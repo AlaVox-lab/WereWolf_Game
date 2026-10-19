@@ -219,7 +219,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
       an toàn (BR07); đêm 1 theo BR03 và **Q01**
       · Kiểm thử: **TC12**; nhiều Sói; BR03 tắt
       · *2.2 tách đôi ngày 19/10 cho dễ duyệt — người dùng đồng ý*
-- [ ] **2.3** `[B]` `BoDieuPhoiVan` — **pha ngày**: công bố người chết không kèm nguyên nhân;
+- [x] **2.3** `[B]` `BoDieuPhoiVan` — **pha ngày**: công bố người chết không kèm nguyên nhân;
       thảo luận có đếm giờ; bỏ phiếu; giải quyết phiếu; dây chuyền Thợ săn; **kiểm tra thắng
       thua hai lần mỗi lượt**
       · Kiểm thử: **TC15** — Sói cắn làm S = D thì kết thúc ngay khi trời sáng

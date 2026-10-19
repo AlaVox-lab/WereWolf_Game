@@ -177,16 +177,22 @@ class BoDieuPhoiVan {
   + van : VanDau
   - cauHinhVai : CauHinhVai
   + layThuTuBuocDem() : List<LoaiVai>
+  + chayVan() : Promise<Phe>
   + xuLyPhaDem() : Promise<KetQuaDem>
+  + sauDem() : boolean
+  + xuLyPhaNgay() : Promise<KetQuaNgay>
+  - kiemTraVaChuyen() : boolean
   + layBuocDemHienTai() : LoaiVai
   + layKetQuaSoi(tienTriId) : List<KetQuaSoi>
   + layThongTinNanNhan() : NanNhan
+  + layCongBoSang() : List<String>
+  + layKetQuaNgay() : KetQuaNgay
 }
 note top of BoDieuPhoiVan
   Pha đêm (2.2): bước sinh từ doUuTien của vai trong cấu hình;
   vai không còn ai sống vẫn chờ giả 8–15 giây (Q05);
   vai laHanhDongTapThe() đồng thuận, hết giờ chọn ngẫu nhiên (BR12).
-  Pha ngày làm ở 2.3.
+  kiemTraVaChuyen() gọi hai lần mỗi lượt: sauDem() và cuối xuLyPhaNgay().
 end note
 class BoGiaiQuyetDem {
   - chuoiBuoc : List<BuocGiaiQuyet>

@@ -3,18 +3,21 @@ import type { LoaiVai } from '../domain/chung/LoaiVai.js';
 import { MaQuyTac } from '../domain/chung/MaQuyTac.js';
 import { LoiNghiepVu } from '../domain/chung/LoiNghiepVu.js';
 import type { NguonNgauNhien } from '../domain/chung/NguonNgauNhien.js';
-import type { Phe } from '../domain/chung/Phe.js';
+import { Phe } from '../domain/chung/Phe.js';
 import { TrangThaiVan } from '../domain/chung/TrangThaiVan.js';
+import { PhienBauCu, type KetQuaPhien } from '../domain/baucu/PhienBauCu.js';
 import type { CauHinhVai } from '../domain/luat/CauHinhVai.js';
 import type { LuaChon, NguCanhHanhDong } from '../domain/vaitro/NguCanhHanhDong.js';
 import type { HanhDongDem } from '../domain/van/HanhDongDem.js';
 import type { KetQuaDem } from '../domain/van/KetQuaDem.js';
 import type { LuotChoi } from '../domain/van/LuotChoi.js';
 import type { NguoiChoi } from '../domain/van/NguoiChoi.js';
+import { NguyenNhanChet } from '../domain/van/NguyenNhanChet.js';
 import type { VanDau } from '../domain/van/VanDau.js';
 import { BoChiaVai } from './BoChiaVai.js';
-import { BoGiaiQuyetDem } from './BoGiaiQuyetDem.js';
+import { BoGiaiQuyetDem, type PhatBan } from './BoGiaiQuyetDem.js';
 import type { BoHenGio } from './BoHenGio.js';
+import { BoKiemTraThangThua, KetQuaThangThua } from './BoKiemTraThangThua.js';
 import { THOI_GIAN_MAC_DINH, type CauHinhThoiGian } from './CauHinhThoiGian.js';
 import type { CongLuaChon } from './CongLuaChon.js';
 
@@ -31,6 +34,24 @@ export interface KetQuaSoi {
   readonly luot: number;
   readonly mucTieuId: string;
   readonly phe: Phe;
+}
+
+/** Kết quả một ngày: kết quả kiểm phiếu và các phát bắn của Thợ săn bị treo cổ. */
+export interface KetQuaNgay {
+  readonly ketQuaPhien: KetQuaPhien;
+  readonly phatBan: readonly PhatBan[];
+}
+
+/** Phiếu thô từ ngoài vào: `{ mucTieuId: string }`, hoặc `{ mucTieuId: null }` là bỏ trắng. */
+export function docPhieu(tho: unknown): string | null {
+  if (typeof tho !== 'object' || tho === null || !('mucTieuId' in tho)) {
+    throw new LoiNghiepVu('LUA_CHON_KHONG_HOP_LE', 'cần { mucTieuId }');
+  }
+  const { mucTieuId } = tho as { mucTieuId: unknown };
+  if (mucTieuId !== null && typeof mucTieuId !== 'string') {
+    throw new LoiNghiepVu('LUA_CHON_KHONG_HOP_LE', 'mucTieuId phải là chuỗi hoặc null');
+  }
+  return mucTieuId;
 }
 
 /** Chuyển lựa chọn thô từ ngoài vào (socket, người chơi ảo) thành `LuaChon` có kiểu. */
@@ -60,6 +81,9 @@ export function docLuaChon(tho: unknown): LuaChon {
 export class BoDieuPhoiVan {
   private readonly thoiGian: CauHinhThoiGian;
   private readonly boGiaiQuyetDem = new BoGiaiQuyetDem();
+  private readonly boKiemTraThangThua = new BoKiemTraThangThua();
+  private congBoSang: readonly string[] = [];
+  private ketQuaNgay: KetQuaNgay | null = null;
   private readonly cacVaiMau: BoChiaVai;
   private buocDemHienTai: LoaiVai | null = null;
   private readonly ketQuaSoi = new Map<string, KetQuaSoi[]>();
@@ -86,6 +110,16 @@ export class BoDieuPhoiVan {
   layThongTinNanNhan(): { nanNhanId: string | null; anToan: boolean } {
     const luot = this.van.luotHienTai > 0 ? this.van.layLuotHienTai() : null;
     return BoGiaiQuyetDem.xemNanNhan(luot?.layYDinh() ?? []);
+  }
+
+  /** Người chết đêm qua để công bố buổi sáng — **chỉ mã người chơi, không kèm nguyên nhân**. */
+  layCongBoSang(): readonly string[] {
+    return this.congBoSang;
+  }
+
+  /** Kết quả ngày gần nhất, `null` khi chưa có ngày nào. */
+  layKetQuaNgay(): KetQuaNgay | null {
+    return this.ketQuaNgay;
   }
 
   /** Mọi kết quả soi của một Tiên tri, theo thứ tự đêm. */
@@ -135,6 +169,120 @@ export class BoDieuPhoiVan {
     );
     ketQua.chot();
     return ketQua;
+  }
+
+  /**
+   * Chạy trọn một ván từ `PHA_DEM` tới khi có phe thắng — đêm, kiểm tra, ngày, kiểm tra, lặp lại
+   * (sơ đồ hoạt động 8.1). Trả phe thắng.
+   */
+  async chayVan(): Promise<Phe> {
+    for (;;) {
+      await this.xuLyPhaDem();
+      if (this.sauDem()) break;
+      await this.xuLyPhaNgay();
+      if (this.van.trangThai === TrangThaiVan.KET_THUC) break;
+    }
+    return this.van.pheThang!;
+  }
+
+  /**
+   * Kiểm tra thắng thua **lần thứ nhất** của lượt, ngay sau giải quyết đêm (UC14 bước 6). Có phe
+   * thắng thì kết thúc ván ngay — bỏ qua cả pha ngày (luồng 6a, TC15). Chưa thì ghi danh sách công
+   * bố và sang `PHA_CONG_BO`. Trả `true` nếu ván đã kết thúc.
+   */
+  sauDem(): boolean {
+    if (this.van.trangThai !== TrangThaiVan.GIAI_QUYET_DEM) {
+      throw new LoiNghiepVu('CHUYEN_TRANG_THAI_KHONG_HOP_LE', `sau đêm khi ${this.van.trangThai}`);
+    }
+    const daKetThuc = this.kiemTraVaChuyen();
+    if (!daKetThuc) {
+      const ketQua = this.van.layLuotHienTai().ketQuaDem;
+      this.congBoSang = ketQua ? ketQua.layDanhSachChet().map((c) => c.nguoiChoiId) : [];
+    }
+    return daKetThuc;
+  }
+
+  /**
+   * Pha ngày (UC15, UC16): công bố → thảo luận có đếm giờ → bỏ phiếu (kèm vòng bầu lại nếu cần) →
+   * thi hành treo cổ → dây chuyền Thợ săn → kiểm tra thắng thua **lần thứ hai**. Kết thúc ở
+   * `PHA_DEM` của lượt kế tiếp hoặc `KET_THUC`.
+   */
+  async xuLyPhaNgay(): Promise<KetQuaNgay> {
+    if (this.van.trangThai !== TrangThaiVan.PHA_CONG_BO) {
+      throw new LoiNghiepVu(
+        'CHUYEN_TRANG_THAI_KHONG_HOP_LE',
+        `xử lý ngày khi ${this.van.trangThai}`,
+      );
+    }
+    await this.choHen('cong-bo', this.thoiGian.congBo);
+    this.van.chuyenPha('congBoXong');
+    await this.choHen('thao-luan', this.thoiGian.thaoLuan);
+    this.van.chuyenPha('hetGioThaoLuan');
+
+    const ketQuaPhien = await this.boPhieu(this.van.layLuotHienTai());
+    this.van.chuyenPha('ketThucBoPhieu');
+
+    let phatBan: PhatBan[] = [];
+    if (ketQuaPhien.loai === 'TREO_CO') {
+      const id = ketQuaPhien.nguoiBiTreoId;
+      this.van.danhDauChet([{ nguoiChoiId: id, nguyenNhan: NguyenNhanChet.BI_TREO_CO }]);
+      phatBan = await this.boGiaiQuyetDem.xuLyDayChuyen(this.van, [id], (thoSan, ungVien) =>
+        this.moiThoSanBan(thoSan, ungVien),
+      );
+    }
+    this.ketQuaNgay = { ketQuaPhien, phatBan };
+    this.kiemTraVaChuyen();
+    return this.ketQuaNgay;
+  }
+
+  /**
+   * Gọi `BoKiemTraThangThua` và chuyển pha theo kết quả — **một chỗ duy nhất** cho cả hai lần kiểm
+   * tra mỗi lượt. Trả `true` nếu ván đã kết thúc.
+   */
+  private kiemTraVaChuyen(): boolean {
+    const ketQua = this.boKiemTraThangThua.kiemTra(this.van);
+    if (ketQua === KetQuaThangThua.CHUA_KET_THUC) {
+      this.van.chuyenPha('chuaKetThuc');
+      return false;
+    }
+    this.van.ketThuc(ketQua === KetQuaThangThua.PHE_SOI_THANG ? Phe.SOI : Phe.DAN);
+    return true;
+  }
+
+  /** Phiên bỏ phiếu của lượt, kèm một vòng bầu lại khi hòa và BR11 tắt (UC16, UC16b, Q03). */
+  private async boPhieu(luot: LuotChoi): Promise<KetQuaPhien> {
+    const henGio = this.phuThuoc.boHenGio;
+    const cuTri = this.van.layNguoiConSong().map((n) => n.id);
+    const phien = new PhienBauCu(luot.soThuTu, cuTri, henGio.bayGio() + this.thoiGian.boPhieu);
+    luot.ganPhienBauCu(phien);
+    await this.thuPhieu(phien, this.thoiGian.boPhieu);
+    const ketQua = phien.kiemPhieu(this.van.boLuatChoi);
+    if (ketQua.loai !== 'BAU_LAI') return ketQua;
+
+    const vongLai = phien.taoVongBauLai(henGio.bayGio() + this.thoiGian.bauLai);
+    luot.ganPhienBauCu(vongLai);
+    await this.thuPhieu(vongLai, this.thoiGian.bauLai);
+    return vongLai.kiemPhieu(this.van.boLuatChoi);
+  }
+
+  /**
+   * Mời mọi cử tri bỏ phiếu cùng lúc. Bộ kiểm của lời mời ghi luôn phiếu vào phiên — phiếu sai bị
+   * từ chối và được bầu lại; ai không bầu tới hết giờ coi như bỏ trắng (UC16 luồng 2a).
+   */
+  private async thuPhieu(phien: PhienBauCu, thoiHan: number): Promise<void> {
+    const henGio = this.phuThuoc.boHenGio;
+    const cuTri = this.van.layNguoiConSong().filter((n) => !phien.daBoPhieu(n.id));
+    await Promise.all(
+      cuTri.map((n) =>
+        this.phuThuoc.congLuaChon.cho(n.id, thoiHan, (tho) =>
+          phien.ghiPhieu(n.id, docPhieu(tho), henGio.bayGio()),
+        ),
+      ),
+    );
+  }
+
+  private choHen(ma: string, thoiHan: number): Promise<void> {
+    return new Promise((xong) => this.phuThuoc.boHenGio.datHen(ma, thoiHan, xong));
   }
 
   /**

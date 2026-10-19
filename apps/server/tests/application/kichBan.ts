@@ -2,7 +2,13 @@
 import { BoDieuPhoiVan } from '../../src/application/BoDieuPhoiVan.js';
 import { BoHenGio } from '../../src/application/BoHenGio.js';
 import { CongLuaChon } from '../../src/application/CongLuaChon.js';
-import { DongHoGia, LoaiVai, LoiNghiepVu, NgauNhienCoHat } from '../../src/domain/chung/index.js';
+import {
+  DongHoGia,
+  LoaiVai,
+  LoiNghiepVu,
+  NgauNhienCoHat,
+  type TrangThaiVan,
+} from '../../src/domain/chung/index.js';
 import { BoLuatChoi, CauHinhVai, type CauHinhBoLuat } from '../../src/domain/luat/index.js';
 import type { VaiTro } from '../../src/domain/vaitro/index.js';
 import { NguoiChoi, VanDau } from '../../src/domain/van/index.js';
@@ -39,8 +45,11 @@ export function taoTran(
 
 export type Tran = ReturnType<typeof taoTran>;
 
-/** Câu trả lời cho một người: một giá trị (lần mời nào cũng trả), hoặc một dãy (mỗi lần mời một phần tử). */
-export type TraLoi = unknown;
+/**
+ * Câu trả lời cho một người: một giá trị (lần mời nào cũng trả), một dãy (mỗi lần mời một phần
+ * tử), hoặc một hàm nhận số thứ tự lần mời và trạng thái ván. Trả `undefined` là để hết giờ.
+ */
+export type TraLoi = unknown | ((ngCanh: { lan: number; trangThai: TrangThaiVan }) => unknown);
 
 export const xaHangDoi = async () => {
   for (let i = 0; i < 5; i++) await new Promise<void>((r) => setImmediate(r));
@@ -84,7 +93,12 @@ export async function chayKichBan<T>(
         const lan = soLanMoi.get(id) ?? 0;
         soLanMoi.set(id, lan + 1);
         const traLoi = kichBan[id];
-        const giaTri = Array.isArray(traLoi) ? traLoi[lan] : traLoi;
+        const giaTri =
+          typeof traLoi === 'function'
+            ? traLoi({ lan, trangThai: van.trangThai })
+            : Array.isArray(traLoi)
+              ? traLoi[lan]
+              : traLoi;
         if (id in kichBan && giaTri !== undefined) {
           try {
             cong.ghiNhan(id, giaTri);

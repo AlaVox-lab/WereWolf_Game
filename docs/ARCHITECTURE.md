@@ -475,6 +475,19 @@ và `application/CongLuaChon.ts` (2.1). Sơ đồ: `docs/diagrams/06-state-van-d
     Cả nhóm ghi **đúng một** ý định `CAN`.
   - `layThongTinNanNhan()` (2.2b) trả `{ nanNhanId, anToan }` của đêm đang chạy từ ý định — dữ
     liệu báo trước cho Phù thủy (BR07); góc nhìn (2.6) chỉ đưa cho Phù thủy.
+  - **Pha ngày và vòng lặp ván** (2.3):
+    - `chayVan()` chạy từ `PHA_DEM` tới khi có phe thắng: `xuLyPhaDem()` → `sauDem()` →
+      `xuLyPhaNgay()` → lặp. Trả phe thắng.
+    - `kiemTraVaChuyen()` là **chỗ duy nhất** gọi `BoKiemTraThangThua` và quyết `ketThuc(phe)` hay
+      `chuaKetThuc`; được gọi đúng hai lần mỗi lượt — trong `sauDem()` và cuối `xuLyPhaNgay()`.
+      Có phe thắng sau đêm thì bỏ qua cả pha ngày (TC15).
+    - `sauDem()` ghi `layCongBoSang()` = **chỉ mã** người chết đêm qua, không nguyên nhân.
+    - `xuLyPhaNgay()`: công bố (`thoiGian.congBo`) → thảo luận (`thaoLuan`) → bỏ phiếu → treo cổ
+      (`BI_TREO_CO`) → dây chuyền Thợ săn → kiểm tra lần hai. Ghi `layKetQuaNgay()`.
+    - Bỏ phiếu đi qua `CongLuaChon`: bộ kiểm của lời mời gọi luôn `PhienBauCu.ghiPhieu()`, nên
+      phiếu sai bị từ chối và được bầu lại; phiên kết thúc sớm khi mọi người đã bầu. Hòa khi BR11
+      tắt thì mở vòng bầu lại (`thoiGian.bauLai`) và gắn vào lượt (Q03). `docPhieu()` kiểm phiếu
+      thô: `{ mucTieuId: string | null }`.
   - **BR03 tắt** (Q01, 2.2b): đêm 1 bỏ hẳn lượt tập thể, và lời mời từ chối ý định `DOC` với
     `VI_PHAM_RANG_BUOC` — đêm 1 không ai chết.
 

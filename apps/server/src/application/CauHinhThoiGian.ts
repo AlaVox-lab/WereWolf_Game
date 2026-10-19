@@ -13,6 +13,14 @@ export interface CauHinhThoiGian {
   /** Bước giả của vai không còn ai sống (Q05): chờ ngẫu nhiên trong khoảng này. */
   readonly buocGiaToiThieu: number;
   readonly buocGiaToiDa: number;
+  /** Công bố người chết buổi sáng. */
+  readonly congBo: number;
+  /** Thảo luận ban ngày. */
+  readonly thaoLuan: number;
+  /** Bỏ phiếu treo cổ. */
+  readonly boPhieu: number;
+  /** Vòng bầu lại khi hòa và BR11 tắt (Q03). */
+  readonly bauLai: number;
 }
 
 export const THOI_GIAN_MAC_DINH: CauHinhThoiGian = {
@@ -25,4 +33,8 @@ export const THOI_GIAN_MAC_DINH: CauHinhThoiGian = {
   thoSanBan: 15_000,
   buocGiaToiThieu: 8_000,
   buocGiaToiDa: 15_000,
+  congBo: 6_000,
+  thaoLuan: 120_000,
+  boPhieu: 30_000,
+  bauLai: 20_000,
 };
