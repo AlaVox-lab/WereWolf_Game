@@ -581,7 +581,26 @@ qua Socket.IO là hạng mục ROADMAP 4.11.
 
 ## 9. Khuôn mẫu: tính xác định và nhật ký ván — PC03
 
-*Chưa cài đặt.*
+*Đã cài* — cổng `DongHo`, `NguonNgauNhien` (1.1); `NhatKyVan` (1.4); ghi nhật ký suốt ván trong
+`BoDieuPhoiVan` (2.7). Bộ mô phỏng hàng loạt chưa có (2.9).
+
+**Ghi nhật ký như đã cài** (2.7): mọi dòng đi qua `BoDieuPhoiVan.ghi()`, thời điểm lấy từ
+`BoHenGio`. Ghi **trực tiếp** chứ không qua `BoPhatSuKien`, vì sự kiện công khai cố tình thiếu ý
+định, phiếu và nguyên nhân chết — đúng những thứ nhật ký cần.
+
+| Loại | Ghi lúc | Dữ liệu chính |
+|---|---|---|
+| `CHIA_VAI` | Mở đêm 1 | Bảng người chơi → loại vai |
+| `CHUYEN_PHA` | Mỗi lần `chuyen()` | Trạng thái mới, lượt |
+| `Y_DINH` | Mỗi ý định ghi vào lượt — qua `ghiYDinh()` nên lượt và nhật ký không lệch | Người làm, loại, mục tiêu. Bầy Sói chỉ **một** dòng `CAN` |
+| `KET_QUA_SOI` | Tiên tri chọn xong | Tiên tri, mục tiêu, phe |
+| `KET_QUA_DEM` | Sau giải quyết và dây chuyền | Người chết kèm nguyên nhân, người được cứu |
+| `PHIEU_BAU` | Mỗi phiếu được nhận | Người bầu, người bị bầu (hoặc `null`), có phải vòng bầu lại |
+| `KET_QUA_BO_PHIEU` | Sau kiểm phiếu | Kết quả phiên, có bầu lại không |
+| `NGUOI_CHET` | Mỗi người chết, đêm và ngày | Nguyên nhân; `BI_BAN` thì thêm `nguoiBanId` |
+| `KET_THUC` | **Trước** `van.ketThuc()` — lệnh đó đóng nhật ký | Phe thắng, lượt |
+
+Góc nhìn chỉ đưa nhật ký ra ở `ketThuc.nhatKy` khi ván đã `KET_THUC` (MH08).
 
 - **Hai cổng**: `DongHo` (thời gian hiện tại, đặt hẹn) và `NguonNgauNhien` (xáo trộn, chọn
   ngẫu nhiên). Máy chủ thật dùng giờ hệ thống và nguồn ngẫu nhiên mật mã; kiểm thử dùng

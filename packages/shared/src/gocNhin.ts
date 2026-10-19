@@ -74,10 +74,20 @@ export interface MoTaQuyTacCongKhai {
   noiDung: string;
 }
 
-/** Chỉ có khi ván đã `KET_THUC` (MH08): phe thắng và vai của tất cả mọi người. */
+/** Một dòng của bản ghi diễn tiến. */
+export interface SuKienNhatKyCongKhai {
+  thuTu: number;
+  thoiDiem: number;
+  loai: string;
+  duLieu: Record<string, unknown>;
+}
+
+/** Chỉ có khi ván đã `KET_THUC` (MH08): phe thắng, vai của tất cả, bản ghi diễn tiến. */
 export interface KetThucCongKhai {
   pheThang: PheCongKhai;
   vai: { id: string; loaiVai: LoaiVaiCongKhai; phe: PheCongKhai }[];
+  /** Bản ghi diễn tiến đầy đủ — ý định, phiếu, nguyên nhân chết (UC20, MH08). */
+  nhatKy: SuKienNhatKyCongKhai[];
 }
 
 export interface GocNhinNguoiChoi {

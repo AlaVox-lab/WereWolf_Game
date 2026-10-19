@@ -231,7 +231,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
       `packages/shared` theo ARCHITECTURE mục 8 và **Q09**
       · Kiểm thử: với **mọi** người chơi ở **mọi** pha của một ván mô phỏng, góc nhìn không chứa
       vai người khác (trừ đồng đội Sói, trừ khi ván đã kết thúc) — bản đơn vị của ST05
-- [ ] **2.7** `[B]` Ghi `NhatKyVan` ở mọi điểm chuyển pha, ý định, phiếu, người chết;
+- [x] **2.7** `[B]` Ghi `NhatKyVan` ở mọi điểm chuyển pha, ý định, phiếu, người chết;
       `xuatBanCongKhai()` chỉ chạy khi ván kết thúc
 - [ ] **2.8** `[A]` `infrastructure/bot/NguoiChoiAo`: nghe góc nhìn của chính nó, khi được mời
       thì chờ ngẫu nhiên 1–4 giây rồi chọn ngẫu nhiên trong danh sách mục tiêu hợp lệ, gửi qua

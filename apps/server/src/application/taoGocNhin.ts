@@ -98,6 +98,12 @@ export function taoGocNhin(dieuPhoi: BoDieuPhoiVan, nguoiChoiId: string): GocNhi
               loaiVai: n.vaiTro.loaiVai as LoaiVaiCongKhai,
               phe: n.vaiTro.phe as PheCongKhai,
             })),
+            nhatKy: van.nhatKy.xuatBanCongKhai().map((sk) => ({
+              thuTu: sk.thuTu,
+              thoiDiem: sk.thoiDiem,
+              loai: sk.loai,
+              duLieu: { ...sk.duLieu },
+            })),
           }
         : null,
   };

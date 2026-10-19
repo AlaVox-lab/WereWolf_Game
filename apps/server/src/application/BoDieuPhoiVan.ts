@@ -13,6 +13,7 @@ import type { KetQuaDem } from '../domain/van/KetQuaDem.js';
 import type { LuotChoi } from '../domain/van/LuotChoi.js';
 import type { NguoiChoi } from '../domain/van/NguoiChoi.js';
 import { NguyenNhanChet } from '../domain/van/NguyenNhanChet.js';
+import type { LoaiSuKien } from '../domain/van/NhatKyVan.js';
 import type { SuKienChuyenPha } from '../domain/van/trangthai/TrangThaiVanDau.js';
 import type { VanDau } from '../domain/van/VanDau.js';
 import { BoChiaVai } from './BoChiaVai.js';
@@ -213,6 +214,13 @@ export class BoDieuPhoiVan {
     }
     const luot = this.van.taoLuotMoi();
     this.hetHanPha = null;
+    if (luot.soThuTu === 1) {
+      this.ghi('CHIA_VAI', {
+        vai: Object.fromEntries(
+          this.van.layDanhSachNguoiChoi().map((n) => [n.id, n.vaiTro.loaiVai]),
+        ),
+      });
+    }
     for (const loai of this.layThuTuBuocDem()) {
       this.datBuocDem(loai);
       await this.chayBuoc(loai, luot);
@@ -221,13 +229,19 @@ export class BoDieuPhoiVan {
 
     this.chuyen('ketThucDem');
     const ketQua = this.boGiaiQuyetDem.giaiQuyet(this.van);
-    await this.boGiaiQuyetDem.xuLyDayChuyen(
+    const phatBan = await this.boGiaiQuyetDem.xuLyDayChuyen(
       this.van,
       ketQua.layDanhSachChet().map((c) => c.nguoiChoiId),
       (thoSan, ungVien) => this.moiThoSanBan(thoSan, ungVien),
       ketQua,
     );
     ketQua.chot();
+    this.ghi('KET_QUA_DEM', {
+      luot: luot.soThuTu,
+      nguoiChet: ketQua.layDanhSachChet().map((c) => ({ ...c })),
+      nguoiDuocCuu: [...ketQua.layDanhSachDuocCuu()],
+    });
+    this.ghiNguoiChet(ketQua.layDanhSachChet(), phatBan);
     return ketQua;
   }
 
@@ -293,6 +307,16 @@ export class BoDieuPhoiVan {
     }
     const coBauLai = this.van.layLuotHienTai().layDanhSachPhienBauCu().length > 1;
     this.ketQuaNgay = { ketQuaPhien, coBauLai, phatBan };
+    this.ghi('KET_QUA_BO_PHIEU', { luot: this.van.luotHienTai, ketQuaPhien, coBauLai });
+    this.ghiNguoiChet(
+      [
+        ...(ketQuaPhien.loai === 'TREO_CO'
+          ? [{ nguoiChoiId: ketQuaPhien.nguoiBiTreoId, nguyenNhan: NguyenNhanChet.BI_TREO_CO }]
+          : []),
+        ...phatBan.map((p) => ({ nguoiChoiId: p.mucTieuId, nguyenNhan: NguyenNhanChet.BI_BAN })),
+      ],
+      phatBan,
+    );
     this.hetHanPha = null;
     this.suKien.phat({ loai: 'KET_QUA_NGAY', ketQua: this.ketQuaNgay }, { loai: 'TAT_CA' });
     this.kiemTraVaChuyen();
@@ -310,6 +334,7 @@ export class BoDieuPhoiVan {
       return false;
     }
     const pheThang = ketQua === KetQuaThangThua.PHE_SOI_THANG ? Phe.SOI : Phe.DAN;
+    this.ghi('KET_THUC', { pheThang, luot: this.van.luotHienTai }); // trước ketThuc() — nó đóng nhật ký
     this.van.ketThuc(pheThang);
     this.suKien.phat({ loai: 'KET_THUC', pheThang }, { loai: 'TAT_CA' });
     return true;
@@ -350,15 +375,60 @@ export class BoDieuPhoiVan {
             luaChon: [{ mucTieu: phien.layDanhSachUngVien() }],
             choPhepBoTrang: true,
           },
-          (tho) => phien.ghiPhieu(n.id, docPhieu(tho), henGio.bayGio()),
+          (tho) => {
+            const phieu = phien.ghiPhieu(n.id, docPhieu(tho), henGio.bayGio());
+            this.ghi('PHIEU_BAU', {
+              luot: phien.soLuot,
+              vongBauLai: phien.laVongBauLai,
+              nguoiBauId: phieu.nguoiBauId,
+              nguoiBiBauId: phieu.nguoiBiBauId,
+            });
+            return phieu;
+          },
         ),
       ),
     );
   }
 
+  /**
+   * Ghi một sự kiện vào nhật ký ván (2.7) — thời điểm lấy từ `BoHenGio`, nhật ký không tự đọc giờ.
+   * Nhật ký mang cả thông tin bí mật; chỉ mở khi ván kết thúc.
+   */
+  private ghi(loai: LoaiSuKien, duLieu: Record<string, unknown>): void {
+    this.van.nhatKy.ghiSuKien(loai, duLieu, this.phuThuoc.boHenGio.bayGio());
+  }
+
+  /** Ghi ý định vào lượt và vào nhật ký cùng lúc — hai nơi không bao giờ lệch nhau. */
+  private ghiYDinh(luot: LuotChoi, hanhDong: HanhDongDem): void {
+    luot.ghiYDinh(hanhDong);
+    this.ghi('Y_DINH', {
+      luot: luot.soThuTu,
+      nguoiThucHienId: hanhDong.nguoiThucHienId,
+      loaiHanhDong: hanhDong.loaiHanhDong,
+      mucTieuId: hanhDong.mucTieuId,
+    });
+  }
+
+  /** Ghi từng người chết kèm nguyên nhân; người bị Thợ săn bắn ghi cả người bắn. */
+  private ghiNguoiChet(
+    danhSach: readonly { nguoiChoiId: string; nguyenNhan: NguyenNhanChet }[],
+    phatBan: readonly PhatBan[],
+  ): void {
+    for (const { nguoiChoiId, nguyenNhan } of danhSach) {
+      const nguoiBan = phatBan.find((p) => p.mucTieuId === nguoiChoiId)?.nguoiBanId;
+      this.ghi('NGUOI_CHET', {
+        luot: this.van.luotHienTai,
+        nguoiChoiId,
+        nguyenNhan,
+        ...(nguoiBan ? { nguoiBanId: nguoiBan } : {}),
+      });
+    }
+  }
+
   /** Đổi pha qua `VanDau` rồi phát `CHUYEN_PHA` cho cả làng. */
   private chuyen(suKienPha: SuKienChuyenPha): void {
     const trangThai = this.van.chuyenPha(suKienPha);
+    this.ghi('CHUYEN_PHA', { trangThai, luot: this.van.luotHienTai });
     this.suKien.phat(
       { loai: 'CHUYEN_PHA', trangThai, luot: this.van.luotHienTai },
       { loai: 'TAT_CA' },
@@ -417,7 +487,7 @@ export class BoDieuPhoiVan {
       nguoiGiu.map(async (nguoiChoi) => {
         const hanhDong = await this.moiHanhDong(nguoiChoi, luot, thoiHan);
         if (!hanhDong) return; // BR12 — hết giờ thì bỏ lượt
-        luot.ghiYDinh(hanhDong);
+        this.ghiYDinh(luot, hanhDong);
         if (hanhDong.loaiHanhDong === LoaiHanhDong.SOI_THONG_TIN) {
           this.ghiKetQuaSoi(nguoiChoi.id, luot.soThuTu, hanhDong.mucTieuId);
         }
@@ -464,7 +534,10 @@ export class BoDieuPhoiVan {
     const mucTieu = [...new Set(cacDeXuat.map((h) => h.mucTieuId))];
     if (mucTieu.length === 0) return; // Q07
     const chon = mucTieu[this.phuThuoc.nguonNgauNhien.soNguyen(mucTieu.length)]!;
-    luot.ghiYDinh(cacDeXuat.find((h) => h.mucTieuId === chon)!);
+    this.ghiYDinh(
+      luot,
+      cacDeXuat.find((h) => h.mucTieuId === chon)!,
+    );
   }
 
   /** Mời một người hành động; lựa chọn được kiểm bằng chính luật của vai. */
@@ -526,6 +599,7 @@ export class BoDieuPhoiVan {
   private ghiKetQuaSoi(tienTriId: string, luot: number, mucTieuId: string): void {
     const ketQua = { luot, mucTieuId, phe: this.van.layPheCua(mucTieuId) };
     this.ketQuaSoi.set(tienTriId, [...this.layKetQuaSoi(tienTriId), ketQua]);
+    this.ghi('KET_QUA_SOI', { tienTriId, ...ketQua });
     this.suKien.phat(
       { loai: 'KET_QUA_SOI', ...ketQua },
       { loai: 'NGUOI_CHOI', nguoiChoiId: tienTriId },
