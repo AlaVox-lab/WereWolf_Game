@@ -86,14 +86,41 @@ class PhongChoi {
   + batDauVan() : VanDau
 }
 class VanDau {
+  + id : String
+  + boLuatChoi : BoLuatChoi
   - trangThai : TrangThaiVan
   - luotHienTai : int
   + chuyenPha() : void
-  + layNguoiConSong() : List
+  + layNguoiConSong() : List<NguoiChoi>
+  + layNguoiChoi(id) : NguoiChoi
+  + layPheCua(id) : Phe
+  + taoLuotMoi() : LuotChoi
+  + danhDauChet(danhSach) : void
 }
+note right of VanDau
+  Constructor tự giữ boLuatPhong.saoChep()
+  đã khóa — bộ luật bất biến trong ván.
+  chuyenPha() làm ở hạng mục 1.10 (mẫu State).
+end note
 class NguoiChoi {
+  + id : String
+  + taiKhoanId : String
+  + thuTuGhe : int
   - conSong : boolean
-  + danhDauChet() : void
+  - nguyenNhanChet : NguyenNhanChet
+  + nhanVai(vai) : void
+  + danhDauChet(nguyenNhan, luot) : void
+  + coTheHanhDong() : boolean
+}
+class LuotChoi {
+  + soThuTu : int
+  + ghiYDinh(hd) : void
+  + ganKetQuaDem(kq) : void
+}
+class NhatKyVan {
+  + ghiSuKien(loai, duLieu, thoiDiem) : SuKien
+  + dong() : void
+  + xuatBanCongKhai() : List<SuKien>
 }
 class HanhDongDem {
   + nguoiThucHienId : String
@@ -101,7 +128,12 @@ class HanhDongDem {
   + mucTieuId : String
   + doUuTien : int
 }
-class KetQuaDem
+class KetQuaDem {
+  + soDem : int
+  + themNguoiChet(id, nguyenNhan) : void
+  + themNguoiDuocCuu(id) : void
+  + coNguoiChet() : boolean
+}
 class PhienBauCu
 class PhieuBau
 class BoDieuPhoiVan
@@ -116,6 +148,10 @@ VaiTro ..> BoLuatChoi
 VanDau "1" *-- "6..12" NguoiChoi
 NguoiChoi "1" -- "1" VaiTro
 NguoiChoi "1" -- "0..*" HanhDongDem
+VanDau "1" *-- "0..*" LuotChoi
+LuotChoi "1" o-- "0..*" HanhDongDem
+LuotChoi "1" o-- "0..1" KetQuaDem
+VanDau "1" *-- "1" NhatKyVan
 VanDau "1" *-- "0..*" KetQuaDem
 VanDau "1" *-- "0..*" PhienBauCu
 PhienBauCu "1" *-- "0..*" PhieuBau

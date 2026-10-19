@@ -233,7 +233,7 @@ flowchart LR
 
 ## 5. Mô hình miền
 
-*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1); các mục còn lại chưa. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
+*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1), `domain/van/` (mục 5.4); các mục còn lại chưa. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
 thuộc tính, phương thức **giữ nguyên như sơ đồ** để người chấm dò được từ sơ đồ xuống mã —
 xem mục 13.
 
@@ -325,6 +325,17 @@ Theo mục 9.4 tài liệu gốc: `TaiKhoan`, `HoSoNguoiChoi`, `PhongChoi`, `Cau
 `TaiKhoan` và `HoSoNguoiChoi` là khái niệm quản lý người dùng, không thuộc luật chơi — đặt
 ở `infrastructure/auth` và `repository`, không đặt trong `domain/`. `NguoiChoi` là
 **hiện thân của tài khoản trong một ván**, chỉ mang mã tài khoản, không mang cả đối tượng.
+
+**Đã cài đặt trong `domain/van/`** (hạng mục 1.4):
+
+| Lớp | Điểm cần biết |
+|---|---|
+| `NguoiChoi` | Khớp `NguoiChoiTrongVan`. `nhanVai()` một lần; đọc `vaiTro` trước khi chia là lỗi `CHUA_NHAN_VAI`. `danhDauChet(nguyenNhan, luot)` nhớ nguyên nhân cho BR09. Không có trạng thái kết nối — BR13 thuộc tầng thời gian thực |
+| `VanDau` | Khớp `VanChiDoc`. Kiểm 6–12 người, không trùng mã, tài khoản, ghế. **Constructor tự gọi `saoChep()`** bộ luật của phòng. `danhDauChet()` kiểm cả danh sách trước khi đổi — không áp dụng nửa chừng. Trạng thái mới là nhãn `CHO_DU_NGUOI`; chuyển tiếp làm ở 1.10 |
+| `LuotChoi` | Giữ ý định của đêm và `KetQuaDem`. `ghiYDinh()` chặn trùng người + loại (ràng buộc 12.3). Gắn kết quả xong thì không ghi thêm ý định |
+| `KetQuaDem` | `themNguoiChet()` bỏ qua người đã có — BR08 đúng tự nhiên. `chot()` khóa lại |
+| `NhatKyVan` | Chỉ ghi thêm, sự kiện đóng băng. **Không tự đọc giờ** — người gọi truyền `thoiDiem` từ `DongHo`. Chỉ `xuatBanCongKhai()` được sau `dong()` |
+| `NguyenNhanChet` | `BI_CAN`, `BI_DOC`, `BI_TREO_CO`, `BI_BAN` — không bao giờ lộ ra khi công bố buổi sáng |
 
 ### 5.5. Các lớp điều khiển
 

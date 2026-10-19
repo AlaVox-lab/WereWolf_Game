@@ -155,7 +155,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
       `ThoSan` ghi đè `kichHoatKhiChet()`
       · Kiểm thử: **TC07, TC08, TC16, TC17**; mỗi vai sinh đúng `LoaiHanhDong`; `DanLang` và
       `ThoSan` có `laHanhDongDem() = false`; BR05 bật/tắt
-- [ ] **1.4** `[A]` `domain/van/`: `NguoiChoi` (`nhanVai`, `danhDauChet`, `coTheHanhDong`,
+- [x] **1.4** `[A]` `domain/van/`: `NguoiChoi` (`nhanVai`, `danhDauChet`, `coTheHanhDong`,
       nhớ nguyên nhân chết cho BR09), `HanhDongDem`, `KetQuaDem`, `LuotChoi`, `NhatKyVan`
       (chỉ ghi thêm), `VanDau` (`layNguoiConSong`, `layPheCua`, `danhDauChet`, giữ bản sao bộ luật)
       · *`HanhDongDem` đã tạo ở 1.3. `NguoiChoi` và `VanDau` phải khớp giao diện
