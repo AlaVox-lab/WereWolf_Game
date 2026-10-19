@@ -28,10 +28,12 @@ export class BoQuanLyKenh {
   /**
    * @param dangLuotTapThe cho biết pha đêm có đang ở lượt hành động tập thể (lượt Sói) không —
    *   `BoDieuPhoiVan` cung cấp.
+   * @param khiCoTinNhan gọi sau mỗi tin nhắn được nhận — `BoDieuPhoiVan` phát nó thành sự kiện.
    */
   constructor(
     private readonly van: VanDau,
     private readonly dangLuotTapThe: () => boolean,
+    private readonly khiCoTinNhan: (tinNhan: TinNhan) => void = () => {},
   ) {}
 
   layTinhHinh(): TinhHinhKenh {
@@ -85,6 +87,7 @@ export class BoQuanLyKenh {
     }
     const tinNhan = new TinNhan(this.lichSu.length + 1, loai, nguoiGuiId, daCat, thoiDiem);
     this.lichSu.push(tinNhan);
+    this.khiCoTinNhan(tinNhan);
     return tinNhan;
   }
 

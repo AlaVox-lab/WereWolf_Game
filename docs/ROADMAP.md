@@ -225,7 +225,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
       · Kiểm thử: **TC15** — Sói cắn làm S = D thì kết thúc ngay khi trời sáng
 - [x] **2.4** `[B]` `BoQuanLyKenh`: mở/đóng kênh theo pha; kiểm quyền trước khi nhận tin nhắn;
       trả danh sách người được xem mỗi kênh cho tầng thời gian thực
-- [ ] **2.5** `[C]` `BoPhatSuKien` (Observer): sự kiện miền kèm **đối tượng nhận** — tất cả,
+- [x] **2.5** `[C]` `BoPhatSuKien` (Observer): sự kiện miền kèm **đối tượng nhận** — tất cả,
       một người, phe Sói, người chết. Chưa gắn Socket.IO
 - [ ] **2.6** `[C]` `taoGocNhin(van, nguoiChoiId)` và kiểu `GocNhinNguoiChoi` trong
       `packages/shared` theo ARCHITECTURE mục 8 và **Q09**

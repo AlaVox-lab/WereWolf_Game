@@ -490,6 +490,19 @@ và `application/CongLuaChon.ts` (2.1). Sơ đồ: `docs/diagrams/06-state-van-d
       phiếu sai bị từ chối và được bầu lại; phiên kết thúc sớm khi mọi người đã bầu. Hòa khi BR11
       tắt thì mở vòng bầu lại (`thoiGian.bauLai`) và gắn vào lượt (Q03). `docPhieu()` kiểm phiếu
       thô: `{ mucTieuId: string | null }`.
+  - **Sự kiện** (2.5): `BoDieuPhoiVan.suKien` là một `BoPhatSuKien` (Observer). Mỗi sự kiện kèm
+    đối tượng nhận `TAT_CA` | `NGUOI_CHOI` | `KENH`, dịch thành mã người chơi **lúc phát** —
+    `KENH` theo `BoQuanLyKenh.layNguoiXem()`, nên Sói chết tự rơi khỏi tin kênh Sói (BR14).
+    `dangKy()` nghe tất cả kèm người nhận (cho bộ chuyển đổi Socket.IO); `dangKyNguoiChoi()` chỉ
+    nghe phần của một người (cho người chơi ảo). Người nghe ném lỗi không làm hỏng ván.
+    - Mọi lần đổi pha đi qua `chuyen()` → phát `CHUYEN_PHA` cho cả làng; đổi bước đêm phát
+      `DOI_BUOC_DEM` (thứ tự bước vốn công khai — Q05).
+    - Mọi lời mời đi qua `moi()` → `MOI_HANH_DONG { viec, hetHanLuc }` **chỉ cho người được mời**;
+      `viec` là `HANH_DONG_DEM` | `BO_PHIEU` | `THO_SAN_BAN`.
+    - `KET_QUA_SOI` chỉ cho Tiên tri; `CONG_BO_SANG` (chỉ mã, không nguyên nhân), `KET_QUA_NGAY`,
+      `KET_THUC` cho cả làng; `TIN_NHAN` cho người xem kênh — `BoQuanLyKenh` báo qua hàm gọi lại.
+    - Sự kiện là dữ liệu **bên trong** máy chủ; tầng thời gian thực (4.7) chiếu chúng qua góc nhìn
+      (2.6) trước khi gửi xuống trình duyệt.
   - **BR03 tắt** (Q01, 2.2b): đêm 1 bỏ hẳn lượt tập thể, và lời mời từ chối ý định `DOC` với
     `VI_PHAM_RANG_BUOC` — đêm 1 không ai chết.
 
@@ -571,7 +584,7 @@ Theo mục 13.2 tài liệu gốc. Không nêu thêm mẫu nào không chỉ ra 
 | Template Method | `VaiTro.thucHienLuot()` | Khung kiểm tra chung, mỗi vai chỉ khác ở `layDanhSachMucTieu`, `kiemTraRangBuoc`, `dungNangLuc` |
 | Chain of Responsibility | Các bước trong `BoGiaiQuyetDem` | Hiệu ứng áp theo độ ưu tiên, bước trước đổi được kết quả bước sau |
 | Factory | `BoChiaVai` | Sinh đối tượng vai theo cấu hình mà nơi gọi không cần biết lớp cụ thể |
-| Observer | `BoPhatSuKien` → bộ chuyển đổi Socket.IO | Nhiều người cùng quan tâm một sự kiện chuyển pha |
+| Observer | `BoPhatSuKien` → bộ chuyển đổi Socket.IO, người chơi ảo, nhật ký — **đã cài** (2.5) | Nhiều người cùng quan tâm một sự kiện chuyển pha |
 | Strategy | `BoLuatChoi` truyền qua `NguCanhHanhDong` | Đổi cách xử lý luật không sửa mã lớp dùng nó |
 
 ---

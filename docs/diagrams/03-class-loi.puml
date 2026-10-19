@@ -188,6 +188,7 @@ class BoDieuPhoiVan {
   + layCongBoSang() : List<String>
   + layKetQuaNgay() : KetQuaNgay
   + dangLuotTapThe() : boolean
+  + suKien : BoPhatSuKien
 }
 note top of BoDieuPhoiVan
   Pha đêm (2.2): bước sinh từ doUuTien của vai trong cấu hình;
@@ -290,6 +291,20 @@ BoQuanLyKenh "1" *-- "3" KenhChat
 BoQuanLyKenh "1" *-- "0..*" TinNhan
 BoQuanLyKenh --> VanDau
 BoDieuPhoiVan *-- BoQuanLyKenh
+class BoPhatSuKien {
+  - cacNguoiNghe : Set<NguoiNghe>
+  + dangKy(nguoiNghe) : HuyDangKy
+  + dangKyNguoiChoi(nguoiChoiId, nguoiNghe) : HuyDangKy
+  + phat(suKien, doiTuong) : void
+}
+note right of BoPhatSuKien
+  Observer. DoiTuongNhan: TAT_CA | NGUOI_CHOI | KENH —
+  dịch thành mã người chơi lúc phát; KENH theo quyền xem (BR14).
+  SuKienMien: CHUYEN_PHA, DOI_BUOC_DEM, MOI_HANH_DONG, KET_QUA_SOI,
+  CONG_BO_SANG, KET_QUA_NGAY, TIN_NHAN, KET_THUC.
+end note
+BoDieuPhoiVan *-- BoPhatSuKien
+BoQuanLyKenh ..> BoPhatSuKien : TIN_NHAN qua gọi lại
 BoDieuPhoiVan --> VanDau
 BoDieuPhoiVan --> BoGiaiQuyetDem
 BoGiaiQuyetDem --> HanhDongDem
