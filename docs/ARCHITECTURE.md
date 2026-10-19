@@ -572,8 +572,8 @@ Nếu một yêu cầu chạm vào danh sách này, dừng lại và trao đổi
    mục 2 hoặc chạm mục 14 thì **dừng lại và hỏi**.
 7. **Thực hiện** — bám khuôn mẫu đã có, ưu tiên mở rộng khuôn mẫu hơn phát minh cái mới.
    Viết kiểm thử theo mã kịch bản trong `game-rules.md`.
-8. **Không tự chạy lệnh Git ghi vào lịch sử** — soạn sẵn commit message để thành viên tự
-   chạy. Xem `CLAUDE.md`.
+8. **Không tự chạy lệnh Git ghi vào lịch sử** trừ khi người dùng yêu cầu rõ — mặc định soạn
+   sẵn commit message. Xem `CLAUDE.md`.
 9. **Trả kết quả để rà soát** — tóm tắt tệp đã đổi và vì sao; nói rõ đã chạy kiểm thử nào,
    kết quả ra sao.
 10. **Cập nhật tài liệu** trong cùng công việc: đánh dấu hạng mục trong `ROADMAP.md`, cập

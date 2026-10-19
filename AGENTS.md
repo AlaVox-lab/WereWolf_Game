@@ -7,24 +7,30 @@ gì trong kho mã này.
 
 ## QUY TẮC TUYỆT ĐỐI
 
-### Không tự thực hiện thao tác Git ghi vào lịch sử
+### Thao tác Git ghi vào lịch sử chỉ khi người dùng yêu cầu rõ
 
-**Không được** chạy `git commit`, `git push`, `git merge`, `git rebase`, `git tag`,
+**Mặc định không** chạy `git commit`, `git push`, `git merge`, `git rebase`, `git tag`,
 `git reset --hard`, tạo/xóa/chuyển nhánh, `gh pr create`, `gh pr merge`, `gh release create`,
-hay bất kỳ lệnh nào ghi vào lịch sử Git hoặc lên máy chủ từ xa.
+hay bất kỳ lệnh nào ghi vào lịch sử Git hoặc lên máy chủ từ xa — soạn sẵn commit message rồi
+dừng.
 
-**Lý do**: lịch sử commit là bằng chứng đóng góp của từng thành viên trong đồ án nhóm. Mọi
-commit phải do thành viên tự thực hiện, mang danh tính thật.
+**Ngoại lệ**: khi người dùng **yêu cầu rõ trong chat** ("commit giúp", "push luôn") thì được
+chạy đúng các lệnh được yêu cầu cho công việc vừa làm. Không suy rộng sang lần sau, không tự
+`push --force`, không viết lại lịch sử đã push. Commit message viết vào tệp UTF-8 rồi dùng
+`git commit -F <tệp>` để giữ dấu tiếng Việt. Quyết định ngày 19/10/2026.
 
-**Được phép**: `git status`, `git diff`, `git log`, `git show`; `gh` chỉ đọc; đọc/tạo/sửa tệp;
-chạy build, test, lint, chạy thử ứng dụng.
+**Tác giả commit**: nhóm chấp nhận để tác giả là tài khoản `AlaVox-lab` — không tự đổi
+`user.name`, `user.email`.
+
+**Luôn được phép**: `git status`, `git diff`, `git log`, `git show`; `gh` chỉ đọc; đọc/tạo/sửa
+tệp; chạy build, test, lint, chạy thử ứng dụng.
 
 ### Khi hoàn thành một hạng mục
 
 1. Tóm tắt các tệp đã đổi và vì sao; nói rõ kiểm thử nào đã chạy, kết quả ra sao
 2. Đánh dấu hạng mục trong `docs/ROADMAP.md`; cập nhật `ARCHITECTURE.md` nếu đụng khuôn mẫu
 3. **Soạn sẵn commit message** theo Conventional Commits, tiếng Việt có dấu, trong khối mã
-4. Dừng lại để thành viên tự commit
+4. Dừng lại để thành viên tự commit — trừ khi người dùng yêu cầu rõ trợ lý commit
 
 ```
 feat(domain): thêm bộ giải quyết đêm theo chuỗi độ ưu tiên

@@ -161,7 +161,7 @@ Ghi vắn tắt để tránh bàn lại. Phần lớn đến từ tài liệu g�
 | Mọi dữ liệu ván gửi xuống trình duyệt đi qua **một hàm** `taoGocNhin()` | `ARCHITECTURE.md` mục 8 |
 | Đồng bộ bằng **ảnh chụp góc nhìn** sau mỗi lần đổi trạng thái — kết nối lại không cần cơ chế riêng | `ARCHITECTURE.md` mục 8 |
 | Trình duyệt không bao giờ tự chuyển pha; chỉ đếm ngược tới thời điểm hết hạn máy chủ gửi | `ARCHITECTURE.md` mục 7 |
-| Trợ lý AI không tự chạy lệnh Git ghi vào lịch sử | `CLAUDE.md`, `AGENTS.md` |
+| Trợ lý AI chỉ commit/push khi người dùng yêu cầu rõ trong chat; mặc định soạn sẵn message | 19/10 — `CLAUDE.md`, `AGENTS.md` |
 | Q01–Q11 chốt theo toàn bộ đề xuất | 19/10 — `game-rules.md` mục 6 |
 | Bộ công nghệ TypeScript toàn tầng | 19/10 — ADR-0001 |
 | Rào chắn phụ thuộc bằng ESLint, không dùng công cụ riêng | `ARCHITECTURE.md` mục 4.1 |
