@@ -236,4 +236,18 @@ BoDieuPhoiVan --> BoGiaiQuyetDem
 BoGiaiQuyetDem --> HanhDongDem
 BoGiaiQuyetDem --> KetQuaDem
 BoDieuPhoiVan --> BoKiemTraThangThua
+class BoChiaVai {
+  - nguonNgauNhien : NguonNgauNhien
+  + taoVai(loai) : VaiTro
+  + sinhDanhSachVai(cauHinh) : List<VaiTro>
+  + xaoTron(danhSach) : List
+  + chiaVai(van, cauHinh) : Map<String, LoaiVai>
+}
+note right of BoChiaVai
+  Factory: bảng LoaiVai → lớp cụ thể.
+  Fisher–Yates qua cổng NguonNgauNhien.
+end note
+BoDieuPhoiVan --> BoChiaVai
+BoChiaVai ..> VaiTro : <<create>>
+BoChiaVai ..> CauHinhVai
 @enduml

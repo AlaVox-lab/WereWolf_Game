@@ -179,7 +179,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
       sơ đồ 11.1 cộng chuyển tiếp `HuyVan` theo **Q04**
       · Kiểm thử: mọi chuyển tiếp hợp lệ đi được, mọi chuyển tiếp không có trên sơ đồ ném lỗi;
       **TC20** — đổi bộ luật sau `ChoDuNguoi` bị chặn
-- [ ] **1.11** `[C]` `application/BoChiaVai` (Factory): sinh vai theo `CauHinhVai`, xáo trộn
+- [x] **1.11** `[C]` `application/BoChiaVai` (Factory): sinh vai theo `CauHinhVai`, xáo trộn
       Fisher–Yates bằng `NguonNgauNhien`, gán; luồng ngoại lệ 2a của UC12
       · Kiểm thử: cùng hạt giống cho cùng kết quả; 10 000 lần chia phân bố đều
 - [ ] **1.12** `[ALL]` Đối chiếu Class Diagram ↔ mã: sửa `docs/diagrams/03-class-loi.puml` cho

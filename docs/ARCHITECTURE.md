@@ -233,7 +233,7 @@ flowchart LR
 
 ## 5. Mô hình miền
 
-*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1), `domain/van/`, `domain/baucu/` (mục 5.4), `domain/kenh/` (mục 5.2); còn mẫu State của ván (1.10) và `BoChiaVai` (1.11). Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
+*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1), `domain/van/`, `domain/baucu/` (mục 5.4), `domain/kenh/` (mục 5.2); `domain/van/trangthai/` (mục 7). Lớp điều khiển đã có: `BoGiaiQuyetDem`, `BoKiemTraThangThua`, `BoChiaVai`. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
 thuộc tính, phương thức **giữ nguyên như sơ đồ** để người chấm dò được từ sơ đồ xuống mã —
 xem mục 13.
 
@@ -363,7 +363,7 @@ chính ra `BAU_LAI`. `phienBauCu` trả phiên đang có hiệu lực.
 | Lớp | Trách nhiệm |
 |---|---|
 | `BoDieuPhoiVan` | Vòng đời ván, chuyển pha, gọi bộ xử lý con đúng thứ tự — **cửa duy nhất** đổi trạng thái ván |
-| `BoChiaVai` | Sinh `VaiTro` theo `CauHinhVai`, xáo trộn bằng `NguonNgauNhien`, gán cho người chơi |
+| `BoChiaVai` | Sinh `VaiTro` theo `CauHinhVai`, xáo trộn bằng `NguonNgauNhien`, gán cho người chơi. **Đã cài** — bảng `LoaiVai` → lớp ở đầu tệp là chỗ duy nhất phải sửa khi thêm vai; `chiaVai()` đòi ván ở `DANG_CHIA_VAI`, kiểm `CauHinhVai` **trước khi gán** (UC12 luồng 2a), không tự chuyển pha |
 | `BoGiaiQuyetDem` | Nạp mọi `HanhDongDem` của đêm, áp dụng theo `doUuTien`, sinh `KetQuaDem` |
 | `BoKiemTraThangThua` | Đếm còn sống theo phe, đối chiếu BR01, BR02. **Đã cài** — `kiemTra(van)` trả `KetQuaThangThua`: `PHE_DAN_THANG` khi S = 0, ngược lại `PHE_SOI_THANG` khi S ≥ D, còn lại `CHUA_KET_THUC`. Chỉ đọc `VanChiDoc`, đếm theo `vaiTro.phe` |
 | `BoQuanLyKenh` | Kênh nào mở, ai xem gì, tại mỗi thời điểm |
