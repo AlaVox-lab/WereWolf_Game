@@ -1,6 +1,6 @@
 import { LoiNghiepVu } from '../chung/LoiNghiepVu.js';
 import type { Phe } from '../chung/Phe.js';
-import { TrangThaiVan } from '../chung/TrangThaiVan.js';
+import type { TrangThaiVan } from '../chung/TrangThaiVan.js';
 import type { BoLuatChoi } from '../luat/BoLuatChoi.js';
 import { CauHinhVai } from '../luat/CauHinhVai.js';
 import type { VanChiDoc } from '../vaitro/NguCanhHanhDong.js';
@@ -8,6 +8,11 @@ import { LuotChoi } from './LuotChoi.js';
 import type { NguoiChoi } from './NguoiChoi.js';
 import type { NguyenNhanChet } from './NguyenNhanChet.js';
 import { NhatKyVan } from './NhatKyVan.js';
+import {
+  ChoDuNguoi,
+  type SuKienChuyenPha,
+  type TrangThaiVanDau,
+} from './trangthai/TrangThaiVanDau.js';
 
 /**
  * Một ván đấu cụ thể — khớp bảng `van_dau`. Khớp giao diện `VanChiDoc` mà phân cấp `VaiTro` đọc.
@@ -15,14 +20,16 @@ import { NhatKyVan } from './NhatKyVan.js';
  * **Bộ luật bất biến** (nguyên tắc 2.3): constructor nhận bộ luật của phòng và tự giữ bản
  * `saoChep()` đã khóa — ván không bao giờ cầm tham chiếu tới bộ luật của phòng.
  *
- * Trạng thái ván mới chỉ là nhãn; các lớp mẫu State và phép chuyển tiếp làm ở hạng mục 1.10.
+ * **Mẫu State**: ván giữ một đối tượng `TrangThaiVanDau`; mọi lần đổi pha đi qua `chuyenPha()`,
+ * `ketThuc()` hoặc `huyVan()` — chuyển tiếp không có trên sơ đồ 11.1 ném lỗi.
  */
 export class VanDau implements VanChiDoc {
   readonly boLuatChoi: BoLuatChoi;
   readonly nhatKy = new NhatKyVan();
   private readonly danhSachNguoiChoi: readonly NguoiChoi[];
   private readonly danhSachLuot: LuotChoi[] = [];
-  private trangThaiHienTai = TrangThaiVan.CHO_DU_NGUOI;
+  private trangThaiHienTai: TrangThaiVanDau = new ChoDuNguoi();
+  private phe: Phe | null = null;
 
   constructor(
     readonly id: string,
@@ -48,7 +55,39 @@ export class VanDau implements VanChiDoc {
   }
 
   get trangThai(): TrangThaiVan {
-    return this.trangThaiHienTai;
+    return this.trangThaiHienTai.ma;
+  }
+
+  /** Phe thắng — `null` khi ván chưa kết thúc hoặc bị hủy. */
+  get pheThang(): Phe | null {
+    return this.phe;
+  }
+
+  /** Chủ phòng còn đổi được bộ luật không — chỉ khi ván chưa bắt đầu (UC25 luồng 1a). */
+  choPhepDoiBoLuat(): boolean {
+    return this.trangThaiHienTai.choPhepDoiBoLuat();
+  }
+
+  /** Cửa chuyển pha duy nhất cho các sự kiện thường. Sai thứ tự ném `CHUYEN_TRANG_THAI_KHONG_HOP_LE`. */
+  chuyenPha(suKien: SuKienChuyenPha): TrangThaiVan {
+    this.trangThaiHienTai = this.trangThaiHienTai[suKien]();
+    return this.trangThaiHienTai.ma;
+  }
+
+  /**
+   * Kết thúc ván với phe thắng (UC20) — chỉ từ `GIAI_QUYET_DEM` hoặc `GIAI_QUYET_PHIEU`, tức ngay
+   * sau một lần kiểm tra thắng thua. Đóng nhật ký để bản ghi diễn tiến được mở công khai.
+   */
+  ketThuc(pheThang: Phe): void {
+    this.trangThaiHienTai = this.trangThaiHienTai.thoaDieuKien();
+    this.phe = pheThang;
+    this.nhatKy.dong();
+  }
+
+  /** Hủy ván khi quá ngưỡng mất kết nối (Q04). Không có phe thắng. */
+  huyVan(): void {
+    this.trangThaiHienTai = this.trangThaiHienTai.quaNguongMatKetNoi();
+    this.nhatKy.dong();
   }
 
   /** Số thứ tự lượt đang chạy; 0 khi chưa bắt đầu lượt nào. */

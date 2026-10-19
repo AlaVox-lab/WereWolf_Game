@@ -103,11 +103,15 @@ class VanDau {
   + layPheCua(id) : Phe
   + taoLuotMoi() : LuotChoi
   + danhDauChet(danhSach) : void
+  + chuyenPha(suKien) : TrangThaiVan
+  + ketThuc(pheThang) : void
+  + huyVan() : void
+  + choPhepDoiBoLuat() : boolean
 }
 note right of VanDau
   Constructor tự giữ boLuatPhong.saoChep()
   đã khóa — bộ luật bất biến trong ván.
-  chuyenPha() làm ở hạng mục 1.10 (mẫu State).
+  Mẫu State: trạng thái là một TrangThaiVanDau.
 end note
 class NguoiChoi {
   + id : String
@@ -203,6 +207,26 @@ LuotChoi "1" o-- "0..*" HanhDongDem
 LuotChoi "1" o-- "0..1" KetQuaDem
 LuotChoi "1" o-- "0..2" PhienBauCu
 VanDau "1" *-- "1" NhatKyVan
+abstract class TrangThaiVanDau {
+  + ma : TrangThaiVan
+  + batDauVan() : TrangThaiVanDau
+  + chiaVaiXong() : TrangThaiVanDau
+  + ketThucDem() : TrangThaiVanDau
+  + chuaKetThuc() : TrangThaiVanDau
+  + thoaDieuKien() : TrangThaiVanDau
+  + congBoXong() : TrangThaiVanDau
+  + hetGioThaoLuan() : TrangThaiVanDau
+  + ketThucBoPhieu() : TrangThaiVanDau
+  + quaNguongMatKetNoi() : TrangThaiVanDau
+  + choPhepDoiBoLuat() : boolean
+}
+note right of TrangThaiVanDau
+  Mười lớp con: ChoDuNguoi, DangChiaVai, PhaDem, GiaiQuyetDem,
+  PhaCongBo, PhaThaoLuan, PhaBoPhieu, GiaiQuyetPhieu, KetThuc, HuyVan.
+  Mỗi lớp chỉ ghi đè sự kiện có mũi tên đi ra trên sơ đồ 11.1;
+  sự kiện khác ném CHUYEN_TRANG_THAI_KHONG_HOP_LE.
+end note
+VanDau "1" o-- "1" TrangThaiVanDau
 VanDau "1" *-- "0..*" KetQuaDem
 VanDau "1" *-- "0..*" PhienBauCu
 PhienBauCu "1" *-- "0..*" PhieuBau

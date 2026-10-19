@@ -175,7 +175,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
 - [x] **1.9** `[B]` `domain/kenh/`: `KenhChat` trừu tượng với `coTheXem`, `coTheGui`, `dangMo`
       theo pha; ba lớp con theo ARCHITECTURE mục 5.2 và **Q10**
       · Kiểm thử: ma trận người sống/chết × phe × pha cho cả ba kênh — phủ **BR14**
-- [ ] **1.10** `[C]` `domain/van/trangthai/`: mẫu State cho `VanDau` — mười trạng thái theo
+- [x] **1.10** `[C]` `domain/van/trangthai/`: mẫu State cho `VanDau` — mười trạng thái theo
       sơ đồ 11.1 cộng chuyển tiếp `HuyVan` theo **Q04**
       · Kiểm thử: mọi chuyển tiếp hợp lệ đi được, mọi chuyển tiếp không có trên sơ đồ ném lỗi;
       **TC20** — đổi bộ luật sau `ChoDuNguoi` bị chặn

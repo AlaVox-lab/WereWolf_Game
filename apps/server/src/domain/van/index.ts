@@ -5,3 +5,4 @@ export { NguoiChoi } from './NguoiChoi.js';
 export { NguyenNhanChet } from './NguyenNhanChet.js';
 export { NhatKyVan, type LoaiSuKien, type SuKien } from './NhatKyVan.js';
 export { VanDau } from './VanDau.js';
+export * from './trangthai/index.js';

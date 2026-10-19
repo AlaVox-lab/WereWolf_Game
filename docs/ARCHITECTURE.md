@@ -423,7 +423,26 @@ Bảng xung đột đầy đủ: `game-rules.md` mục 3.
 
 ## 7. Khuôn mẫu: máy trạng thái ván và tác nhân thời gian
 
-*Chưa cài đặt.* Sơ đồ: `docs/diagrams/06-state-van-dau.puml`.
+*Mẫu State đã cài* — `domain/van/trangthai/TrangThaiVanDau.ts` (hạng mục 1.10). Bộ hẹn giờ và
+cổng chờ lựa chọn chưa cài (2.1). Sơ đồ: `docs/diagrams/06-state-van-dau.puml`.
+
+**Như đã cài**:
+
+- Lớp trừu tượng `TrangThaiVanDau` có một phương thức cho **mỗi nhãn sự kiện trên sơ đồ**
+  (`batDauVan`, `chiaVaiXong`, `ketThucDem`, `chuaKetThuc`, `thoaDieuKien`, `congBoXong`,
+  `hetGioThaoLuan`, `ketThucBoPhieu`, `quaNguongMatKetNoi`). Mặc định ném
+  `CHUYEN_TRANG_THAI_KHONG_HOP_LE`; mười lớp con chỉ ghi đè mũi tên đi ra của mình.
+- Mười lớp **để chung một tệp** có chủ ý: mọi trạng thái đều sang được `HuyVan`, tách tệp thì lớp
+  cơ sở và lớp con nhập vòng, ES module không nạp kịp lớp cha lúc kế thừa.
+- `VanDau` giữ đối tượng trạng thái và có **ba cửa** đổi pha: `chuyenPha(suKien)` cho sự kiện
+  thường; `ketThuc(pheThang)` (chỉ từ `GIAI_QUYET_DEM` / `GIAI_QUYET_PHIEU`) ghi phe thắng;
+  `huyVan()` (Q04, mọi trạng thái trừ hai trạng thái cuối). Hai cửa sau **đóng nhật ký** — sự
+  kiện `KET_THUC` phải ghi **trước** khi gọi chúng.
+- `choPhepDoiBoLuat()` chỉ đúng ở `CHO_DU_NGUOI` — tầng phòng (4.4) dùng để chặn UC25 khi ván đã
+  bắt đầu. Bản sao bộ luật của ván vốn đã khóa từ constructor, nên TC20 đúng ở cả hai tầng.
+- `chuyenPha()` **không tự mở lượt mới** — bộ điều phối (2.2) gọi `taoLuotMoi()` khi vào đêm.
+
+**Thiết kế gốc**:
 
 **Mẫu State**: mỗi trạng thái của `VanDau` là một lớp trong `domain/van/trangthai/`, chỉ
 cho phép đúng những chuyển tiếp có trên sơ đồ. Gọi chuyển tiếp không hợp lệ thì ném lỗi —
