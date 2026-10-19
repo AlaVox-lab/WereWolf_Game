@@ -27,6 +27,7 @@ export type MaLoi =
   | 'KHONG_THE_BAU_LAI'
   | 'DANG_CHO_LUA_CHON'
   | 'KHONG_CO_YEU_CAU'
+  | 'LUA_CHON_KHONG_HOP_LE'
   | 'CHUYEN_TRANG_THAI_KHONG_HOP_LE';
 
 export class LoiNghiepVu extends Error {

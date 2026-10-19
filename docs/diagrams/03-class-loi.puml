@@ -170,8 +170,19 @@ note right of PhienBauCu
   BR11 tắt: hòa thì bầu lại một lần giữa người hòa,
   vòng lại vẫn hòa thì không ai chết (Q03).
 end note
-class BoDieuPhoiVan
-note top of BoDieuPhoiVan : Chưa cài — Giai đoạn 2
+class BoDieuPhoiVan {
+  + van : VanDau
+  - cauHinhVai : CauHinhVai
+  + layThuTuBuocDem() : List<LoaiVai>
+  + xuLyPhaDem() : Promise<KetQuaDem>
+  + layBuocDemHienTai() : LoaiVai
+  + layKetQuaSoi(tienTriId) : List<KetQuaSoi>
+}
+note top of BoDieuPhoiVan
+  Pha đêm (2.2a): bước sinh từ doUuTien của vai trong cấu hình;
+  vai không còn ai sống vẫn chờ giả 8–15 giây (Q05).
+  Pha ngày làm ở 2.3.
+end note
 class BoGiaiQuyetDem {
   - chuoiBuoc : List<BuocGiaiQuyet>
   + {static} xemNanNhan(yDinh) : NanNhan

@@ -17,13 +17,13 @@
 | Cập nhật lần cuối | 2026-10-19 |
 | Phiên bản hiện tại | **`v0.2.0`** — Lõi miền, phát hành 19/10 ([release](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.2.0)). Bỏ qua `v0.1.0` vì Giai đoạn 0 chỉ còn 0.9, không phải mã |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
-| Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2** xong 1/10 (2.1) |
+| Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2** xong 2/11 (2.1, 2.2a) |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
 | Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`), `domain/luat/` (`BoLuatChoi`, `CauHinhVai`), `domain/vaitro/` (`VaiTro` và sáu lớp con), `domain/van/` (`NguoiChoi`, `VanDau`, `LuotChoi`, `KetQuaDem`, `NhatKyVan`), `domain/baucu/` (`PhienBauCu`, `PhieuBau`), `domain/kenh/` (`KenhChat` và ba lớp con), `application/BoGiaiQuyetDem`, `application/BoKiemTraThangThua`, `application/BoChiaVai` |
 | Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
-| Kiểm thử tự động | 178 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`) · độ phủ dòng lệnh 99 % · **18 / 20 TC** (TC01–TC11, TC13, TC14, TC16–TC20); còn TC12, TC15 — cần bộ điều phối ở Giai đoạn 2 · 0 / 5 ST |
+| Kiểm thử tự động | 194 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 16 pha đêm) · độ phủ dòng lệnh 99 % · **18 / 20 TC** (TC01–TC11, TC13, TC14, TC16–TC20); còn TC12, TC15 — cần bộ điều phối ở Giai đoạn 2 · 0 / 5 ST |
 | Thiết kế giao diện | Chưa làm — tới Giai đoạn 3 thì **chờ người dùng kết nối Higgsfield** và đưa ý tưởng, không tự thiết kế |
 
 **Một câu tóm tắt trạng thái**: kho đã dựng xong công cụ — `npm run dev` chạy máy chủ và trang
@@ -199,11 +199,21 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 - [x] 13 bài kiểm thử, gồm cắm `CongLuaChon` thật vào dây chuyền Thợ săn với đồng hồ giả
       (UC17 luồng 2a); `soDoLop.test.ts` bắt được hai lớp mới chưa lên sơ đồ — đã thêm
 
+**Điều phối** — hạng mục 2.2a (2.2 tách đôi thành 2.2a và 2.2b, người dùng đồng ý)
+
+- [x] `application/BoDieuPhoiVan.xuLyPhaDem()`: bước đêm sinh từ `doUuTien` của vai trong cấu
+      hình; vai đã chết vẫn chờ giả 8–15 giây (Q05); lời mời kiểm lựa chọn bằng chính
+      `VaiTro.thucHienLuot()`; kết quả soi; Phù thủy biết nạn nhân; giải quyết + dây chuyền Thợ săn
+- [x] `application/CauHinhThoiGian` — thời lượng bước là cấu hình
+- [x] 16 bài kiểm thử, chạy bằng đồng hồ giả và bộ điều khiển kịch bản: thứ tự gọi, đêm đầy đủ,
+      bỏ lượt khi hết giờ, bước giả Q05, lựa chọn sai, Thợ săn chết ban đêm
+- [x] `BoDieuPhoiVan` lên Class Diagram, gỡ khỏi danh sách chưa cài
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 2 — Điều phối ván và người chơi ảo.** Hạng mục kế tiếp: **2.2** — `BoDieuPhoiVan` pha đêm (TC12, Q01, Q05, Q07).
+**Giai đoạn 2 — Điều phối ván và người chơi ảo.** Hạng mục kế tiếp: **2.2b** — đồng thuận Sói (TC12, Q07), báo cờ an toàn cho Phù thủy (BR07), đêm 1 theo BR03 (Q01).
 
 ---
 

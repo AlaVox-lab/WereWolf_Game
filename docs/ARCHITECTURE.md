@@ -364,7 +364,7 @@ chính ra `BAU_LAI`. `phienBauCu` trả phiên đang có hiệu lực.
 
 | Lớp | Trách nhiệm |
 |---|---|
-| `BoDieuPhoiVan` | Vòng đời ván, chuyển pha, gọi bộ xử lý con đúng thứ tự — **cửa duy nhất** đổi trạng thái ván |
+| `BoDieuPhoiVan` | Vòng đời ván, chuyển pha, gọi bộ xử lý con đúng thứ tự — **cửa duy nhất** đổi trạng thái ván. **Pha đêm đã cài** (2.2a) — xem mục 7 |
 | `BoChiaVai` | Sinh `VaiTro` theo `CauHinhVai`, xáo trộn bằng `NguonNgauNhien`, gán cho người chơi. **Đã cài** — bảng `LoaiVai` → lớp ở đầu tệp là chỗ duy nhất phải sửa khi thêm vai; `chiaVai()` đòi ván ở `DANG_CHIA_VAI`, kiểm `CauHinhVai` **trước khi gán** (UC12 luồng 2a), không tự chuyển pha |
 | `BoGiaiQuyetDem` | Nạp mọi `HanhDongDem` của đêm, áp dụng theo `doUuTien`, sinh `KetQuaDem` |
 | `BoKiemTraThangThua` | Đếm còn sống theo phe, đối chiếu BR01, BR02. **Đã cài** — `kiemTra(van)` trả `KetQuaThangThua`: `PHE_DAN_THANG` khi S = 0, ngược lại `PHE_SOI_THANG` khi S ≥ D, còn lại `CHUA_KET_THUC`. Chỉ đọc `VanChiDoc`, đếm theo `vaiTro.phe` |
@@ -450,6 +450,24 @@ và `application/CongLuaChon.ts` (2.1). Sơ đồ: `docs/diagrams/06-state-van-d
   ném `LoiNghiepVu` nếu sai — lời mời **vẫn mở** để chọn lại. Mỗi người tối đa một lời mời
   (`DANG_CHO_LUA_CHON`); lệnh không có lời mời bị từ chối (`KHONG_CO_YEU_CAU`). `huy()` đóng
   sớm như bỏ lượt. Đây là **cửa duy nhất** cổng Socket.IO và người chơi ảo gửi lựa chọn vào.
+- **`BoDieuPhoiVan.xuLyPhaDem()`** (2.2a) hiện thực mã giả mục 16.1: mở lượt mới → với mỗi bước
+  trong `layThuTuBuocDem()` mời **cùng lúc** mọi người còn sống giữ vai đó qua `CongLuaChon`,
+  bước xong khi tất cả xong hoặc hết giờ → `chuyenPha('ketThucDem')` → `giaiQuyet()` → dây chuyền
+  Thợ săn (mời Thợ săn qua cùng cổng) → `chot()`. **Chưa** kiểm tra thắng thua và chuyển pha
+  tiếp — việc của 2.3.
+  - `layThuTuBuocDem()` lấy mọi loại vai **có trong `CauHinhVai`** và `laHanhDongDem()`, sắp theo
+    `doUuTien` — dùng `BoChiaVai.taoVai()` làm mẫu, không có tên vai nào trong thân hàm.
+  - Bước của vai không còn ai sống: chờ giả ngẫu nhiên trong `[buocGiaToiThieu, buocGiaToiDa]`
+    qua `BoHenGio` (Q05).
+  - Lựa chọn thô đi qua `docLuaChon()` rồi **chính `VaiTro.thucHienLuot()`** — lời mời dùng luật
+    của vai làm bộ kiểm, không chép lại luật.
+  - `nanNhanBiCanId` của Phù thủy tính từ ý định đã ghi trong lượt, lúc mời.
+  - Kết quả soi lưu theo Tiên tri, đọc bằng `layKetQuaSoi()`; `layBuocDemHienTai()` cho kênh Sói
+    và góc nhìn biết đang lượt vai nào.
+  - Thời lượng là `CauHinhThoiGian` (`application/CauHinhThoiGian.ts`), mặc định theo
+    `game-rules.md` mục 4.
+  - **Chưa có** (2.2b): đồng thuận nhiều Sói — hiện mỗi Sói ghi một ý định `CAN` riêng và bộ giải
+    quyết lấy ý định đầu tiên; báo cờ an toàn cho Phù thủy; đêm 1 theo BR03 (Q01).
 
 **Thiết kế gốc**:
 

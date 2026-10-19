@@ -18,7 +18,7 @@ const SO_DO = readFileSync(join(GOC, 'docs/diagrams/03-class-loi.puml'), 'utf-8'
 const THU_MUC_MA = ['domain', 'application'].map((t) => join(GOC, 'apps/server/src', t));
 
 /** Lớp trên sơ đồ chưa có trong mã — phải khớp đúng danh sách này, cài xong thì gỡ khỏi đây. */
-const CHUA_CAI = ['BoDieuPhoiVan', 'PhongChoi', 'TaiKhoan'];
+const CHUA_CAI = ['PhongChoi', 'TaiKhoan'];
 
 /** Lớp kỹ thuật không vẽ trên sơ đồ lõi. */
 const KHONG_VE = ['LoiNghiepVu', 'DongHoGia', 'NgauNhienCoHat'];

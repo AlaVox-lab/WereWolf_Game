@@ -33,7 +33,7 @@ chạy trong `npm test` và CI:
 2. Mỗi lớp `export` từ `domain/` và `application/` phải có mặt trên sơ đồ (trong khối lớp hoặc
    ghi chú). Ngoại lệ: `LoiNghiepVu`, `DongHoGia`, `NgauNhienCoHat` — lớp kỹ thuật.
 3. Lớp có trên sơ đồ mà chưa có mã phải khớp đúng danh sách `CHUA_CAI` trong bài kiểm thử —
-   hiện là `BoDieuPhoiVan`, `PhongChoi`, `TaiKhoan`. Cài xong lớp nào thì gỡ khỏi danh sách.
+   hiện là `PhongChoi`, `TaiKhoan`. Cài xong lớp nào thì gỡ khỏi danh sách.
 
 Bài kiểm thử chỉ so tên, không so kiểu và tham số — đổi chữ ký mà giữ tên thì vẫn phải tự sửa sơ đồ.
 

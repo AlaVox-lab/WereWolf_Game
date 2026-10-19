@@ -207,11 +207,18 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
 
 - [x] **2.1** `[A]` `BoHenGio` (tác nhân AC04) trên cổng `DongHo`; `CongLuaChon` — lời hứa
       được giải quyết bởi lệnh người chơi hoặc hết giờ, cái nào đến trước (ARCHITECTURE mục 7)
-- [ ] **2.2** `[A]` `BoDieuPhoiVan` — **pha đêm**: duyệt vai theo cấu hình và `doUuTien`
-      (**Q05**); mời từng vai, chờ `CongLuaChon`; Sói đồng thuận trên kênh Sói, hết giờ thì chọn
-      ngẫu nhiên trong mục tiêu đã đề xuất (BR12, **Q07**); Phù thủy được báo nạn nhân và cờ
-      an toàn (BR07); đêm 1 theo BR03 và **Q01**; gọi `BoGiaiQuyetDem`
-      · Kiểm thử: **TC12**; vai bỏ lượt khi hết giờ; Tiên tri nhận đúng phe
+- [x] **2.2a** `[A]` `BoDieuPhoiVan` — **khung pha đêm**: duyệt vai theo **cấu hình** và
+      `doUuTien` (**Q05**) — vai không còn ai sống vẫn chờ giả 8–15 giây; mời người giữ vai qua
+      `CongLuaChon`, kiểm lựa chọn bằng chính `VaiTro.thucHienLuot()`; ghi ý định; trả kết quả
+      soi cho Tiên tri; Phù thủy nhận `nanNhanBiCanId` từ ý định; gọi `BoGiaiQuyetDem` và dây
+      chuyền Thợ săn; thời lượng bước là cấu hình
+      · Kiểm thử: thứ tự gọi; vai bỏ lượt khi hết giờ; bước giả của vai đã chết; Tiên tri nhận
+      đúng phe; một đêm đầy đủ tới `GIAI_QUYET_DEM`
+- [ ] **2.2b** `[A]` Pha đêm — **phần riêng từng vai**: Sói đồng thuận trên kênh Sói, hết giờ thì
+      chọn ngẫu nhiên trong mục tiêu đã đề xuất (BR12, **Q07**); Phù thủy được báo nạn nhân và cờ
+      an toàn (BR07); đêm 1 theo BR03 và **Q01**
+      · Kiểm thử: **TC12**; nhiều Sói; BR03 tắt
+      · *2.2 tách đôi ngày 19/10 cho dễ duyệt — người dùng đồng ý*
 - [ ] **2.3** `[B]` `BoDieuPhoiVan` — **pha ngày**: công bố người chết không kèm nguyên nhân;
       thảo luận có đếm giờ; bỏ phiếu; giải quyết phiếu; dây chuyền Thợ săn; **kiểm tra thắng
       thua hai lần mỗi lượt**
