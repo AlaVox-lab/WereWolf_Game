@@ -167,6 +167,7 @@ Ghi vắn tắt để tránh bàn lại. Phần lớn đến từ tài liệu g�
 | Rào chắn phụ thuộc bằng ESLint, không dùng công cụ riêng | `ARCHITECTURE.md` mục 4.1 |
 | `NgauNhienCoHat` và `DongHoGia` thuần, đặt trong `domain/chung/`; bản cài trên giờ hệ thống và nguồn ngẫu nhiên thật sẽ ở `infrastructure/` | Hạng mục 1.1 |
 | Thiết kế giao diện chờ người dùng kết nối Higgsfield | 19/10 |
+| Commit mang tác giả `AlaVox-lab`, không đổi sang tên thật từng thành viên | 19/10 — nhóm chấp nhận |
 
 ---
 
