@@ -17,13 +17,13 @@
 | Cập nhật lần cuối | 2026-10-19 |
 | Phiên bản hiện tại | Chưa có. `v0.1.0` cắt khi xong 0.6 và 0.9 |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
-| Giai đoạn MVP | **Giai đoạn 0** xong 8/10 hạng mục, còn 0.6, 0.9 · **Giai đoạn 1** xong 11/12 (1.1–1.11) |
+| Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) — đủ điều kiện cắt `v0.2.0` |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
 | Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`), `domain/luat/` (`BoLuatChoi`, `CauHinhVai`), `domain/vaitro/` (`VaiTro` và sáu lớp con), `domain/van/` (`NguoiChoi`, `VanDau`, `LuotChoi`, `KetQuaDem`, `NhatKyVan`), `domain/baucu/` (`PhienBauCu`, `PhieuBau`), `domain/kenh/` (`KenhChat` và ba lớp con), `application/BoGiaiQuyetDem`, `application/BoKiemTraThangThua`, `application/BoChiaVai` |
 | Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
-| Kiểm thử tự động | 161 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`) · **18 / 20 TC** (TC01–TC11, TC13, TC14, TC16–TC20); còn TC12, TC15 — cần bộ điều phối ở Giai đoạn 2 · 0 / 5 ST |
+| Kiểm thử tự động | 165 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ) · độ phủ dòng lệnh 99 % · **18 / 20 TC** (TC01–TC11, TC13, TC14, TC16–TC20); còn TC12, TC15 — cần bộ điều phối ở Giai đoạn 2 · 0 / 5 ST |
 | Thiết kế giao diện | Chưa làm — tới Giai đoạn 3 thì **chờ người dùng kết nối Higgsfield** và đưa ý tưởng, không tự thiết kế |
 
 **Một câu tóm tắt trạng thái**: kho đã dựng xong công cụ — `npm run dev` chạy máy chủ và trang
@@ -178,11 +178,23 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 - [x] 10 bài kiểm thử: cùng hạt giống cùng kết quả; 60 000 lần xáo cho 6 hoán vị đều nhau;
       10 000 lần chia 6 người, mỗi ghế nhận Sói khoảng 1/6
 
+**Khép Giai đoạn 1** — hạng mục 1.12, cùng 0.6
+
+- [x] Đối chiếu Class Diagram ↔ mã: bỏ `chuyenPha()` trùng; `KetQuaDem`, `PhienBauCu` chuyển về
+      `LuotChoi`; `mucTieuDemTruoc` là mã người chơi; vẽ thêm `VanChiDoc`, `NguoiChoiTrongVan`;
+      ghi chú rõ lớp chưa cài
+- [x] `tests/docs/soDoLop.test.ts` — đối chiếu sơ đồ ↔ mã hai chiều, chạy trong CI; đã thử đổi tên
+      một phương thức trên sơ đồ, bài kiểm thử báo đỏ đúng chỗ
+- [x] `npm run so-do` — xuất 7 sơ đồ SVG + PNG bằng PlantUML trong Docker; cả 7 dựng không lỗi
+- [x] `docs/diagrams/README.md` — bảng khác biệt so với Hình 9.1 để cập nhật tài liệu gốc
+- [x] Đo độ phủ bằng `@vitest/coverage-v8`: toàn bộ 99 %, `domain/` 96–100 % từng thư mục
+- [x] **0.6**: `npm run db:up` lên PostgreSQL 17.11 *healthy*
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 1 — Lõi miền.** Hạng mục kế tiếp: **1.12** — đối chiếu Class Diagram ↔ mã, xuất ảnh sơ đồ. Xong là khép Giai đoạn 1, cắt `v0.2.0`.
+**Giai đoạn 1 hoàn thành.** Hạng mục kế tiếp: **2.1** — `BoHenGio` và `CongLuaChon`, mở đầu Giai đoạn 2.
 
 ---
 
@@ -191,11 +203,10 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 ### Theo thứ tự
 
 1. **Mời hai thành viên còn lại và giảng viên** vào kho GitHub (phần còn lại của 0.1)
-2. **0.6** — bật Docker Desktop, chạy `npm run db:up`, xác nhận PostgreSQL lên trạng thái
-   *healthy*
-3. **0.9 phần còn lại** — gán tên cho nhãn A/B/C, xác nhận tuần học kỳ để chỉnh lịch `ROADMAP.md`
-4. **Cắt `v0.1.0`** khi 0.1–0.9 xong
-5. **1.12** — đối chiếu sơ đồ, khép Giai đoạn 1
+2. **0.9 phần còn lại** — gán tên cho nhãn A/B/C, xác nhận tuần học kỳ để chỉnh lịch `ROADMAP.md`
+3. **Cắt `v0.1.0` và `v0.2.0`** — Giai đoạn 0 chỉ còn 0.9 (không phải mã), Giai đoạn 1 đã xong
+4. **Cập nhật tài liệu gốc `.docx`** theo bảng khác biệt ở `docs/diagrams/README.md` — trước mốc M4
+5. **2.1 → 2.10** — điều phối ván và người chơi ảo
 6. **Chốt Q12, Q13** — không chặn việc gì, đã cài theo đề xuất
 
 ### Chờ giảng viên
@@ -211,7 +222,6 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 | Vấn đề | Ảnh hưởng | Hướng xử lý |
 |---|---|---|
 | Không bật được quy tắc bảo vệ nhánh | Kho riêng tư gói miễn phí — ai cũng đẩy thẳng được lên `main` | Tuân thủ tự giác: việc mới đi qua pull request vào `dev`. Bật lại nếu chuyển kho công khai |
-| Docker Desktop chưa bật trên máy phát triển | `db:up` chưa kiểm chứng; chưa chặn việc gì tới Giai đoạn 4 | Bật Docker, chạy 0.6 |
 | Chưa xác nhận tuần học kỳ | Có thể đã trễ mốc M2, M3 so với `ROADMAP.md` | Xác nhận rồi dời bảng thời gian |
 | Nhãn A/B/C chưa gán người | Chưa phân được hạng mục | Gán ở 0.9 |
 

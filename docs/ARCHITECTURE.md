@@ -123,8 +123,9 @@ WereWolf_Game/
 │   ├── server/
 │   │   ├── src/main.ts          # khởi động Express ở cổng PORT (mặc định 3000)
 │   │   ├── src/interface/api/app.ts   # createApp() — GET /api/health
-│   │   ├── src/domain/…         # khung rỗng
-│   │   ├── tests/health.test.ts
+│   │   ├── src/domain/          # lõi miền — Giai đoạn 1 xong
+│   │   ├── src/application/     # BoGiaiQuyetDem, BoKiemTraThangThua, BoChiaVai
+│   │   ├── tests/               # domain/, application/, docs/ (đối chiếu Class Diagram ↔ mã)
 │   │   └── vitest.config.ts
 │   └── web/
 │       ├── vite.config.ts       # proxy /api và /socket.io sang :3000
@@ -135,6 +136,7 @@ WereWolf_Game/
 │   ├── docker-compose.yml       # PostgreSQL 17
 │   └── .env.example
 ├── docs/                        # ARCHITECTURE, PROJECT_STATE, ROADMAP, game-rules, adr/, diagrams/
+├── scripts/xuat-so-do.mjs       # npm run so-do — PlantUML trong Docker, ra docs/diagrams/out/
 ├── eslint.config.js             # RÀO CHẮN: domain/ không nhập ra ngoài; web không nhập server
 ├── tsconfig.base.json
 ├── package.json                 # lệnh gốc: dev, test, lint, typecheck, format, db:up, db:down
@@ -680,7 +682,7 @@ Nếu một yêu cầu chạm vào danh sách này, dừng lại và trao đổi
 |---|---|
 | Sửa lỗi bên trong một khuôn mẫu đã có | **Không** |
 | Cài đặt xong một khuôn mẫu đang ghi *chưa cài đặt* | **Có** — bỏ nhãn, ghi tệp thật |
-| Đổi chữ ký lớp miền hoặc thêm lớp miền | **Có** — và cập nhật `docs/diagrams/03-class-loi.puml` |
+| Đổi chữ ký lớp miền hoặc thêm lớp miền | **Có** — và cập nhật `docs/diagrams/03-class-loi.puml`; `tests/docs/soDoLop.test.ts` báo đỏ nếu quên |
 | Thêm điểm cuối REST hoặc sự kiện socket | **Có** — mục 11 |
 | Thêm bảng hoặc cột mà mã khác cần biết | **Có** — mục 12 |
 | Chốt hoặc đổi công nghệ | **Có** — mục 3, kèm ADR |

@@ -96,7 +96,7 @@ thì thêm người chơi ảo.
 
 ## Giai đoạn 0 — Dựng nền
 
-**Tuần 3** · **Phiên bản**: `v0.1.0` · **Trạng thái**: Gần xong — còn 0.6, 0.9
+**Tuần 3** · **Phiên bản**: `v0.1.0` · **Trạng thái**: Gần xong — còn 0.9 (tên A/B/C, tuần học kỳ)
 
 Mục tiêu: kho mã chạy được một lệnh kiểm thử và một lệnh chạy thử trên máy cả ba người, có
 rào chắn tự động cho nguyên tắc lõi miền không phụ thuộc gì.
@@ -115,9 +115,9 @@ rào chắn tự động cho nguyên tắc lõi miền không phụ thuộc gì.
       lẫn `web` nhập được
 - [x] **0.5** `[C]` `apps/web`: Vite + React + TypeScript + Tailwind; trang tạm hiển thị
       "Làng Trăng Mờ" và kết quả gọi `/api/health` qua proxy của Vite
-- [ ] **0.6** `[C]` `infra/docker-compose.yml` dựng PostgreSQL 17; `infra/.env.example` chạy
+- [x] **0.6** `[C]` `infra/docker-compose.yml` dựng PostgreSQL 17; `infra/.env.example` chạy
       được ngay; lệnh `npm run db:up` / `db:down`
-      · *Đã viết, cú pháp hợp lệ — còn chạy thử `db:up` khi bật Docker Desktop*
+      · *19/10: `db:up` lên PostgreSQL 17.11 trạng thái healthy, truy vấn được*
 - [x] **0.7** `[B]` Rào chắn phụ thuộc: quy tắc ESLint `no-restricted-imports` (hoặc
       dependency-cruiser) làm **hỏng lint** nếu `domain/` nhập bất cứ thứ gì ngoài `domain/`,
       hoặc `apps/web` nhập mã máy chủ. Tự thêm một lần nhập sai để chứng minh lint bắt được
@@ -135,7 +135,7 @@ rào chắn tự động cho nguyên tắc lõi miền không phụ thuộc gì.
 
 ## Giai đoạn 1 — Lõi miền
 
-**Tuần 3–5** · **Phiên bản**: `v0.2.0` · **Điều kiện bắt đầu**: 0.2, 0.3, 0.7 xong; Q01–Q11 đã chốt — **đạt 19/10**
+**Tuần 3–5** · **Phiên bản**: `v0.2.0` · **Trạng thái**: **Hoàn thành 19/10** · **Điều kiện bắt đầu**: 0.2, 0.3, 0.7 xong; Q01–Q11 đã chốt — đạt 19/10
 
 Mục tiêu: toàn bộ luật chơi viết bằng TypeScript thuần trong `domain/` và các bộ xử lý thuần
 trong `application/`, **không mạng, không cơ sở dữ liệu, không đồng hồ thật**. TC01–TC20
@@ -182,11 +182,17 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
 - [x] **1.11** `[C]` `application/BoChiaVai` (Factory): sinh vai theo `CauHinhVai`, xáo trộn
       Fisher–Yates bằng `NguonNgauNhien`, gán; luồng ngoại lệ 2a của UC12
       · Kiểm thử: cùng hạt giống cho cùng kết quả; 10 000 lần chia phân bố đều
-- [ ] **1.12** `[ALL]` Đối chiếu Class Diagram ↔ mã: sửa `docs/diagrams/03-class-loi.puml` cho
+- [x] **1.12** `[ALL]` Đối chiếu Class Diagram ↔ mã: sửa `docs/diagrams/03-class-loi.puml` cho
       khớp chữ ký thật, xuất ảnh, báo lại thay đổi để cập nhật tài liệu gốc
+      · *19/10: sửa 5 chỗ lệch; thêm `tests/docs/soDoLop.test.ts` đối chiếu sơ đồ ↔ mã hai chiều
+      trong CI; `npm run so-do` xuất 7 sơ đồ SVG + PNG bằng PlantUML trong Docker; bảng khác
+      biệt so với Hình 9.1 ở `docs/diagrams/README.md`*
 
 **Tiêu chí hoàn thành**: TC01–TC11, TC13, TC14, TC16–TC20 xanh (TC12, TC15 cần bộ điều phối,
 làm ở G2). Độ phủ `domain/` ≥ 90 %. Lint xác nhận `domain/` không nhập gì bên ngoài.
+
+**Kết quả 19/10**: đạt cả ba — 18/20 TC xanh đúng danh sách trên; độ phủ dòng lệnh `domain/`
+96–100 % từng thư mục, toàn bộ 99 %; lint sạch. 165 bài kiểm thử.
 
 **Đầu ra cho báo cáo**: Class Diagram đã kiểm chứng bằng mã; bảng TC → tệp kiểm thử.
 

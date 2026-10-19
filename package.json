@@ -20,7 +20,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:up": "docker compose -f infra/docker-compose.yml --env-file infra/.env.example up -d",
-    "db:down": "docker compose -f infra/docker-compose.yml --env-file infra/.env.example down"
+    "db:down": "docker compose -f infra/docker-compose.yml --env-file infra/.env.example down",
+    "so-do": "node scripts/xuat-so-do.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
