@@ -173,7 +173,15 @@ note bottom of BuocGiaiQuyet
   Chain of Responsibility: bước Bảo vệ, Cắn, Cứu, Độc.
   Ý định sắp theo doUuTien rồi đưa vào bước cùng loại.
 end note
-class BoKiemTraThangThua
+class BoKiemTraThangThua {
+  + kiemTra(van) : KetQuaThangThua
+}
+note right of BoKiemTraThangThua
+  S = 0 → PHE_DAN_THANG (BR02)
+  S ≥ D → PHE_SOI_THANG (BR01)
+  còn lại → CHUA_KET_THUC
+  Gọi hai lần mỗi lượt.
+end note
 TaiKhoan "1" -- "0..*" NguoiChoi
 PhongChoi "1" -- "0..*" VanDau
 PhongChoi "1" *-- "1" BoLuatChoi

@@ -354,7 +354,7 @@ chính ra `BAU_LAI`. `phienBauCu` trả phiên đang có hiệu lực.
 | `BoDieuPhoiVan` | Vòng đời ván, chuyển pha, gọi bộ xử lý con đúng thứ tự — **cửa duy nhất** đổi trạng thái ván |
 | `BoChiaVai` | Sinh `VaiTro` theo `CauHinhVai`, xáo trộn bằng `NguonNgauNhien`, gán cho người chơi |
 | `BoGiaiQuyetDem` | Nạp mọi `HanhDongDem` của đêm, áp dụng theo `doUuTien`, sinh `KetQuaDem` |
-| `BoKiemTraThangThua` | Đếm còn sống theo phe, đối chiếu BR01, BR02 |
+| `BoKiemTraThangThua` | Đếm còn sống theo phe, đối chiếu BR01, BR02. **Đã cài** — `kiemTra(van)` trả `KetQuaThangThua`: `PHE_DAN_THANG` khi S = 0, ngược lại `PHE_SOI_THANG` khi S ≥ D, còn lại `CHUA_KET_THUC`. Chỉ đọc `VanChiDoc`, đếm theo `vaiTro.phe` |
 | `BoQuanLyKenh` | Kênh nào mở, ai xem gì, tại mỗi thời điểm |
 
 ---

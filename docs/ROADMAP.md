@@ -170,7 +170,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
 - [x] **1.7** `[B]` `domain/baucu/`: `PhieuBau`, `PhienBauCu` — `ghiPhieu` (mỗi người một phiếu,
       cho bỏ trắng), `kiemPhieu`, `xuLyHoa` theo BR11 và **Q03**
       · Kiểm thử: **TC11, TC19**; bỏ phiếu hai lần bị chặn; người chết không được bầu
-- [ ] **1.8** `[B]` `application/BoKiemTraThangThua` đúng công thức mục 16.4 tài liệu gốc
+- [x] **1.8** `[B]` `application/BoKiemTraThangThua` đúng công thức mục 16.4 tài liệu gốc
       · Kiểm thử: **TC13, TC14**; bảng đủ biên (S = 0, S = D, S = D − 1)
 - [ ] **1.9** `[B]` `domain/kenh/`: `KenhChat` trừu tượng với `coTheXem`, `coTheGui`, `dangMo`
       theo pha; ba lớp con theo ARCHITECTURE mục 5.2 và **Q10**
