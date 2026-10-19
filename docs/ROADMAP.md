@@ -236,7 +236,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
 - [x] **2.8** `[A]` `infrastructure/bot/NguoiChoiAo`: nghe góc nhìn của chính nó, khi được mời
       thì chờ ngẫu nhiên 1–4 giây rồi chọn ngẫu nhiên trong danh sách mục tiêu hợp lệ, gửi qua
       **đúng cửa lệnh** người thật dùng; bỏ phiếu ngẫu nhiên; không nhắn tin
-- [ ] **2.9** `[C]` `scripts/mo-phong.ts`: `npm run mo-phong -- --so-nguoi 8 --hat-giong 42
+- [x] **2.9** `[C]` `scripts/mo-phong.ts`: `npm run mo-phong -- --so-nguoi 8 --hat-giong 42
       --so-van 1000` chạy hàng loạt ván toàn người chơi ảo, in nhật ký một ván hoặc thống kê
       tỉ lệ thắng của nhiều ván
 - [ ] **2.10** `[A][B]` Kiểm thử hệ thống không giao diện: **ST01** (6 người, Dân thắng) và

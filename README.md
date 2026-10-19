@@ -17,8 +17,10 @@ Trường Đại học Thủ Dầu Một.
 
 ## Trạng thái
 
-**Đang khởi tạo** — có bộ tài liệu và khung thư mục, chưa có mã nguồn. Xem
-[`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md).
+Đã có **toàn bộ luật chơi và bộ điều phối ván** — một ván chạy trọn vẹn bằng người chơi ảo, chưa có
+máy chủ thời gian thực và giao diện. Bản phát hành mới nhất:
+[v0.2.0 — Lõi miền](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.2.0). Chi tiết
+tiến độ: [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md).
 
 ## Trò chơi
 
@@ -40,20 +42,29 @@ khi số Sói còn sống không ít hơn số người còn lại. Luật đầ
 | [`docs/design/`](docs/design/) | Thiết kế giao diện trên Claude Design — làm ở Giai đoạn 3 |
 | [`docs/adr/`](docs/adr/) | Bản ghi quyết định kiến trúc |
 
-## Công nghệ (đề xuất)
+## Công nghệ
 
 TypeScript toàn tầng — Node.js, Express, Socket.IO, PostgreSQL, Prisma, React, Vite, Tailwind
-CSS, Vitest. Lý do và phương án thay thế: [ADR-0001](docs/adr/0001-chon-bo-cong-nghe.md).
+CSS, Vitest — đã chốt ở [ADR-0001](docs/adr/0001-chon-bo-cong-nghe.md), kèm lý do và phương án thay thế.
 
 ## Chạy thử
 
-*Chưa có — hoàn thành ở Giai đoạn 0 của [`ROADMAP.md`](docs/ROADMAP.md).* Dự kiến:
+Cần Node.js 24 và Docker Desktop.
 
 ```bash
 npm install
-npm run db:up
-npm run dev
 ```
+
+```bash
+npm test
+```
+
+```bash
+npm run mo-phong
+```
+
+`npm run mo-phong` chạy một ván toàn người chơi ảo và in nhật ký; thêm
+`-- --so-nguoi 6-12 --so-van 1000` để xem thống kê tỉ lệ thắng. Giao diện chơi được ở Giai đoạn 5.
 
 ## Cấu trúc thư mục
 

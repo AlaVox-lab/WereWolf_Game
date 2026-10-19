@@ -90,6 +90,7 @@ class BoLuatChoi {
   + saoChep() : BoLuatChoi
 }
 class CauHinhVai {
+  + {static} macDinh(soNguoi) : CauHinhVai
   - danhSachVaiVaSoLuong : Map<LoaiVai, int>
   + soLuong(loai) : int
   + tongSoVai() : int

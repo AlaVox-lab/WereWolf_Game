@@ -61,6 +61,17 @@ export class DongHoGia implements DongHo {
     this.hienTai = dich;
   }
 
+  /**
+   * Nhảy thẳng tới hẹn sớm nhất và gọi nó (cùng mọi hẹn tới hạn đúng lúc đó). Trả `false` nếu
+   * không còn hẹn nào. Bộ mô phỏng dùng để chạy hàng nghìn ván mà không tua từng bước nhỏ.
+   */
+  tuaToiHenKeTiep(): boolean {
+    const somNhat = this.layHenSomNhat();
+    if (!somNhat) return false;
+    this.tua(somNhat.luc - this.hienTai);
+    return true;
+  }
+
   /** Số hẹn đang chờ — tiện cho kiểm thử. */
   soHenDangCho(): number {
     return this.hangHen.length;

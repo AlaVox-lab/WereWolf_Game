@@ -131,7 +131,8 @@ WereWolf_Game/
 │   │   ├── src/main.ts          # khởi động Express ở cổng PORT (mặc định 3000)
 │   │   ├── src/interface/api/app.ts   # createApp() — GET /api/health
 │   │   ├── src/domain/          # lõi miền — Giai đoạn 1 xong
-│   │   ├── src/application/     # BoGiaiQuyetDem, BoKiemTraThangThua, BoChiaVai
+│   │   ├── src/application/     # bộ điều phối và các bộ xử lý — Giai đoạn 2
+│   │   ├── src/infrastructure/bot/  # NguoiChoiAo, moPhong
 │   │   ├── tests/               # domain/, application/, docs/ (đối chiếu Class Diagram ↔ mã)
 │   │   └── vitest.config.ts
 │   └── web/
@@ -144,6 +145,7 @@ WereWolf_Game/
 │   └── .env.example
 ├── docs/                        # ARCHITECTURE, PROJECT_STATE, ROADMAP, game-rules, adr/, diagrams/
 ├── scripts/xuat-so-do.mjs       # npm run so-do — PlantUML trong Docker, ra docs/diagrams/out/
+├── scripts/mo-phong.ts          # npm run mo-phong — chạy hàng loạt ván toàn người chơi ảo
 ├── eslint.config.js             # RÀO CHẮN: domain/ không nhập ra ngoài; web không nhập server
 ├── tsconfig.base.json
 ├── package.json                 # lệnh gốc: dev, test, lint, typecheck, format, db:up, db:down
@@ -589,7 +591,22 @@ qua Socket.IO là hạng mục ROADMAP 4.11.
 ## 9. Khuôn mẫu: tính xác định và nhật ký ván — PC03
 
 *Đã cài* — cổng `DongHo`, `NguonNgauNhien` (1.1); `NhatKyVan` (1.4); ghi nhật ký suốt ván trong
-`BoDieuPhoiVan` (2.7). Bộ mô phỏng hàng loạt chưa có (2.9).
+`BoDieuPhoiVan` (2.7); bộ mô phỏng hàng loạt (2.9).
+
+**Bộ mô phỏng** — `infrastructure/bot/moPhong.ts` + `scripts/mo-phong.ts` (2.9):
+`moPhongMotVan({ soNguoi, hatGiong, cauHinhVai?, luat?, thoiGian? })` chạy trọn một ván toàn người
+chơi ảo qua **đúng đường bắt đầu ván thật** (người chơi chưa có vai → `batDauVan` → `BoChiaVai` →
+`chiaVaiXong` → `chayVan()`). Mỗi vòng đợi mọi lời hứa đang treo chạy xong rồi gọi
+`DongHoGia.tuaToiHenKeTiep()` — 1 000 ván mất dưới một giây thật. Có `gioiHanBuoc` chống lặp vô
+tận. Bộ vai mặc định là `CauHinhVai.macDinh(n)`: Sói lớn nhất còn < n/3, mỗi vai đặc biệt một người.
+
+```bash
+npm run mo-phong                                    # một ván 8 người, in nhật ký dễ đọc
+npm run mo-phong -- --so-nguoi 6-12 --so-van 1000   # bảng thống kê theo số người
+npm run mo-phong -- --hat-giong 42 --tat BR11       # tắt quy tắc tùy biến, lặp được --tat
+```
+
+Lệnh thoát mã 1 nếu có ván ném lỗi hoặc không kết thúc — dùng được trong CI.
 
 **Ghi nhật ký như đã cài** (2.7): mọi dòng đi qua `BoDieuPhoiVan.ghi()`, thời điểm lấy từ
 `BoHenGio`. Ghi **trực tiếp** chứ không qua `BoPhatSuKien`, vì sự kiện công khai cố tình thiếu ý

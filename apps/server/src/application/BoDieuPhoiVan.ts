@@ -295,28 +295,30 @@ export class BoDieuPhoiVan {
     this.chuyen('hetGioThaoLuan');
 
     const ketQuaPhien = await this.boPhieu(this.van.layLuotHienTai());
+    const coBauLai = this.van.layLuotHienTai().layDanhSachPhienBauCu().length > 1;
+    // Ghi kết quả kiểm phiếu ngay — trước khi Thợ săn bị treo kịp chọn mục tiêu.
+    this.ghi('KET_QUA_BO_PHIEU', { luot: this.van.luotHienTai, ketQuaPhien, coBauLai });
     this.chuyen('ketThucBoPhieu');
 
     let phatBan: PhatBan[] = [];
     if (ketQuaPhien.loai === 'TREO_CO') {
-      const id = ketQuaPhien.nguoiBiTreoId;
-      this.van.danhDauChet([{ nguoiChoiId: id, nguyenNhan: NguyenNhanChet.BI_TREO_CO }]);
-      phatBan = await this.boGiaiQuyetDem.xuLyDayChuyen(this.van, [id], (thoSan, ungVien) =>
-        this.moiThoSanBan(thoSan, ungVien),
+      const treoCo = {
+        nguoiChoiId: ketQuaPhien.nguoiBiTreoId,
+        nguyenNhan: NguyenNhanChet.BI_TREO_CO,
+      };
+      this.van.danhDauChet([treoCo]);
+      this.ghiNguoiChet([treoCo], []); // ghi ngay lúc thi hành, trước khi Thợ săn chọn
+      phatBan = await this.boGiaiQuyetDem.xuLyDayChuyen(
+        this.van,
+        [treoCo.nguoiChoiId],
+        (thoSan, ungVien) => this.moiThoSanBan(thoSan, ungVien),
+      );
+      this.ghiNguoiChet(
+        phatBan.map((p) => ({ nguoiChoiId: p.mucTieuId, nguyenNhan: NguyenNhanChet.BI_BAN })),
+        phatBan,
       );
     }
-    const coBauLai = this.van.layLuotHienTai().layDanhSachPhienBauCu().length > 1;
     this.ketQuaNgay = { ketQuaPhien, coBauLai, phatBan };
-    this.ghi('KET_QUA_BO_PHIEU', { luot: this.van.luotHienTai, ketQuaPhien, coBauLai });
-    this.ghiNguoiChet(
-      [
-        ...(ketQuaPhien.loai === 'TREO_CO'
-          ? [{ nguoiChoiId: ketQuaPhien.nguoiBiTreoId, nguyenNhan: NguyenNhanChet.BI_TREO_CO }]
-          : []),
-        ...phatBan.map((p) => ({ nguoiChoiId: p.mucTieuId, nguyenNhan: NguyenNhanChet.BI_BAN })),
-      ],
-      phatBan,
-    );
     this.hetHanPha = null;
     this.suKien.phat({ loai: 'KET_QUA_NGAY', ketQua: this.ketQuaNgay }, { loai: 'TAT_CA' });
     this.kiemTraVaChuyen();

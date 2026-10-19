@@ -35,6 +35,23 @@ export class CauHinhVai {
     [LoaiVai.ThoSan]: 2,
   };
 
+  /**
+   * Bộ vai mặc định cho phòng `soNguoi` người: số Sói lớn nhất còn nhỏ hơn một phần ba (Q06), mỗi
+   * vai đặc biệt một người, còn lại là Dân làng. Hợp lệ với mọi số người từ 6 đến 12.
+   */
+  static macDinh(soNguoi: number): CauHinhVai {
+    const soSoi = Math.max(1, Math.floor((soNguoi - 1) / 3));
+    const dacBiet = 4; // Bảo vệ, Tiên tri, Phù thủy, Thợ săn
+    return new CauHinhVai({
+      [LoaiVai.Soi]: soSoi,
+      [LoaiVai.BaoVe]: 1,
+      [LoaiVai.TienTri]: 1,
+      [LoaiVai.PhuThuy]: 1,
+      [LoaiVai.ThoSan]: 1,
+      [LoaiVai.DanLang]: soNguoi - soSoi - dacBiet,
+    });
+  }
+
   private readonly danhSachVaiVaSoLuong: ReadonlyMap<LoaiVai, number>;
 
   constructor(soLuong: Partial<Record<LoaiVai, number>>) {

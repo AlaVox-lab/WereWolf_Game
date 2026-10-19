@@ -17,13 +17,13 @@
 | Cập nhật lần cuối | 2026-10-19 |
 | Phiên bản hiện tại | **`v0.2.0`** — Lõi miền, phát hành 19/10 ([release](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.2.0)). Bỏ qua `v0.1.0` vì Giai đoạn 0 chỉ còn 0.9, không phải mã |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
-| Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2** xong 9/11 (2.1–2.8) |
+| Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2** xong 10/11 (2.1–2.9) |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
 | Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`), `domain/luat/` (`BoLuatChoi`, `CauHinhVai`), `domain/vaitro/` (`VaiTro` và sáu lớp con), `domain/van/` (`NguoiChoi`, `VanDau`, `LuotChoi`, `KetQuaDem`, `NhatKyVan`), `domain/baucu/` (`PhienBauCu`, `PhieuBau`), `domain/kenh/` (`KenhChat` và ba lớp con), `application/BoGiaiQuyetDem`, `application/BoKiemTraThangThua`, `application/BoChiaVai` |
 | Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
-| Kiểm thử tự động | 265 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 29 pha đêm, 18 pha ngày, 9 `BoQuanLyKenh`, 8 `BoPhatSuKien`, 9 `taoGocNhin`, 7 nhật ký, 7 `NguoiChoiAo`) · độ phủ dòng lệnh 99 % · **20 / 20 TC** · 0 / 5 ST (ST01, ST02, ST04 ở 2.10) |
+| Kiểm thử tự động | 279 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 29 pha đêm, 18 pha ngày, 9 `BoQuanLyKenh`, 8 `BoPhatSuKien`, 9 `taoGocNhin`, 7 nhật ký, 7 `NguoiChoiAo`, 14 mô phỏng) · độ phủ dòng lệnh 99 % · **20 / 20 TC** · 0 / 5 ST (ST01, ST02, ST04 ở 2.10) |
 | Thiết kế giao diện | Chưa làm — tới Giai đoạn 3 thì **chờ người dùng kết nối Higgsfield** và đưa ý tưởng, không tự thiết kế |
 
 **Một câu tóm tắt trạng thái**: kho đã dựng xong công cụ — `npm run dev` chạy máy chủ và trang
@@ -277,11 +277,22 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
       không trả lời thay người thật; cùng hạt giống cùng nhật ký; **20 ván 6–12 người đều kết thúc**
 - [x] Đo thử 20 ván: 1–6 lượt, 0–19 phút giả lập; Sói thắng 14/20 khi cả hai phe chọn ngẫu nhiên
 
+**Mô phỏng** — hạng mục 2.9
+
+- [x] `infrastructure/bot/moPhong.ts` — một ván toàn người chơi ảo qua đúng đường bắt đầu ván thật;
+      `scripts/mo-phong.ts` — `npm run mo-phong`, in nhật ký một ván hoặc bảng thống kê, `--tat`
+      để tắt quy tắc tùy biến, thoát mã 1 nếu có lỗi
+- [x] `DongHoGia.tuaToiHenKeTiep()`, `CauHinhVai.macDinh(n)`
+- [x] Nhật ký: kết quả bỏ phiếu và người bị treo ghi ngay lúc thi hành, trước khi Thợ săn chọn
+- [x] 14 bài kiểm thử, gồm 200 ván 6–12 người
+- [x] **1 000 ván 6–12 người: 1 000/1 000 kết thúc, 0 lỗi, 0,85 giây thật** — tỉ lệ thắng ở mục
+      Ghi chú kỹ thuật
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 2 — Điều phối ván và người chơi ảo.** Hạng mục kế tiếp: **2.9** — `scripts/mo-phong.ts`: chạy hàng loạt ván toàn người chơi ảo.
+**Giai đoạn 2 — Điều phối ván và người chơi ảo.** Hạng mục kế tiếp: **2.10** — kiểm thử hệ thống không giao diện ST01, ST02, ST04; khép Giai đoạn 2, cắt `v0.3.0`.
 
 ---
 
@@ -354,6 +365,21 @@ Những phát hiện trong quá trình làm, ghi lại để không phải đi�
 `print()` một chuỗi có dấu khi đầu ra bị chuyển hướng sẽ ném `UnicodeEncodeError: 'charmap'
 codec can't encode` vì Python dùng bảng mã `cp1252` của hệ thống. Chạy kèm biến môi trường
 `PYTHONIOENCODING=utf-8`. Gặp lần đầu khi trích văn bản từ tệp `.docx` tài liệu gốc.
+
+**Tỉ lệ thắng khi cả hai phe chọn ngẫu nhiên** — `npm run mo-phong -- --so-nguoi 6-12 --so-van 1000`, 19/10
+
+| Số người | Dân thắng | Sói thắng | Lượt TB |
+|---|---|---|---|
+| 6 | 52 % | 48 % | 1,8 |
+| 7 | 28 % | 72 % | 2,2 |
+| 8 | 31 % | 69 % | 2,7 |
+| 9 | 30 % | 70 % | 3,6 |
+| 10 | 15 % | 85 % | 3,6 |
+| 11 | 19 % | 81 % | 4,4 |
+| 12 | 15 % | 85 % | 5,1 |
+
+Sói áp đảo là bình thường với người chơi ảo: Dân ảo bầu ngẫu nhiên, không dùng kết quả soi. Số liệu
+**không** nói bộ vai mặc định mất cân bằng với người thật — chỉ là mốc so sánh khi chỉnh luật hay bộ vai.
 
 **Heredoc dài trong Bash tool trên Windows có thể hỏng**
 
