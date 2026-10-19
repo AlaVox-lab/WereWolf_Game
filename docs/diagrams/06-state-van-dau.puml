@@ -1,0 +1,19 @@
+' State Machine Diagram của Ván đấu
+' Nguồn: Tài liệu dự án toàn diện, Hình 11.1. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+@startuml
+[*] --> ChoDuNguoi
+ChoDuNguoi --> DangChiaVai : batDauVan()
+DangChiaVai --> PhaDem : chiaVaiXong()
+PhaDem --> GiaiQuyetDem : hetGio / duHanhDong
+GiaiQuyetDem --> PhaCongBo : chuaKetThuc
+GiaiQuyetDem --> KetThuc : thoaDieuKien
+PhaCongBo --> PhaThaoLuan : congBoXong()
+PhaThaoLuan --> PhaBoPhieu : hetGioThaoLuan
+PhaBoPhieu --> GiaiQuyetPhieu : duPhieu / hetGio
+GiaiQuyetPhieu --> PhaDem : chuaKetThuc
+GiaiQuyetPhieu --> KetThuc : thoaDieuKien
+ChoDuNguoi --> HuyVan : quaNguongMatKetNoi
+PhaDem --> HuyVan : quaNguongMatKetNoi
+KetThuc --> [*]
+HuyVan --> [*]
+@enduml

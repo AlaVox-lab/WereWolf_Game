@@ -1,0 +1,43 @@
+# ---------- Biến môi trường và bí mật ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# ---------- Node / Vite / TypeScript ----------
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.eslintcache
+.vite/
+npm-debug.log*
+
+# LƯU Ý: package-lock.json PHẢI được commit, không đưa vào tệp này.
+# Tệp khóa phiên bản bảo đảm cả ba thành viên dựng lại đúng bộ thư viện đã kiểm thử.
+
+# ---------- Cơ sở dữ liệu ----------
+*.db
+*.sqlite
+*.sqlite3
+pgdata/
+
+# ---------- Docker ----------
+docker-compose.override.yml
+
+# ---------- Sơ đồ sinh ra từ PlantUML ----------
+# Mã nguồn .puml là nguồn sự thật; ảnh xuất ra để chèn báo cáo thì không commit
+# (trừ khi nhóm quyết định khác lúc nộp).
+docs/diagrams/out/
+
+# ---------- Trình soạn thảo và hệ điều hành ----------
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

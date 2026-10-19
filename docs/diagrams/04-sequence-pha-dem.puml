@@ -1,0 +1,56 @@
+' Sequence Diagram pha đêm
+' Nguồn: Tài liệu dự án toàn diện, Hình 10.1. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+@startuml
+actor "Bảo vệ" as BV
+actor "Sói" as SO
+actor "Tiên tri" as TT
+actor "Phù thủy" as PT
+participant "BoDieuPhoiVan" as DP
+participant "BoGiaiQuyetDem" as GQ
+participant "VanDau" as VD
+participant "BoKiemTraThangThua" as KT
+DP -> VD : chuyenPha(DEM)
+DP -> DP : locVaiCoNangLucDem()
+DP -> DP : sapXepTheoDoUuTien()
+group Độ ưu tiên 10 — Bảo vệ
+  DP -> BV : yeuCauHanhDong()
+  BV -> DP : chonMucTieu(A)
+  DP -> DP : kiemTraRangBuoc(A)
+  note right : BR06 không đỡ trùng đêm trước
+  DP -> GQ : ghiNhanYDinh(BAO_VE, A)
+end
+group Độ ưu tiên 20 — Sói
+  DP -> SO : yeuCauHanhDong()
+  SO -> DP : deXuatMucTieu(B)
+  DP -> DP : kiemTraDongThuan()
+  DP -> GQ : ghiNhanYDinh(CAN, B)
+end
+group Độ ưu tiên 30 — Tiên tri
+  DP -> TT : yeuCauHanhDong()
+  TT -> DP : chonMucTieu(C)
+  DP -> VD : layPheCua(C)
+  VD --> DP : phe
+  DP --> TT : ketQuaSoi(phe)
+  note right : Chỉ đọc, không ghi ý định
+end
+group Độ ưu tiên 40 — Phù thủy
+  DP -> GQ : layNanNhanHienTai()
+  GQ --> DP : B
+  DP -> PT : thongBaoNanNhan(B)
+  PT -> DP : dungThuocCuu(B)
+  DP -> GQ : ghiNhanYDinh(CUU, B)
+end
+DP -> GQ : giaiQuyet()
+activate GQ
+GQ -> GQ : sapXepYDinhTheoDoUuTien()
+GQ -> GQ : apDungBaoVe()
+GQ -> GQ : apDungCan()
+GQ -> GQ : apDungCuu()
+GQ -> GQ : apDungDoc()
+GQ -> VD : danhDauChet(danhSach)
+GQ --> DP : ketQuaDem
+deactivate GQ
+DP -> KT : kiemTra(van)
+KT --> DP : CHUA_KET_THUC
+DP -> VD : chuyenPha(NGAY)
+@enduml

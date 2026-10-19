@@ -1,0 +1,98 @@
+' Class Diagram phần lõi
+' Nguồn: Tài liệu dự án toàn diện, Hình 9.1. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+@startuml
+skinparam classAttributeIconSize 0
+abstract class VaiTro {
+  # tenVai : String
+  # phe : Phe
+  # doUuTien : int
+  + laHanhDongDem() : boolean
+  + {abstract} dungNangLuc(mt) : HanhDongDem
+  + kiemTraRangBuoc(mt) : boolean
+}
+class DanLang
+class BaoVe {
+  - mucTieuDemTruoc : NguoiChoi
+}
+class Soi
+class TienTri
+class PhuThuy {
+  - conThuocCuu : boolean
+  - conThuocDoc : boolean
+}
+class ThoSan {
+  + kichHoatKhiChet(mt) : HanhDongDem
+}
+VaiTro <|-- DanLang
+VaiTro <|-- BaoVe
+VaiTro <|-- Soi
+VaiTro <|-- TienTri
+VaiTro <|-- PhuThuy
+VaiTro <|-- ThoSan
+abstract class KenhChat {
+  + {abstract} coTheXem(nc) : boolean
+  + {abstract} coTheGui(nc) : boolean
+}
+class KenhChung
+class KenhSoi
+class KenhNguoiChet
+KenhChat <|-- KenhChung
+KenhChat <|-- KenhSoi
+KenhChat <|-- KenhNguoiChet
+class TaiKhoan {
+  - tenDangNhap : String
+  - matKhauBam : String
+  + xacThuc(mk) : boolean
+}
+class BoLuatChoi {
+  - batDemDauCoChet : boolean
+  - camPhuThuyTuCuu : boolean
+  - choBaoVeTuDo : boolean
+  - camDoTrungDem : boolean
+  - thoSanBanKhiTreoCo : boolean
+  - hoaPhieuKhongAiChet : boolean
+  + chophep(maQuyTac) : boolean
+}
+class PhongChoi {
+  - maPhong : String
+  - trangThai : TrangThaiPhong
+  + batDauVan() : VanDau
+}
+class VanDau {
+  - trangThai : TrangThaiVan
+  - luotHienTai : int
+  + chuyenPha() : void
+  + layNguoiConSong() : List
+}
+class NguoiChoi {
+  - conSong : boolean
+  + danhDauChet() : void
+}
+class HanhDongDem {
+  - loaiHanhDong : LoaiHanhDong
+  - doUuTien : int
+}
+class KetQuaDem
+class PhienBauCu
+class PhieuBau
+class BoDieuPhoiVan
+class BoGiaiQuyetDem
+class BoKiemTraThangThua
+TaiKhoan "1" -- "0..*" NguoiChoi
+PhongChoi "1" -- "0..*" VanDau
+PhongChoi "1" *-- "1" BoLuatChoi
+VanDau "1" *-- "1" BoLuatChoi
+VaiTro ..> BoLuatChoi
+VanDau "1" *-- "6..12" NguoiChoi
+NguoiChoi "1" -- "1" VaiTro
+NguoiChoi "1" -- "0..*" HanhDongDem
+VanDau "1" *-- "0..*" KetQuaDem
+VanDau "1" *-- "0..*" PhienBauCu
+PhienBauCu "1" *-- "0..*" PhieuBau
+VanDau "1" -- "3" KenhChat
+BoDieuPhoiVan --> VanDau
+BoDieuPhoiVan --> BoGiaiQuyetDem
+BoGiaiQuyetDem --> HanhDongDem
+BoGiaiQuyetDem --> KetQuaDem
+BoDieuPhoiVan --> BoKiemTraThangThua
+@enduml

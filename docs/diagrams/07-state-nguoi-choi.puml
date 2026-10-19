@@ -1,0 +1,13 @@
+' State Machine Diagram của Người chơi
+' Nguồn: Tài liệu dự án toàn diện, Hình 11.2. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+@startuml
+[*] --> DangSong : nhanVai()
+DangSong --> BiNham : soiChonMucTieu()
+BiNham --> DangSong : duocBaoVe / duocCuu
+BiNham --> DaChet : khongDuocCuu
+DangSong --> DaChet : biTreoCo / biBan
+DaChet --> ChoKichHoatKyNang : laThoSan
+ChoKichHoatKyNang --> KhanGia : daBan / boQua
+DaChet --> KhanGia : khongCoKyNang
+KhanGia --> [*] : ketThucVan
+@enduml

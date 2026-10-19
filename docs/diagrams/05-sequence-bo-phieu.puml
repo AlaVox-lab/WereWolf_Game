@@ -1,0 +1,35 @@
+' Sequence Diagram pha bỏ phiếu
+' Nguồn: Tài liệu dự án toàn diện, Hình 10.2. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+@startuml
+actor "Người chơi" as NC
+participant "BoDieuPhoiVan" as DP
+participant "PhienBauCu" as PB
+participant "VanDau" as VD
+participant "BoKiemTraThangThua" as KT
+DP -> PB : moPhien(danhSachConSong)
+loop Với mỗi người chơi còn sống
+  NC -> PB : boPhieu(mucTieu)
+  PB -> PB : ghiPhieu(phieu)
+end
+DP -> PB : chotPhien()
+PB -> PB : kiemPhieu()
+alt Có một người nhiều phiếu nhất
+  PB -> VD : danhDauChet(nguoiBiTreo)
+  opt Người bị treo là Thợ săn
+    PB -> NC : yeuCauChonMucTieu()
+    NC -> PB : chonMucTieu(X)
+    PB -> VD : danhDauChet(X)
+  end
+else Hòa phiếu
+  PB -> DP : khongAiBiLoai()
+  note right : BR11
+end
+DP -> KT : kiemTra(van)
+alt Đã thỏa điều kiện
+  KT --> DP : PHE_THANG
+  DP -> VD : ketThuc(pheThang)
+else Chưa thỏa
+  KT --> DP : CHUA_KET_THUC
+  DP -> VD : chuyenPha(DEM)
+end
+@enduml

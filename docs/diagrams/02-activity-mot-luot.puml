@@ -1,0 +1,51 @@
+' Activity Diagram một lượt chơi
+' Nguồn: Tài liệu dự án toàn diện, Hình 8.1. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+@startuml
+start
+:Chuyển sang pha Đêm;
+:Khóa kênh chung;
+:Lọc vai có năng lực đêm;
+:Sắp xếp theo doUuTien tăng dần;
+while (Còn vai chưa hành động?) is (còn)
+  :Mở giao diện cho vai hiện tại;
+  :Ghi nhận ý định hành động;
+  note right
+    Chưa thay đổi trạng thái
+    người chơi ở bước này
+  end note
+endwhile (hết)
+:Bộ giải quyết duyệt các ý định;
+:Áp dụng hiệu ứng, sinh danh sách chết;
+repeat
+  if (Có Thợ săn trong danh sách chết?) then (có)
+    :Thợ săn chọn mục tiêu;
+    :Thêm mục tiêu vào danh sách chết;
+  else (không)
+  endif
+repeat while (Phát sinh người chết mới?) is (có)
+if (Thỏa điều kiện thắng thua?) then (có)
+  :Công bố phe thắng;
+  stop
+else (chưa)
+endif
+:Công bố người chết đêm qua;
+:Mở kênh chung, thảo luận có đếm giờ;
+:Thu phiếu bầu;
+if (Có người nhiều phiếu nhất duy nhất?) then (có)
+  :Thi hành treo cổ;
+else (hòa phiếu)
+  :Không ai bị loại;
+endif
+repeat
+  if (Người bị loại là Thợ săn?) then (có)
+    :Thợ săn chọn mục tiêu;
+  else (không)
+  endif
+repeat while (Phát sinh người chết mới?) is (có)
+if (Thỏa điều kiện thắng thua?) then (có)
+  :Công bố phe thắng;
+  stop
+else (chưa)
+  :Sang lượt kế tiếp;
+endif
+@enduml

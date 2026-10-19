@@ -1,0 +1,69 @@
+' Use Case Diagram tổng thể
+' Nguồn: Tài liệu dự án toàn diện, Hình 6.1. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor "Người chơi" as NC
+actor "Chủ phòng" as CP
+actor "Quản trị viên" as QT
+actor "Bộ hẹn giờ" as HG
+CP --|> NC
+rectangle "Hệ thống Làng Trăng Mờ" {
+  usecase "UC01 Đăng ký" as U01
+  usecase "UC02 Đăng nhập" as U02
+  usecase "UC03 Cập nhật hồ sơ" as U03
+  usecase "UC04 Xem lịch sử ván" as U04
+  usecase "UC05 Xem bảng xếp hạng" as U05
+  usecase "UC06 Tạo phòng" as U06
+  usecase "UC07 Tham gia phòng" as U07
+  usecase "UC08 Cấu hình bộ vai" as U08
+  usecase "UC09 Mời người chơi" as U09
+  usecase "UC10 Loại khỏi phòng" as U10
+  usecase "UC11 Bắt đầu ván" as U11
+  usecase "UC12 Chia vai trò" as U12
+  usecase "UC13 Hành động đêm" as U13
+  usecase "UC14 Giải quyết đêm" as U14
+  usecase "UC15 Thảo luận ban ngày" as U15
+  usecase "UC16 Bỏ phiếu treo cổ" as U16
+  usecase "UC16b Xử lý hòa phiếu" as U16b
+  usecase "UC17 Kỹ năng lúc chết" as U17
+  usecase "UC18 Nhắn tin theo kênh" as U18
+  usecase "UC19 Kiểm tra thắng thua" as U19
+  usecase "UC20 Kết thúc ván" as U20
+  usecase "UC21 Báo cáo vi phạm" as U21
+  usecase "UC22 Xem xét báo cáo" as U22
+  usecase "UC23 Khóa tài khoản" as U23
+  usecase "UC24 Xem thống kê" as U24
+  usecase "UC25 Tùy chỉnh bộ luật" as U25
+}
+NC --> U01
+NC --> U02
+NC --> U03
+NC --> U04
+NC --> U05
+NC --> U06
+NC --> U07
+NC --> U13
+NC --> U15
+NC --> U16
+NC --> U17
+NC --> U18
+NC --> U20
+NC --> U21
+CP --> U08
+CP --> U09
+CP --> U10
+CP --> U11
+CP --> U25
+QT --> U22
+QT --> U23
+QT --> U24
+HG --> U14
+HG --> U16
+U11 ..> U12 : <<include>>
+U14 ..> U19 : <<include>>
+U16 ..> U19 : <<include>>
+U17 ..> U14 : <<extend>>
+U17 ..> U16 : <<extend>>
+U16b ..> U16 : <<extend>>
+@enduml
