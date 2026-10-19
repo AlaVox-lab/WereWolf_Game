@@ -425,8 +425,8 @@ Bảng xung đột đầy đủ: `game-rules.md` mục 3.
 
 ## 7. Khuôn mẫu: máy trạng thái ván và tác nhân thời gian
 
-*Mẫu State đã cài* — `domain/van/trangthai/TrangThaiVanDau.ts` (hạng mục 1.10). Bộ hẹn giờ và
-cổng chờ lựa chọn chưa cài (2.1). Sơ đồ: `docs/diagrams/06-state-van-dau.puml`.
+*Đã cài* — mẫu State ở `domain/van/trangthai/TrangThaiVanDau.ts` (1.10); `application/BoHenGio.ts`
+và `application/CongLuaChon.ts` (2.1). Sơ đồ: `docs/diagrams/06-state-van-dau.puml`.
 
 **Như đã cài**:
 
@@ -443,6 +443,13 @@ cổng chờ lựa chọn chưa cài (2.1). Sơ đồ: `docs/diagrams/06-state-v
 - `choPhepDoiBoLuat()` chỉ đúng ở `CHO_DU_NGUOI` — tầng phòng (4.4) dùng để chặn UC25 khi ván đã
   bắt đầu. Bản sao bộ luật của ván vốn đã khóa từ constructor, nên TC20 đúng ở cả hai tầng.
 - `chuyenPha()` **không tự mở lượt mới** — bộ điều phối (2.2) gọi `taoLuotMoi()` khi vào đêm.
+- **`BoHenGio`** (AC04): `datHen(ma, thoiHanMs, khiHetGio)` trả **thời điểm hết hạn tuyệt đối**;
+  đặt lại cùng mã thì hẹn cũ tự hủy — mỗi bước một đồng hồ. Chạy trên cổng `DongHo`.
+- **`CongLuaChon`**: `cho(nguoiChoiId, thoiHanMs, kiemTra)` trả `Promise<T | null>`, giải quyết bởi
+  `ghiNhan(nguoiChoiId, luaChon)` hoặc hết giờ (`null`). `kiemTra` nhận lựa chọn **thô** từ ngoài,
+  ném `LoiNghiepVu` nếu sai — lời mời **vẫn mở** để chọn lại. Mỗi người tối đa một lời mời
+  (`DANG_CHO_LUA_CHON`); lệnh không có lời mời bị từ chối (`KHONG_CO_YEU_CAU`). `huy()` đóng
+  sớm như bỏ lượt. Đây là **cửa duy nhất** cổng Socket.IO và người chơi ảo gửi lựa chọn vào.
 
 **Thiết kế gốc**:
 

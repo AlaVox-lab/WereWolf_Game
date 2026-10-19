@@ -135,7 +135,7 @@ rào chắn tự động cho nguyên tắc lõi miền không phụ thuộc gì.
 
 ## Giai đoạn 1 — Lõi miền
 
-**Tuần 3–5** · **Phiên bản**: `v0.2.0` · **Trạng thái**: **Hoàn thành 19/10** · **Điều kiện bắt đầu**: 0.2, 0.3, 0.7 xong; Q01–Q11 đã chốt — đạt 19/10
+**Tuần 3–5** · **Phiên bản**: `v0.2.0` (đã phát hành 19/10) · **Trạng thái**: **Hoàn thành 19/10** · **Điều kiện bắt đầu**: 0.2, 0.3, 0.7 xong; Q01–Q11 đã chốt — đạt 19/10
 
 Mục tiêu: toàn bộ luật chơi viết bằng TypeScript thuần trong `domain/` và các bộ xử lý thuần
 trong `application/`, **không mạng, không cơ sở dữ liệu, không đồng hồ thật**. TC01–TC20
@@ -200,12 +200,12 @@ làm ở G2). Độ phủ `domain/` ≥ 90 %. Lint xác nhận `domain/` không 
 
 ## Giai đoạn 2 — Điều phối ván và người chơi ảo
 
-**Tuần 5–6** · **Phiên bản**: `v0.3.0` · **Điều kiện bắt đầu**: G1 xong
+**Tuần 5–6** · **Phiên bản**: `v0.3.0` · **Trạng thái**: Đang làm · **Điều kiện bắt đầu**: G1 xong — đạt 19/10
 
 Mục tiêu: một ván chạy **trọn vẹn không cần giao diện** — người chơi ảo tự chơi với nhau
 trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
 
-- [ ] **2.1** `[A]` `BoHenGio` (tác nhân AC04) trên cổng `DongHo`; `CongLuaChon` — lời hứa
+- [x] **2.1** `[A]` `BoHenGio` (tác nhân AC04) trên cổng `DongHo`; `CongLuaChon` — lời hứa
       được giải quyết bởi lệnh người chơi hoặc hết giờ, cái nào đến trước (ARCHITECTURE mục 7)
 - [ ] **2.2** `[A]` `BoDieuPhoiVan` — **pha đêm**: duyệt vai theo cấu hình và `doUuTien`
       (**Q05**); mời từng vai, chờ `CongLuaChon`; Sói đồng thuận trên kênh Sói, hết giờ thì chọn

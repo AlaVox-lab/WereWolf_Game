@@ -264,6 +264,25 @@ note right of BoChiaVai
   Fisher–Yates qua cổng NguonNgauNhien.
 end note
 BoDieuPhoiVan --> BoChiaVai
+class BoHenGio {
+  - dongHo : DongHo
+  + datHen(ma, thoiHanMs, khiHetGio) : long
+  + huy(ma) : void
+  + layHetHanLuc(ma) : long
+}
+note right of BoHenGio : Tác nhân AC04 — chỉ lớp này đặt hạn
+class CongLuaChon {
+  + cho(nguoiChoiId, thoiHanMs, kiemTra) : Promise<T | null>
+  + ghiNhan(nguoiChoiId, luaChon) : void
+  + huy(nguoiChoiId) : void
+}
+note right of CongLuaChon
+  Cái nào đến trước: lệnh người chơi (socket hoặc
+  người chơi ảo, cùng một cửa) hoặc hết giờ → null (BR12).
+end note
+CongLuaChon --> BoHenGio
+BoDieuPhoiVan --> CongLuaChon
+BoDieuPhoiVan --> BoHenGio
 BoChiaVai ..> VaiTro : <<create>>
 BoChiaVai ..> CauHinhVai
 @enduml
