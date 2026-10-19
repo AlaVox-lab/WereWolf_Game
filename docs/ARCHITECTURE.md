@@ -83,6 +83,13 @@ Người chơi ảo là một **bộ chuyển đổi** gửi lệnh vào đúng 
 có nhánh `if (laNguoiChoiAo)` nào trong lõi miền hay tầng ứng dụng. Phải viết nhánh riêng
 cho người ảo nghĩa là luật đang rò ra khỏi tầng nghiệp vụ.
 
+**Đã cài** — `infrastructure/bot/NguoiChoiAo.ts` (hạng mục 2.8): nghe sự kiện của riêng mình qua
+`BoPhatSuKien.dangKyNguoiChoi()`; khi nhận `MOI_HANH_DONG` thì hẹn trễ ngẫu nhiên 1–4 giây qua
+`BoHenGio`, rồi đọc **góc nhìn của chính mình** (`taoGocNhin`) để lấy việc cần làm và lựa chọn hợp
+lệ, gửi qua `CongLuaChon.ghiNhan()`. Chọn ngẫu nhiên; bỏ phiếu không bầu chính mình; không nhắn
+tin; được mời lại trong cùng lượt (Sói đổi ý) thì giữ lựa chọn cũ. Người chơi ảo **chỉ biết những
+gì người thật biết** — nếu nó chơi gian được thì góc nhìn đang rò rỉ.
+
 ---
 
 ## 3. Bộ công nghệ

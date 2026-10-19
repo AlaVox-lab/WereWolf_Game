@@ -233,7 +233,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
       vai người khác (trừ đồng đội Sói, trừ khi ván đã kết thúc) — bản đơn vị của ST05
 - [x] **2.7** `[B]` Ghi `NhatKyVan` ở mọi điểm chuyển pha, ý định, phiếu, người chết;
       `xuatBanCongKhai()` chỉ chạy khi ván kết thúc
-- [ ] **2.8** `[A]` `infrastructure/bot/NguoiChoiAo`: nghe góc nhìn của chính nó, khi được mời
+- [x] **2.8** `[A]` `infrastructure/bot/NguoiChoiAo`: nghe góc nhìn của chính nó, khi được mời
       thì chờ ngẫu nhiên 1–4 giây rồi chọn ngẫu nhiên trong danh sách mục tiêu hợp lệ, gửi qua
       **đúng cửa lệnh** người thật dùng; bỏ phiếu ngẫu nhiên; không nhắn tin
 - [ ] **2.9** `[C]` `scripts/mo-phong.ts`: `npm run mo-phong -- --so-nguoi 8 --hat-giong 42

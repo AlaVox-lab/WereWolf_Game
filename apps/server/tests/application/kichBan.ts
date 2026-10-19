@@ -40,7 +40,7 @@ export function taoTran(
     congLuaChon: cong,
     nguonNgauNhien: new NgauNhienCoHat(hatGiong),
   });
-  return { van, dongHo, cong, dieuPhoi };
+  return { van, dongHo, boHenGio, cong, dieuPhoi };
 }
 
 export type Tran = ReturnType<typeof taoTran>;
