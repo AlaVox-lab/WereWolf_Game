@@ -351,8 +351,7 @@ Theo mục 9.4 tài liệu gốc: `TaiKhoan`, `HoSoNguoiChoi`, `PhongChoi`, `Cau
 
 ## 6. Khuôn mẫu: ghi ý định — giải quyết tập trung
 
-*Đã cài đặt phần áp hiệu ứng* — `application/BoGiaiQuyetDem.ts` (hạng mục 1.5). Dây chuyền Thợ
-săn chưa cài (1.6). Hiện thực nguyên tắc 2.2.
+*Đã cài đặt* — `application/BoGiaiQuyetDem.ts` (hạng mục 1.5, 1.6). Hiện thực nguyên tắc 2.2.
 
 **Như đã cài**:
 
@@ -364,7 +363,14 @@ săn chưa cài (1.6). Hiện thực nguyên tắc 2.2.
   thực sự cứu — mục tiêu đã được đỡ thì không trừ (BR07, TC04); mọi Bảo vệ còn sống được ghi
   mục tiêu đêm nay, bỏ lượt thì ghi `null` (BR06).
 - Gọi lần hai trên cùng lượt ném `DEM_DA_GIAI_QUYET` **trước** khi đổi bất cứ gì.
-- `KetQuaDem` trả về **chưa chốt** — 1.6 thêm người bị Thợ săn bắn rồi mới chốt.
+- `KetQuaDem` trả về **chưa chốt** — người gọi chạy dây chuyền Thợ săn rồi mới `chot()`.
+- `xuLyDayChuyen(van, nguoiVuaChet, chonMucTieu, ketQuaDem?)` — **bất đồng bộ**, dùng chung cho
+  ban đêm và sau treo cổ. Đầu vào là người **đã** được đánh dấu chết. Hàng đợi, không đệ quy;
+  mỗi phát bắn đánh dấu chết ngay (`BI_BAN`) nên người đã chết tự rơi khỏi ứng viên — luôn dừng.
+  `chonMucTieu: (thoSan, ungVien) => Promise<string | null>` là chỗ cắm `CongLuaChon` (2.1);
+  trả `null` hoặc mã ngoài danh sách thì coi như bỏ qua. BR09 tắt chỉ chặn Thợ săn chết vì
+  `BI_TREO_CO` (Q02). Ban đêm truyền `ketQuaDem` để người bị bắn vào danh sách chết của đêm.
+  Trả danh sách `PhatBan { nguoiBanId, mucTieuId }` cho nhật ký và công bố.
 - `BoGiaiQuyetDem.xemNanNhan(yDinh)` (tĩnh, thuần) trả `{ nanNhanId, anToan }` từ ý định đã ghi —
   `BoDieuPhoiVan` dùng để báo trước cho Phù thủy (BR07) và điền `nanNhanBiCanId` vào ngữ cảnh.
 

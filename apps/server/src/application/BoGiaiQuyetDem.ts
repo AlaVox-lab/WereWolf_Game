@@ -1,11 +1,29 @@
 import { LoaiHanhDong } from '../domain/chung/LoaiHanhDong.js';
 import { LoiNghiepVu } from '../domain/chung/LoiNghiepVu.js';
+import { MaQuyTac } from '../domain/chung/MaQuyTac.js';
 import { BaoVe } from '../domain/vaitro/BaoVe.js';
 import { PhuThuy } from '../domain/vaitro/PhuThuy.js';
 import type { HanhDongDem } from '../domain/van/HanhDongDem.js';
 import { KetQuaDem } from '../domain/van/KetQuaDem.js';
+import type { NguoiChoi } from '../domain/van/NguoiChoi.js';
 import { NguyenNhanChet } from '../domain/van/NguyenNhanChet.js';
 import type { VanDau } from '../domain/van/VanDau.js';
+
+/**
+ * Hỏi một Thợ săn vừa bị loại muốn bắn ai (UC17). Trả mã người chơi trong `ungVien`, hoặc `null`
+ * nếu bỏ qua hay hết giờ. Ở máy chủ thật đây là `CongLuaChon` (hạng mục 2.1); trong kiểm thử là
+ * một kịch bản trả lời sẵn.
+ */
+export type ChonMucTieuThoSan = (
+  thoSan: NguoiChoi,
+  ungVien: readonly NguoiChoi[],
+) => Promise<string | null>;
+
+/** Một phát bắn đã thực hiện trong dây chuyền — để ghi nhật ký và công bố. */
+export interface PhatBan {
+  readonly nguoiBanId: string;
+  readonly mucTieuId: string;
+}
 
 /** Ngữ cảnh truyền dọc chuỗi bước giải quyết — mỗi bước đọc và sửa được kết quả bước trước. */
 interface NguCanhGiaiQuyet {
@@ -120,6 +138,55 @@ export class BoGiaiQuyetDem {
     van.danhDauChet(ketQua.layDanhSachChet());
     luot.ganKetQuaDem(ketQua);
     return ketQua;
+  }
+
+  /**
+   * Dây chuyền kỹ năng lúc chết (UC17, mục 16.3 tài liệu gốc). `nguoiVuaChet` là những người
+   * **vừa được đánh dấu chết** — sau `giaiQuyet()` ban đêm, hoặc sau khi thi hành treo cổ ban ngày.
+   *
+   * Dùng **hàng đợi, không đệ quy**. Mỗi phát bắn đánh dấu chết ngay, nên người đã chết tự rơi
+   * khỏi danh sách ứng viên của lần hỏi sau — mỗi vòng có thêm ít nhất một người chết, số người
+   * hữu hạn, nên thuật toán luôn dừng. Người bị bắn là Thợ săn thì vào hàng đợi (BR10).
+   *
+   * BR09 tắt: Thợ săn chết vì **treo cổ** không được bắn; chết vì cách khác vẫn bắn được (Q02).
+   *
+   * Truyền `ketQuaDem` khi xử lý ban đêm để người bị bắn vào danh sách chết của đêm. Người gọi tự
+   * `chot()` kết quả sau khi dây chuyền xong.
+   */
+  async xuLyDayChuyen(
+    van: VanDau,
+    nguoiVuaChet: readonly string[],
+    chonMucTieu: ChonMucTieuThoSan,
+    ketQuaDem?: KetQuaDem,
+  ): Promise<PhatBan[]> {
+    const hangDoi = [...nguoiVuaChet];
+    const phatBan: PhatBan[] = [];
+
+    while (hangDoi.length > 0) {
+      const nguoiChoi = van.layNguoiChoi(hangDoi.shift()!);
+      const vai = nguoiChoi.vaiTro;
+      if (!vai.coKyNangKhiChet()) continue;
+      if (
+        nguoiChoi.nguyenNhanChet === NguyenNhanChet.BI_TREO_CO &&
+        !van.boLuatChoi.chophep(MaQuyTac.BR09)
+      ) {
+        continue;
+      }
+
+      const nc = { van, luat: van.boLuatChoi, nguoiThucHien: nguoiChoi };
+      const ungVien = vai.layDanhSachMucTieu(nc).map((m) => van.layNguoiChoi(m.id));
+      if (ungVien.length === 0) continue;
+      const mucTieuId = await chonMucTieu(nguoiChoi, ungVien);
+      // Bỏ qua, hết giờ (UC17 luồng 2a), hoặc chọn ngoài danh sách thì không ai bị bắn.
+      if (mucTieuId === null || !ungVien.some((m) => m.id === mucTieuId)) continue;
+
+      vai.kichHoatKhiChet(nc, { mucTieuId }); // kiểm lại qua khung Template Method của vai
+      van.danhDauChet([{ nguoiChoiId: mucTieuId, nguyenNhan: NguyenNhanChet.BI_BAN }]);
+      ketQuaDem?.themNguoiChet(mucTieuId, NguyenNhanChet.BI_BAN);
+      phatBan.push({ nguoiBanId: nguoiChoi.id, mucTieuId });
+      hangDoi.push(mucTieuId);
+    }
+    return phatBan;
   }
 
   /** BR06: Bảo vệ nhớ người đã đỡ đêm nay; Bảo vệ còn sống mà bỏ lượt thì xóa mục tiêu cũ. */

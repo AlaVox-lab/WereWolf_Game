@@ -17,13 +17,13 @@
 | Cập nhật lần cuối | 2026-10-19 |
 | Phiên bản hiện tại | Chưa có. `v0.1.0` cắt khi xong 0.6 và 0.9 |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
-| Giai đoạn MVP | **Giai đoạn 0** xong 8/10 hạng mục, còn 0.6, 0.9 · **Giai đoạn 1** xong 5/12 (1.1–1.5) |
+| Giai đoạn MVP | **Giai đoạn 0** xong 8/10 hạng mục, còn 0.6, 0.9 · **Giai đoạn 1** xong 6/12 (1.1–1.6) |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
 | Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`), `domain/luat/` (`BoLuatChoi`, `CauHinhVai`), `domain/vaitro/` (`VaiTro` và sáu lớp con), `domain/van/` (`NguoiChoi`, `VanDau`, `LuotChoi`, `KetQuaDem`, `NhatKyVan`), `application/BoGiaiQuyetDem` |
 | Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
-| Kiểm thử tự động | 95 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 12 `BoGiaiQuyetDem`) · **10 / 20 TC** (TC01–TC08, TC16, TC17) · 0 / 5 ST |
+| Kiểm thử tự động | 107 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`) · **13 / 20 TC** (TC01–TC10, TC16–TC18) · 0 / 5 ST |
 | Thiết kế giao diện | Chưa làm — tới Giai đoạn 3 thì **chờ người dùng kết nối Higgsfield** và đưa ý tưởng, không tự thiết kế |
 
 **Một câu tóm tắt trạng thái**: kho đã dựng xong công cụ — `npm run dev` chạy máy chủ và trang
@@ -138,11 +138,18 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 - [x] 12 bài kiểm thử, gồm **TC01–TC06** và một bài chứng minh kết quả không phụ thuộc thứ tự
       ghi ý định (PC03)
 
+**Lõi miền** — hạng mục 1.6
+
+- [x] `BoGiaiQuyetDem.xuLyDayChuyen()`: hàng đợi Thợ săn theo mục 16.3 tài liệu gốc, bất đồng
+      bộ, dùng chung ban đêm và sau treo cổ; BR09 tắt chỉ chặn chết vì treo cổ (Q02)
+- [x] 12 bài kiểm thử, gồm **TC09, TC10, TC18**, Q02, và một bài chứng minh luôn dừng khi hai
+      Thợ săn cùng muốn bắn nhau
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 1 — Lõi miền.** Hạng mục kế tiếp: **1.6** — dây chuyền Thợ săn `xuLyDayChuyen()` (TC09, TC10, TC18).
+**Giai đoạn 1 — Lõi miền.** Hạng mục kế tiếp: **1.7** — `PhienBauCu`, `PhieuBau` (TC11, TC19).
 
 ---
 
@@ -155,7 +162,7 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
    *healthy*
 3. **0.9 phần còn lại** — gán tên cho nhãn A/B/C, xác nhận tuần học kỳ để chỉnh lịch `ROADMAP.md`
 4. **Cắt `v0.1.0`** khi 0.1–0.9 xong
-5. **1.6 → 1.12** — lõi miền
+5. **1.7 → 1.12** — lõi miền
 6. **Chốt Q12, Q13** — không chặn việc gì, đã cài theo đề xuất
 
 ### Chờ giảng viên

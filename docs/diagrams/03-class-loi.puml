@@ -141,6 +141,7 @@ class BoGiaiQuyetDem {
   - chuoiBuoc : List<BuocGiaiQuyet>
   + {static} xemNanNhan(yDinh) : NanNhan
   + giaiQuyet(van) : KetQuaDem
+  + xuLyDayChuyen(van, nguoiVuaChet, chonMucTieu, ketQuaDem) : List<PhatBan>
 }
 interface BuocGiaiQuyet {
   + loai : LoaiHanhDong

@@ -164,7 +164,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
       `doUuTien` (Chain of Responsibility); trừ lọ thuốc và cập nhật `mucTieuDemTruoc` **ở
       bước này**, không ở lúc ghi ý định
       · Kiểm thử: **TC01–TC06**
-- [ ] **1.6** `[A]` `BoGiaiQuyetDem.xuLyDayChuyen()`: hàng đợi Thợ săn theo mục 16.3 tài liệu
+- [x] **1.6** `[A]` `BoGiaiQuyetDem.xuLyDayChuyen()`: hàng đợi Thợ săn theo mục 16.3 tài liệu
       gốc, nhận một hàm chọn mục tiêu bất đồng bộ; áp **Q02** khi BR09 tắt
       · Kiểm thử: **TC09, TC10, TC18**; thuật toán luôn dừng khi mọi Thợ săn bắn lẫn nhau
 - [ ] **1.7** `[B]` `domain/baucu/`: `PhieuBau`, `PhienBauCu` — `ghiPhieu` (mỗi người một phiếu,
