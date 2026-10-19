@@ -46,9 +46,16 @@ VaiTro <|-- TienTri
 VaiTro <|-- PhuThuy
 VaiTro <|-- ThoSan
 abstract class KenhChat {
+  + loaiKenh : LoaiKenh
   + {abstract} coTheXem(nc) : boolean
-  + {abstract} coTheGui(nc) : boolean
+  + {abstract} dangMo(tinhHinh) : boolean
+  + coTheGui(nc, tinhHinh) : boolean
+  # {abstract} coQuyenGui(nc) : boolean
 }
+note right of KenhChat
+  coTheGui = dangMo && coQuyenGui (Template Method).
+  tinhHinh = { trangThai, dangLuotSoi }
+end note
 class KenhChung
 class KenhSoi
 class KenhNguoiChet

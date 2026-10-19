@@ -233,7 +233,7 @@ flowchart LR
 
 ## 5. Mô hình miền
 
-*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1), `domain/van/`, `domain/baucu/` (mục 5.4); các mục còn lại chưa. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
+*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1), `domain/van/`, `domain/baucu/` (mục 5.4), `domain/kenh/` (mục 5.2); còn mẫu State của ván (1.10) và `BoChiaVai` (1.11). Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
 thuộc tính, phương thức **giữ nguyên như sơ đồ** để người chấm dò được từ sơ đồ xuống mã —
 xem mục 13.
 
@@ -295,6 +295,17 @@ Phân cấp thứ hai dựa trên tiêu chí khác hẳn: **quyền**, không ph
 | `KenhNguoiChet` | Người đã bị loại | Người đã bị loại | Luôn mở sau khi chết |
 
 BR14 là hệ quả trực tiếp của bảng này: Sói đã chết rơi khỏi `KenhSoi`.
+
+**Đã cài đặt** — `domain/kenh/` (hạng mục 1.9):
+
+- `coTheXem(thanhVien)` **không phụ thuộc pha** — ai có quyền xem thì nhận tin của kênh.
+- `coTheGui(thanhVien, tinhHinh)` là khung chung: `dangMo(tinhHinh) && coQuyenGui(thanhVien)`.
+  Lớp con chỉ định nghĩa `dangMo()` và `coQuyenGui()`.
+- `TinhHinhKenh = { trangThai, dangLuotSoi }`. `dangLuotSoi` do bộ điều phối điền vì
+  `TrangThaiVan` chỉ biết là `PHA_DEM`, không biết đang lượt vai nào.
+- `ThanhVienKenh = { conSong, vaiTro: { phe } }` — `NguoiChoi` khớp sẵn.
+- `KenhNguoiChet` luôn mở; `KenhChung` mở ở `PHA_THAO_LUAN`, `PHA_BO_PHIEU` (Q10), đóng mọi
+  trạng thái khác kể cả `KET_THUC`.
 
 ### 5.3. `BoLuatChoi` — mẫu Strategy
 

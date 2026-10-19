@@ -172,7 +172,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
       · Kiểm thử: **TC11, TC19**; bỏ phiếu hai lần bị chặn; người chết không được bầu
 - [x] **1.8** `[B]` `application/BoKiemTraThangThua` đúng công thức mục 16.4 tài liệu gốc
       · Kiểm thử: **TC13, TC14**; bảng đủ biên (S = 0, S = D, S = D − 1)
-- [ ] **1.9** `[B]` `domain/kenh/`: `KenhChat` trừu tượng với `coTheXem`, `coTheGui`, `dangMo`
+- [x] **1.9** `[B]` `domain/kenh/`: `KenhChat` trừu tượng với `coTheXem`, `coTheGui`, `dangMo`
       theo pha; ba lớp con theo ARCHITECTURE mục 5.2 và **Q10**
       · Kiểm thử: ma trận người sống/chết × phe × pha cho cả ba kênh — phủ **BR14**
 - [ ] **1.10** `[C]` `domain/van/trangthai/`: mẫu State cho `VanDau` — mười trạng thái theo

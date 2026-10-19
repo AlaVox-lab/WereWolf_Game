@@ -17,13 +17,13 @@
 | Cập nhật lần cuối | 2026-10-19 |
 | Phiên bản hiện tại | Chưa có. `v0.1.0` cắt khi xong 0.6 và 0.9 |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
-| Giai đoạn MVP | **Giai đoạn 0** xong 8/10 hạng mục, còn 0.6, 0.9 · **Giai đoạn 1** xong 8/12 (1.1–1.8) |
+| Giai đoạn MVP | **Giai đoạn 0** xong 8/10 hạng mục, còn 0.6, 0.9 · **Giai đoạn 1** xong 9/12 (1.1–1.9) |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
-| Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`), `domain/luat/` (`BoLuatChoi`, `CauHinhVai`), `domain/vaitro/` (`VaiTro` và sáu lớp con), `domain/van/` (`NguoiChoi`, `VanDau`, `LuotChoi`, `KetQuaDem`, `NhatKyVan`), `domain/baucu/` (`PhienBauCu`, `PhieuBau`), `application/BoGiaiQuyetDem`, `application/BoKiemTraThangThua` |
+| Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`), `domain/luat/` (`BoLuatChoi`, `CauHinhVai`), `domain/vaitro/` (`VaiTro` và sáu lớp con), `domain/van/` (`NguoiChoi`, `VanDau`, `LuotChoi`, `KetQuaDem`, `NhatKyVan`), `domain/baucu/` (`PhienBauCu`, `PhieuBau`), `domain/kenh/` (`KenhChat` và ba lớp con), `application/BoGiaiQuyetDem`, `application/BoKiemTraThangThua` |
 | Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
-| Kiểm thử tự động | 135 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`) · **17 / 20 TC** (TC01–TC11, TC13, TC14, TC16–TC19); còn TC12, TC15 (cần bộ điều phối, G2) và TC20 (1.10) · 0 / 5 ST |
+| Kiểm thử tự động | 143 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`) · **17 / 20 TC** (TC01–TC11, TC13, TC14, TC16–TC19); còn TC12, TC15 (cần bộ điều phối, G2) và TC20 (1.10) · 0 / 5 ST |
 | Thiết kế giao diện | Chưa làm — tới Giai đoạn 3 thì **chờ người dùng kết nối Higgsfield** và đưa ý tưởng, không tự thiết kế |
 
 **Một câu tóm tắt trạng thái**: kho đã dựng xong công cụ — `npm run dev` chạy máy chủ và trang
@@ -157,11 +157,18 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 - [x] `application/BoKiemTraThangThua`: đúng công thức mục 16.4, trả `KetQuaThangThua`
 - [x] 13 bài kiểm thử, gồm **TC13, TC14** và bảng biên S = 0, S = D, S = D − 1
 
+**Lõi miền** — hạng mục 1.9
+
+- [x] `domain/kenh/`: `KenhChat` trừu tượng (quyền gửi theo Template Method), `KenhChung`,
+      `KenhSoi`, `KenhNguoiChet` theo bảng quyền mục 5.2, BR14 và Q10
+- [x] 8 bài kiểm thử, gồm ma trận đủ 240 ô (3 kênh × 4 kiểu người × 10 trạng thái × lượt Sói)
+      đối chiếu với bảng luật viết độc lập
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 1 — Lõi miền.** Hạng mục kế tiếp: **1.9** — phân cấp `KenhChat` (BR14, Q10).
+**Giai đoạn 1 — Lõi miền.** Hạng mục kế tiếp: **1.10** — mẫu State cho `VanDau` (TC20, Q04).
 
 ---
 
@@ -174,7 +181,7 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
    *healthy*
 3. **0.9 phần còn lại** — gán tên cho nhãn A/B/C, xác nhận tuần học kỳ để chỉnh lịch `ROADMAP.md`
 4. **Cắt `v0.1.0`** khi 0.1–0.9 xong
-5. **1.9 → 1.12** — lõi miền
+5. **1.10 → 1.12** — lõi miền
 6. **Chốt Q12, Q13** — không chặn việc gì, đã cài theo đề xuất
 
 ### Chờ giảng viên
