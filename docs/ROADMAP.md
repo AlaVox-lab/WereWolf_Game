@@ -160,7 +160,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
       (chỉ ghi thêm), `VanDau` (`layNguoiConSong`, `layPheCua`, `danhDauChet`, giữ bản sao bộ luật)
       · *`HanhDongDem` đã tạo ở 1.3. `NguoiChoi` và `VanDau` phải khớp giao diện
       `NguoiChoiTrongVan`, `VanChiDoc` trong `vaitro/NguCanhHanhDong.ts`*
-- [ ] **1.5** `[A]` `application/BoGiaiQuyetDem`: chuỗi bước Bảo vệ → Cắn → Cứu → Độc theo
+- [x] **1.5** `[A]` `application/BoGiaiQuyetDem`: chuỗi bước Bảo vệ → Cắn → Cứu → Độc theo
       `doUuTien` (Chain of Responsibility); trừ lọ thuốc và cập nhật `mucTieuDemTruoc` **ở
       bước này**, không ở lúc ghi ý định
       · Kiểm thử: **TC01–TC06**

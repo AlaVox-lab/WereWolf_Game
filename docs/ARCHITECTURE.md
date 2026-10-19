@@ -351,7 +351,24 @@ Theo mục 9.4 tài liệu gốc: `TaiKhoan`, `HoSoNguoiChoi`, `PhongChoi`, `Cau
 
 ## 6. Khuôn mẫu: ghi ý định — giải quyết tập trung
 
-*Chưa cài đặt.* Hiện thực nguyên tắc 2.2.
+*Đã cài đặt phần áp hiệu ứng* — `application/BoGiaiQuyetDem.ts` (hạng mục 1.5). Dây chuyền Thợ
+săn chưa cài (1.6). Hiện thực nguyên tắc 2.2.
+
+**Như đã cài**:
+
+- `giaiQuyet(van)` lấy ý định của lượt hiện tại, sắp theo `doUuTien`, đưa từng ý định vào mắt
+  xích cùng loại (`BAO_VE`, `CAN`, `CUU`, `DOC`); `SOI_THONG_TIN` không có mắt xích nào nhận.
+  Rồi kết luận: cắn vô hiệu nếu mục tiêu được đỡ hoặc được cứu; độc luôn có tác dụng, kể cả
+  lên người được Bảo vệ đỡ; độc trùng người vừa chết vì cắn thì `KetQuaDem` bỏ qua (BR08).
+- **Trạng thái vai đổi ở đây và chỉ ở đây**: lọ độc trừ khi áp dụng; lọ cứu chỉ trừ khi thuốc
+  thực sự cứu — mục tiêu đã được đỡ thì không trừ (BR07, TC04); mọi Bảo vệ còn sống được ghi
+  mục tiêu đêm nay, bỏ lượt thì ghi `null` (BR06).
+- Gọi lần hai trên cùng lượt ném `DEM_DA_GIAI_QUYET` **trước** khi đổi bất cứ gì.
+- `KetQuaDem` trả về **chưa chốt** — 1.6 thêm người bị Thợ săn bắn rồi mới chốt.
+- `BoGiaiQuyetDem.xemNanNhan(yDinh)` (tĩnh, thuần) trả `{ nanNhanId, anToan }` từ ý định đã ghi —
+  `BoDieuPhoiVan` dùng để báo trước cho Phù thủy (BR07) và điền `nanNhanBiCanId` vào ngữ cảnh.
+
+**Thiết kế gốc**:
 
 ```
 thu nhận (pha đêm)                     giải quyết (một lần, cuối đêm)

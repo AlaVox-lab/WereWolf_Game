@@ -137,7 +137,20 @@ class KetQuaDem {
 class PhienBauCu
 class PhieuBau
 class BoDieuPhoiVan
-class BoGiaiQuyetDem
+class BoGiaiQuyetDem {
+  - chuoiBuoc : List<BuocGiaiQuyet>
+  + {static} xemNanNhan(yDinh) : NanNhan
+  + giaiQuyet(van) : KetQuaDem
+}
+interface BuocGiaiQuyet {
+  + loai : LoaiHanhDong
+  + xuLy(nc, hanhDong) : void
+}
+BoGiaiQuyetDem o-- "4" BuocGiaiQuyet
+note bottom of BuocGiaiQuyet
+  Chain of Responsibility: bước Bảo vệ, Cắn, Cứu, Độc.
+  Ý định sắp theo doUuTien rồi đưa vào bước cùng loại.
+end note
 class BoKiemTraThangThua
 TaiKhoan "1" -- "0..*" NguoiChoi
 PhongChoi "1" -- "0..*" VanDau
