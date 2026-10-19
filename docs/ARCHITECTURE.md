@@ -308,6 +308,8 @@ BR14 là hệ quả trực tiếp của bảng này: Sói đã chết rơi khỏ
 - `ThanhVienKenh = { conSong, vaiTro: { phe } }` — `NguoiChoi` khớp sẵn.
 - `KenhNguoiChet` luôn mở; `KenhChung` mở ở `PHA_THAO_LUAN`, `PHA_BO_PHIEU` (Q10), đóng mọi
   trạng thái khác kể cả `KET_THUC`.
+- `TinNhan` (`domain/kenh/TinNhan.ts`) — lớp giá trị bất biến `{ thuTu, kenh, nguoiGuiId,
+  noiDung, thoiDiem }`, khớp bảng `tin_nhan`. Lịch sử giữ trong `BoQuanLyKenh` (2.4).
 
 ### 5.3. `BoLuatChoi` — mẫu Strategy
 
@@ -368,7 +370,7 @@ chính ra `BAU_LAI`. `phienBauCu` trả phiên đang có hiệu lực.
 | `BoChiaVai` | Sinh `VaiTro` theo `CauHinhVai`, xáo trộn bằng `NguonNgauNhien`, gán cho người chơi. **Đã cài** — bảng `LoaiVai` → lớp ở đầu tệp là chỗ duy nhất phải sửa khi thêm vai; `chiaVai()` đòi ván ở `DANG_CHIA_VAI`, kiểm `CauHinhVai` **trước khi gán** (UC12 luồng 2a), không tự chuyển pha |
 | `BoGiaiQuyetDem` | Nạp mọi `HanhDongDem` của đêm, áp dụng theo `doUuTien`, sinh `KetQuaDem` |
 | `BoKiemTraThangThua` | Đếm còn sống theo phe, đối chiếu BR01, BR02. **Đã cài** — `kiemTra(van)` trả `KetQuaThangThua`: `PHE_DAN_THANG` khi S = 0, ngược lại `PHE_SOI_THANG` khi S ≥ D, còn lại `CHUA_KET_THUC`. Chỉ đọc `VanChiDoc`, đếm theo `vaiTro.phe` |
-| `BoQuanLyKenh` | Kênh nào mở, ai xem gì, tại mỗi thời điểm |
+| `BoQuanLyKenh` | Kênh nào mở, ai xem gì, tại mỗi thời điểm. **Đã cài** (2.4) — `BoDieuPhoiVan.quanLyKenh`; `guiTinNhan()` là cửa duy nhất nhận tin, kiểm nội dung (1–500 ký tự) rồi quyền gửi; `layNguoiXem()` cho tầng thời gian thực biết phát tới ai; `layTinNhan()` lọc lịch sử theo quyền xem. Cờ lượt Sói lấy từ `BoDieuPhoiVan.dangLuotTapThe()` |
 
 ---
 

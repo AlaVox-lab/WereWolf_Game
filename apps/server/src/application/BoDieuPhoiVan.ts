@@ -18,6 +18,7 @@ import { BoChiaVai } from './BoChiaVai.js';
 import { BoGiaiQuyetDem, type PhatBan } from './BoGiaiQuyetDem.js';
 import type { BoHenGio } from './BoHenGio.js';
 import { BoKiemTraThangThua, KetQuaThangThua } from './BoKiemTraThangThua.js';
+import { BoQuanLyKenh } from './BoQuanLyKenh.js';
 import { THOI_GIAN_MAC_DINH, type CauHinhThoiGian } from './CauHinhThoiGian.js';
 import type { CongLuaChon } from './CongLuaChon.js';
 
@@ -82,6 +83,8 @@ export class BoDieuPhoiVan {
   private readonly thoiGian: CauHinhThoiGian;
   private readonly boGiaiQuyetDem = new BoGiaiQuyetDem();
   private readonly boKiemTraThangThua = new BoKiemTraThangThua();
+  /** Kênh trò chuyện của ván — mở đóng theo pha và theo lượt tập thể. */
+  readonly quanLyKenh: BoQuanLyKenh;
   private congBoSang: readonly string[] = [];
   private ketQuaNgay: KetQuaNgay | null = null;
   private readonly cacVaiMau: BoChiaVai;
@@ -95,11 +98,18 @@ export class BoDieuPhoiVan {
   ) {
     this.thoiGian = phuThuoc.thoiGian ?? THOI_GIAN_MAC_DINH;
     this.cacVaiMau = new BoChiaVai(phuThuoc.nguonNgauNhien);
+    this.quanLyKenh = new BoQuanLyKenh(van, () => this.dangLuotTapThe());
   }
 
   /** Vai đang tới lượt trong pha đêm, `null` ngoài pha đêm — cho kênh Sói và góc nhìn. */
   layBuocDemHienTai(): LoaiVai | null {
     return this.buocDemHienTai;
+  }
+
+  /** Pha đêm đang ở lượt hành động tập thể (lượt Sói) không — kênh Sói chỉ mở lúc này. */
+  dangLuotTapThe(): boolean {
+    const buoc = this.buocDemHienTai;
+    return buoc !== null && this.cacVaiMau.taoVai(buoc).laHanhDongTapThe();
   }
 
   /**

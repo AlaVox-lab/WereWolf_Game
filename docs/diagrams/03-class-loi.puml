@@ -187,6 +187,7 @@ class BoDieuPhoiVan {
   + layThongTinNanNhan() : NanNhan
   + layCongBoSang() : List<String>
   + layKetQuaNgay() : KetQuaNgay
+  + dangLuotTapThe() : boolean
 }
 note top of BoDieuPhoiVan
   Pha đêm (2.2): bước sinh từ doUuTien của vai trong cấu hình;
@@ -268,7 +269,27 @@ note right of TrangThaiVanDau
 end note
 VanDau "1" o-- "1" TrangThaiVanDau
 PhienBauCu "1" *-- "0..*" PhieuBau
-VanDau "1" -- "3" KenhChat : qua BoQuanLyKenh (chưa cài — 2.4)
+class BoQuanLyKenh {
+  - lichSu : List<TinNhan>
+  + layTinhHinh() : TinhHinhKenh
+  + kenhDangMo() : List<LoaiKenh>
+  + layNguoiXem(loai) : List<String>
+  + cacKenhXemDuoc(nguoiChoiId) : List<LoaiKenh>
+  + coTheGui(nguoiChoiId, loai) : boolean
+  + guiTinNhan(nguoiGuiId, loai, noiDung, thoiDiem) : TinNhan
+  + layTinNhan(loai, nguoiXemId) : List<TinNhan>
+}
+class TinNhan {
+  + thuTu : int
+  + kenh : LoaiKenh
+  + nguoiGuiId : String
+  + noiDung : String
+  + thoiDiem : long
+}
+BoQuanLyKenh "1" *-- "3" KenhChat
+BoQuanLyKenh "1" *-- "0..*" TinNhan
+BoQuanLyKenh --> VanDau
+BoDieuPhoiVan *-- BoQuanLyKenh
 BoDieuPhoiVan --> VanDau
 BoDieuPhoiVan --> BoGiaiQuyetDem
 BoGiaiQuyetDem --> HanhDongDem

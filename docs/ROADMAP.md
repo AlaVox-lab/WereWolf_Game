@@ -223,7 +223,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
       thảo luận có đếm giờ; bỏ phiếu; giải quyết phiếu; dây chuyền Thợ săn; **kiểm tra thắng
       thua hai lần mỗi lượt**
       · Kiểm thử: **TC15** — Sói cắn làm S = D thì kết thúc ngay khi trời sáng
-- [ ] **2.4** `[B]` `BoQuanLyKenh`: mở/đóng kênh theo pha; kiểm quyền trước khi nhận tin nhắn;
+- [x] **2.4** `[B]` `BoQuanLyKenh`: mở/đóng kênh theo pha; kiểm quyền trước khi nhận tin nhắn;
       trả danh sách người được xem mỗi kênh cho tầng thời gian thực
 - [ ] **2.5** `[C]` `BoPhatSuKien` (Observer): sự kiện miền kèm **đối tượng nhận** — tất cả,
       một người, phe Sói, người chết. Chưa gắn Socket.IO

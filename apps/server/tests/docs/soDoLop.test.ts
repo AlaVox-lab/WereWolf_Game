@@ -15,6 +15,21 @@ import { describe, expect, it } from 'vitest';
 
 const GOC = fileURLToPath(new URL('../../../../', import.meta.url));
 const SO_DO = readFileSync(join(GOC, 'docs/diagrams/03-class-loi.puml'), 'utf-8');
+/**
+ * Chữ của mọi ghi chú trên sơ đồ — `note … end note` và `note … : chữ`. Lớp được nêu trong ghi
+ * chú (như mười lớp trạng thái) tính là đã vẽ; tên lớp chỉ nằm trong kiểu dữ liệu của lớp khác
+ * hay trong nhãn mũi tên thì **không** tính.
+ */
+const CHU_GHI_CHU = [
+  ...[...SO_DO.matchAll(/^note[^\n]*\n([\s\S]*?)^end note/gm)].map((k) => k[1]!),
+  ...[...SO_DO.matchAll(/^note [^\n:]*:(.*)$/gm)].map((k) => k[1]!),
+].join('\n');
+
+/** Lớp `ten` có mặt trên sơ đồ: được khai báo, hoặc được nêu trong một ghi chú. */
+function coTrenSoDo(ten: string): boolean {
+  const khaiBao = new RegExp(`^(abstract class|class|interface) ${ten}\\b`, 'm');
+  return khaiBao.test(SO_DO) || new RegExp(`\\b${ten}\\b`).test(CHU_GHI_CHU);
+}
 const THU_MUC_MA = ['domain', 'application'].map((t) => join(GOC, 'apps/server/src', t));
 
 /** Lớp trên sơ đồ chưa có trong mã — phải khớp đúng danh sách này, cài xong thì gỡ khỏi đây. */
@@ -84,9 +99,7 @@ describe('Class Diagram ↔ mã nguồn', () => {
     const tenLop = TEP_MA.flatMap((t) =>
       [...t.noiDung.matchAll(/export (?:abstract )?class (\w+)/g)].map((k) => k[1]!),
     );
-    const vangMat = tenLop.filter(
-      (ten) => !KHONG_VE.includes(ten) && !new RegExp(`\\b${ten}\\b`).test(SO_DO),
-    );
+    const vangMat = tenLop.filter((ten) => !KHONG_VE.includes(ten) && !coTrenSoDo(ten));
     expect(vangMat).toEqual([]);
   });
 });

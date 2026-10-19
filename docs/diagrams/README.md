@@ -30,8 +30,10 @@ Kết quả: `docs/diagrams/out/*.svg` và `*.png`, dùng để chèn báo cáo.
 chạy trong `npm test` và CI:
 
 1. Mỗi thành viên ghi trong khối lớp trên sơ đồ phải có trong tệp định nghĩa lớp đó.
-2. Mỗi lớp `export` từ `domain/` và `application/` phải có mặt trên sơ đồ (trong khối lớp hoặc
-   ghi chú). Ngoại lệ: `LoiNghiepVu`, `DongHoGia`, `NgauNhienCoHat` — lớp kỹ thuật.
+2. Mỗi lớp `export` từ `domain/` và `application/` phải có mặt trên sơ đồ: được **khai báo**
+   (`class` / `interface`) hoặc được **nêu trong một ghi chú**. Tên lớp chỉ xuất hiện làm kiểu dữ
+   liệu của lớp khác hay trong nhãn mũi tên thì không tính. Ngoại lệ: `LoiNghiepVu`, `DongHoGia`,
+   `NgauNhienCoHat` — lớp kỹ thuật.
 3. Lớp có trên sơ đồ mà chưa có mã phải khớp đúng danh sách `CHUA_CAI` trong bài kiểm thử —
    hiện là `PhongChoi`, `TaiKhoan`. Cài xong lớp nào thì gỡ khỏi danh sách.
 
