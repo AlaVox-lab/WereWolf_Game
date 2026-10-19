@@ -14,6 +14,13 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     languageOptions: { globals: { ...globals.node } },
+    rules: {
+      // Tham số bắt đầu bằng _ là tham số lớp con cần nhưng bản mặc định không dùng.
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    },
   },
   {
     files: ['apps/web/**/*.{ts,tsx}'],

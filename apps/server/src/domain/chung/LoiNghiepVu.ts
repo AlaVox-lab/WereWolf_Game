@@ -9,6 +9,7 @@ export type MaLoi =
   | 'QUY_TAC_CO_DINH'
   | 'MUC_TIEU_KHONG_HOP_LE'
   | 'VI_PHAM_RANG_BUOC'
+  | 'VAI_KHONG_CO_NANG_LUC'
   | 'DA_BO_PHIEU'
   | 'CHUYEN_TRANG_THAI_KHONG_HOP_LE';
 

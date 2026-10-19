@@ -3,25 +3,41 @@
 @startuml
 skinparam classAttributeIconSize 0
 abstract class VaiTro {
-  # tenVai : String
-  # phe : Phe
-  # doUuTien : int
+  + loaiVai : LoaiVai
+  + tenVai : String
+  + phe : Phe
+  + doUuTien : int
+  + moTaNangLuc : String
   + laHanhDongDem() : boolean
-  + {abstract} dungNangLuc(mt) : HanhDongDem
-  + kiemTraRangBuoc(mt) : boolean
+  + coKyNangKhiChet() : boolean
+  + thucHienLuot(nc, luaChon) : HanhDongDem
+  + kichHoatKhiChet(nc, luaChon) : HanhDongDem
+  + layDanhSachMucTieu(nc, loai) : List<NguoiChoi>
+  + kiemTraRangBuoc(nc, luaChon) : boolean
+  # {abstract} dungNangLuc(nc, luaChon) : HanhDongDem
+  # taoPhatBan(nc, luaChon) : HanhDongDem
 }
+note right of VaiTro
+  Template Method: thucHienLuot() và kichHoatKhiChet()
+  là khung chung; lớp con chỉ ghi đè ba điểm mở rộng.
+  nc = NguCanhHanhDong { van, luat, nguoiThucHien, nanNhanBiCanId }
+end note
 class DanLang
 class BaoVe {
   - mucTieuDemTruoc : NguoiChoi
+  + capNhatMucTieuDemTruoc(mt) : void
 }
 class Soi
 class TienTri
 class PhuThuy {
   - conThuocCuu : boolean
   - conThuocDoc : boolean
+  + truThuocCuu() : void
+  + truThuocDoc() : void
 }
 class ThoSan {
-  + kichHoatKhiChet(mt) : HanhDongDem
+  + coKyNangKhiChet() : boolean
+  # taoPhatBan(nc, luaChon) : HanhDongDem
 }
 VaiTro <|-- DanLang
 VaiTro <|-- BaoVe
@@ -80,8 +96,10 @@ class NguoiChoi {
   + danhDauChet() : void
 }
 class HanhDongDem {
-  - loaiHanhDong : LoaiHanhDong
-  - doUuTien : int
+  + nguoiThucHienId : String
+  + loaiHanhDong : LoaiHanhDong
+  + mucTieuId : String
+  + doUuTien : int
 }
 class KetQuaDem
 class PhienBauCu

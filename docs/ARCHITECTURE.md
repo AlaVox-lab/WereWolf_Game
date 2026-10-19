@@ -233,51 +233,56 @@ flowchart LR
 
 ## 5. Mô hình miền
 
-*Đang cài đặt* — xong `domain/chung/` và `domain/luat/` (mục 5.3); các mục còn lại chưa. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
+*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1); các mục còn lại chưa. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
 thuộc tính, phương thức **giữ nguyên như sơ đồ** để người chấm dò được từ sơ đồ xuống mã —
 xem mục 13.
 
 ### 5.1. Phân cấp `VaiTro` — kế thừa, đa hình, Template Method
 
-Phân cấp trung tâm, thể hiện đủ ba đặc trưng hướng đối tượng. Chi tiết từng vai ở
-`game-rules.md` mục 1.
+**Đã cài đặt** — `domain/vaitro/` (hạng mục 1.3). Chi tiết từng vai ở `game-rules.md` mục 1.
 
 ```ts
-// Phác thảo chữ ký — hình dạng thật chốt ở hạng mục ROADMAP 1.3
 export abstract class VaiTro {
+  abstract readonly loaiVai: LoaiVai;      // trùng tên lớp — khóa của CauHinhVai và Factory
   abstract readonly tenVai: string;
   abstract readonly phe: Phe;
   abstract readonly doUuTien: number;
   abstract readonly moTaNangLuc: string;   // hiển thị cho người mới — nhu cầu N05
 
-  laHanhDongDem(): boolean { return false; }      // BaoVe, Soi, TienTri, PhuThuy ghi đè
-  coKyNangKhiChet(): boolean { return false; }    // ThoSan ghi đè
+  laHanhDongDem(): boolean;                // BaoVe, Soi, TienTri, PhuThuy ghi đè → true
+  coKyNangKhiChet(): boolean;              // ThoSan ghi đè → true
 
-  // Template Method: khung chung, lớp con KHÔNG ghi đè
-  thucHienLuot(nc: NguCanhHanhDong, luaChon: LuaChon): HanhDongDem {
-    const hopLe = this.layDanhSachMucTieu(nc).some(m => m.id === luaChon.mucTieuId);
-    if (!hopLe || !this.kiemTraRangBuoc(luaChon, nc)) throw new LoiNghiepVu(/* ... */);
-    return this.dungNangLuc(luaChon, nc);
-  }
+  // Template Method — khung chung, lớp con KHÔNG ghi đè
+  thucHienLuot(nc, luaChon): HanhDongDem;     // năng lực đêm → mục tiêu → ràng buộc → dungNangLuc
+  kichHoatKhiChet(nc, luaChon): HanhDongDem;  // kỹ năng lúc chết → mục tiêu → ràng buộc → taoPhatBan
 
-  // Ba điểm mở rộng cho lớp con
-  layDanhSachMucTieu(nc: NguCanhHanhDong): NguoiChoi[] { return nc.van.layNguoiConSong(); }
-  kiemTraRangBuoc(luaChon: LuaChon, nc: NguCanhHanhDong): boolean { return true; }
-  protected abstract dungNangLuc(luaChon: LuaChon, nc: NguCanhHanhDong): HanhDongDem;
-
-  kichHoatKhiChet(nc: NguCanhHanhDong, luaChon: LuaChon): HanhDongDem | null { return null; }
+  // Điểm mở rộng cho lớp con
+  layDanhSachMucTieu(nc, loai?): NguoiChoiTrongVan[];   // mặc định: mọi người còn sống
+  kiemTraRangBuoc(nc, luaChon): boolean;                // mặc định: true
+  protected abstract dungNangLuc(nc, luaChon): HanhDongDem;
+  protected taoPhatBan(nc, luaChon): HanhDongDem;       // chỉ ThoSan ghi đè
 }
 ```
 
-- `NguCanhHanhDong` gồm ván (chỉ đọc), bộ luật và người thực hiện. Vai nhận bộ luật **qua
-  ngữ cảnh**, không giữ tham chiếu — đó là điểm nối của mẫu Strategy.
-- **Trạng thái riêng của vai** (`BaoVe.mucTieuDemTruoc`, `PhuThuy.conThuocCuu`,
-  `PhuThuy.conThuocDoc`) nằm trong đối tượng vai và **chỉ đổi ở bước giải quyết**, không đổi
-  lúc ghi ý định — nếu không, TC04 (không mất lọ cứu khi đã được bảo vệ) không đúng được.
-- `DanLang` không nằm trong danh sách gọi ban đêm — bị loại ngay ở bước lọc
-  `laHanhDongDem()`, chứ không phải được gọi rồi đứng im.
-- `ThoSan` có `laHanhDongDem() = false` nhưng ghi đè `kichHoatKhiChet()` — phân cấp có
-  **hai điểm mở rộng độc lập**.
+- **Phá vòng phụ thuộc bằng giao diện**: `VaiTro` cần đọc người chơi và ván, còn `NguoiChoi` lại
+  giữ một `VaiTro`. Vai chỉ phụ thuộc hai giao diện nhỏ trong `vaitro/NguCanhHanhDong.ts` —
+  `NguoiChoiTrongVan { id, vaiTro }` và `VanChiDoc { layNguoiConSong() }`. `NguoiChoi` và `VanDau`
+  ở `domain/van/` (hạng mục 1.4) phải **khớp hai giao diện này**, không sửa chúng cho tiện.
+- `NguCanhHanhDong` = `{ van, luat, nguoiThucHien, nanNhanBiCanId? }`. Vai nhận bộ luật **qua
+  ngữ cảnh**, không giữ tham chiếu (Strategy). `nanNhanBiCanId` do bộ điều phối điền từ **ý định**
+  của Sói, chỉ Phù thủy đọc.
+- `LuaChon` = `{ mucTieuId, loai? }`. `loai` chỉ Phù thủy dùng (`CUU` / `DOC`). Bỏ lượt (BR12) là
+  việc của bộ điều phối — vai không bao giờ nhận lựa chọn rỗng.
+- **Trạng thái riêng của vai chỉ đổi ở bước giải quyết**: `BaoVe.capNhatMucTieuDemTruoc()`,
+  `PhuThuy.truThuocCuu()`, `truThuocDoc()` do `BoGiaiQuyetDem` gọi. `thucHienLuot()` không bao giờ
+  đổi trạng thái — nếu không, TC04 không đúng được.
+- Vi phạm ném `LoiNghiepVu` với mã `VAI_KHONG_CO_NANG_LUC`, `MUC_TIEU_KHONG_HOP_LE` (ngoài danh
+  sách) hoặc `VI_PHAM_RANG_BUOC` (trong danh sách nhưng sai ràng buộc riêng).
+- `DanLang` không nằm trong danh sách gọi ban đêm — bị loại ngay ở bước lọc `laHanhDongDem()`.
+- `ThoSan` có `laHanhDongDem() = false` nhưng có kỹ năng lúc chết — phân cấp có **hai điểm mở
+  rộng độc lập**.
+- `HanhDongDem` (`domain/van/HanhDongDem.ts`) là lớp giá trị bất biến
+  `{ nguoiThucHienId, loaiHanhDong, mucTieuId, doUuTien }` — tạo sớm ở 1.3 vì vai cần trả nó.
 
 ### 5.2. Phân cấp `KenhChat` — theo quyền hiển thị
 
