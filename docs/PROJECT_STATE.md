@@ -15,12 +15,12 @@
 | Mục | Giá trị |
 |---|---|
 | Cập nhật lần cuối | 2026-10-19 |
-| Phiên bản hiện tại | Chưa có. `v0.1.0` cắt khi đã có Git (0.1) |
+| Phiên bản hiện tại | Chưa có. `v0.1.0` cắt khi xong 0.6 và 0.9 |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
-| Giai đoạn MVP | **Giai đoạn 0** xong 6/10 hạng mục, còn 0.1, 0.6, 0.8, 0.9 · **Giai đoạn 1** xong 1/12 (1.1) |
+| Giai đoạn MVP | **Giai đoạn 0** xong 8/10 hạng mục, còn 0.6, 0.9 · **Giai đoạn 1** xong 1/12 (1.1) |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
 | Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, và `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`) |
-| Kho mã | **Chưa khởi tạo Git**, chưa có kho GitHub — hạng mục 0.1, thành viên tự làm |
+| Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10 theo toàn bộ đề xuất — `game-rules.md` mục 6 |
 | Kiểm thử tự động | 11 bài xanh (1 sức khỏe máy chủ, 10 cho `domain/chung`) · 0 / 20 TC · 0 / 5 ST |
@@ -112,8 +112,7 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 
 ### Theo thứ tự
 
-1. **0.1 — thành viên tự khởi tạo Git**, tạo kho GitHub, commit các thay đổi đang có (đã soạn
-   sẵn commit message), tạo nhánh `dev`. Xong thì CI (0.8) tự chạy lần đầu
+1. **Mời hai thành viên còn lại và giảng viên** vào kho GitHub (phần còn lại của 0.1)
 2. **0.6** — bật Docker Desktop, chạy `npm run db:up`, xác nhận PostgreSQL lên trạng thái
    *healthy*
 3. **0.9 phần còn lại** — gán tên cho nhãn A/B/C, xác nhận tuần học kỳ để chỉnh lịch `ROADMAP.md`
@@ -132,7 +131,7 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 
 | Vấn đề | Ảnh hưởng | Hướng xử lý |
 |---|---|---|
-| Chưa có Git | Chưa có lịch sử commit làm bằng chứng đóng góp; CI chưa chạy | Hạng mục 0.1 — thành viên tự làm |
+| Không bật được quy tắc bảo vệ nhánh | Kho riêng tư gói miễn phí — ai cũng đẩy thẳng được lên `main` | Tuân thủ tự giác: việc mới đi qua pull request vào `dev`. Bật lại nếu chuyển kho công khai |
 | Docker Desktop chưa bật trên máy phát triển | `db:up` chưa kiểm chứng; chưa chặn việc gì tới Giai đoạn 4 | Bật Docker, chạy 0.6 |
 | Chưa xác nhận tuần học kỳ | Có thể đã trễ mốc M2, M3 so với `ROADMAP.md` | Xác nhận rồi dời bảng thời gian |
 | Nhãn A/B/C chưa gán người | Chưa phân được hạng mục | Gán ở 0.9 |

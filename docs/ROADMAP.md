@@ -96,14 +96,16 @@ thì thêm người chơi ảo.
 
 ## Giai đoạn 0 — Dựng nền
 
-**Tuần 3** · **Phiên bản**: `v0.1.0` · **Trạng thái**: Gần xong — còn 0.1, 0.6, 0.8, 0.9
+**Tuần 3** · **Phiên bản**: `v0.1.0` · **Trạng thái**: Gần xong — còn 0.6, 0.9
 
 Mục tiêu: kho mã chạy được một lệnh kiểm thử và một lệnh chạy thử trên máy cả ba người, có
 rào chắn tự động cho nguyên tắc lõi miền không phụ thuộc gì.
 
 - [x] **0.0** `[C]` Khung thư mục, bộ tài liệu `docs/`, 7 sơ đồ PlantUML, ADR-0001 đề xuất
-- [ ] **0.1** `[C]` Khởi tạo Git; tạo kho GitHub riêng tư, mời ba thành viên và giảng viên;
+- [x] **0.1** `[C]` Khởi tạo Git; tạo kho GitHub riêng tư, mời ba thành viên và giảng viên;
       nhánh `main` và `dev`; bảo vệ `main` (chỉ hợp nhất qua pull request)
+      · *19/10: kho riêng tư `AlaVox-lab/WereWolf_Game`, có `main` và `dev`. Quy tắc bảo vệ nhánh
+      không bật được trên kho riêng tư gói miễn phí — tạm tuân thủ tự giác. Còn mời thành viên, giảng viên*
 - [x] **0.2** `[C]` `package.json` gốc với npm workspaces (`apps/*`, `packages/*`);
       `tsconfig.base.json` bật `strict`; ESLint + Prettier; các lệnh gốc `dev`, `test`,
       `lint`, `typecheck`, `format`
@@ -119,9 +121,9 @@ rào chắn tự động cho nguyên tắc lõi miền không phụ thuộc gì.
 - [x] **0.7** `[B]` Rào chắn phụ thuộc: quy tắc ESLint `no-restricted-imports` (hoặc
       dependency-cruiser) làm **hỏng lint** nếu `domain/` nhập bất cứ thứ gì ngoài `domain/`,
       hoặc `apps/web` nhập mã máy chủ. Tự thêm một lần nhập sai để chứng minh lint bắt được
-- [ ] **0.8** `[C]` Tích hợp liên tục GitHub Actions: `lint`, `typecheck`, `test` trên mỗi
+- [x] **0.8** `[C]` Tích hợp liên tục GitHub Actions: `lint`, `typecheck`, `test` trên mỗi
       pull request vào `dev` và `main`
-      · *Đã viết `.github/workflows/ci.yml` — còn chạy thật lần đầu sau khi có kho GitHub (0.1)*
+      · *19/10: lần chạy đầu trên `main` xanh trong 26 giây*
 - [ ] **0.9** `[ALL]` Họp chốt: **Q01–Q11** trong `game-rules.md` mục 6, **ADR-0001**, và gán
       tên thật cho nhãn A/B/C. Ghi kết quả vào `game-rules.md` và `PROJECT_STATE.md`
       · *19/10: đã chốt Q01–Q11 và ADR-0001. Còn gán tên A/B/C và xác nhận tuần học kỳ*
