@@ -166,6 +166,12 @@ bám theo nó. Còn phải cập nhật lại vào tài liệu gốc `.docx`.
 | Q10 | Kênh chung có mở trong **pha bỏ phiếu** không? | Có — mở ở pha thảo luận và pha bỏ phiếu, đóng ở pha đêm | 1.9 |
 | Q11 | **Chủ phòng rời phòng** khi ván chưa bắt đầu thì sao? | Chuyển quyền cho người vào phòng sớm nhất còn lại; phòng trống thì đóng | 4.3 |
 
+**Điểm mới, chưa chốt** — phát hiện khi làm hạng mục 1.2 ngày 19/10/2026:
+
+| Mã | Câu hỏi | Đề xuất | Hạng mục áp dụng |
+|---|---|---|---|
+| Q12 | UC25 bước 4 yêu cầu "kiểm tra tính hợp lệ của tổ hợp đã chọn" và có luồng ngoại lệ 4a "tổ hợp không hợp lệ", nhưng tài liệu **không nêu tổ hợp nào bị cấm** — sáu quy tắc độc lập với nhau | Không cấm tổ hợp nào; `BoLuatChoi.kiemTraHopLe()` hiện luôn trả rỗng và giữ làm điểm mở rộng. Đã cài theo đề xuất này — chốt khác thì chỉ sửa một phương thức | 1.2, 4.4 |
+
 ---
 
 ## 7. Yêu cầu phi chức năng được nhắc tới

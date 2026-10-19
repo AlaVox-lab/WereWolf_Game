@@ -17,13 +17,13 @@
 | Cập nhật lần cuối | 2026-10-19 |
 | Phiên bản hiện tại | Chưa có. `v0.1.0` cắt khi xong 0.6 và 0.9 |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
-| Giai đoạn MVP | **Giai đoạn 0** xong 8/10 hạng mục, còn 0.6, 0.9 · **Giai đoạn 1** xong 1/12 (1.1) |
+| Giai đoạn MVP | **Giai đoạn 0** xong 8/10 hạng mục, còn 0.6, 0.9 · **Giai đoạn 1** xong 2/12 (1.1, 1.2) |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
-| Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, và `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`) |
+| Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`), `domain/luat/` (`BoLuatChoi`, `CauHinhVai`) |
 | Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
-| Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10 theo toàn bộ đề xuất — `game-rules.md` mục 6 |
-| Kiểm thử tự động | 11 bài xanh (1 sức khỏe máy chủ, 10 cho `domain/chung`) · 0 / 20 TC · 0 / 5 ST |
+| Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
+| Kiểm thử tự động | 41 bài xanh (1 sức khỏe máy chủ, 10 `domain/chung`, 30 `domain/luat`) · 0 / 20 TC · 0 / 5 ST |
 | Thiết kế giao diện | Chưa làm — tới Giai đoạn 3 thì **chờ người dùng kết nối Higgsfield** và đưa ý tưởng, không tự thiết kế |
 
 **Một câu tóm tắt trạng thái**: kho đã dựng xong công cụ — `npm run dev` chạy máy chủ và trang
@@ -100,11 +100,22 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
       `MaLoi`; cổng `DongHo` + `DongHoGia` tua được; cổng `NguonNgauNhien` + `NgauNhienCoHat`
       theo hạt giống — 10 bài kiểm thử
 
+**Lõi miền** — hạng mục 1.2
+
+- [x] `domain/luat/BoLuatChoi`: sáu thuộc tính, `chophep`, `datQuyTac`, `kiemTraHopLe`,
+      `layMoTa`, `saoChep` trả bản khóa và đóng băng; quy tắc cố định luôn bật
+- [x] `domain/luat/CauHinhVai`: `kiemTraHopLe(soNguoi)` trả danh sách vi phạm có mã theo UC11
+      bước 3 và Q06; thêm `LoaiVai` vào `domain/chung/`
+- [x] 30 bài kiểm thử, gồm một bài đối chiếu **mọi tổ hợp vai** cho phòng 6–12 người với công
+      thức Q06 viết lại độc lập
+- [x] Class Diagram: bổ sung phương thức của `BoLuatChoi` và lớp `CauHinhVai`
+- [x] Phát hiện **Q12**: UC25 nói kiểm tra "tổ hợp không hợp lệ" nhưng không nêu tổ hợp nào bị cấm
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 1 — Lõi miền.** Hạng mục kế tiếp: **1.2** — `BoLuatChoi` và `CauHinhVai`.
+**Giai đoạn 1 — Lõi miền.** Hạng mục kế tiếp: **1.3** — phân cấp `VaiTro` và sáu lớp con.
 
 ---
 
@@ -117,7 +128,8 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
    *healthy*
 3. **0.9 phần còn lại** — gán tên cho nhãn A/B/C, xác nhận tuần học kỳ để chỉnh lịch `ROADMAP.md`
 4. **Cắt `v0.1.0`** khi 0.1–0.9 xong
-5. **1.2 → 1.12** — lõi miền
+5. **1.3 → 1.12** — lõi miền
+6. **Chốt Q12** — không chặn việc gì, đã cài theo đề xuất
 
 ### Chờ giảng viên
 

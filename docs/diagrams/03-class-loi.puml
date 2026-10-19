@@ -51,7 +51,18 @@ class BoLuatChoi {
   - camDoTrungDem : boolean
   - thoSanBanKhiTreoCo : boolean
   - hoaPhieuKhongAiChet : boolean
+  - daKhoa : boolean
   + chophep(maQuyTac) : boolean
+  + datQuyTac(maQuyTac, dangBat) : void
+  + kiemTraHopLe() : List<ViPhamBoLuat>
+  + layMoTa() : List<MoTaQuyTac>
+  + saoChep() : BoLuatChoi
+}
+class CauHinhVai {
+  - danhSachVaiVaSoLuong : Map<LoaiVai, int>
+  + soLuong(loai) : int
+  + tongSoVai() : int
+  + kiemTraHopLe(soNguoi) : List<ViPhamCauHinh>
 }
 class PhongChoi {
   - maPhong : String
@@ -81,6 +92,7 @@ class BoKiemTraThangThua
 TaiKhoan "1" -- "0..*" NguoiChoi
 PhongChoi "1" -- "0..*" VanDau
 PhongChoi "1" *-- "1" BoLuatChoi
+PhongChoi "1" *-- "1" CauHinhVai
 VanDau "1" *-- "1" BoLuatChoi
 VaiTro ..> BoLuatChoi
 VanDau "1" *-- "6..12" NguoiChoi

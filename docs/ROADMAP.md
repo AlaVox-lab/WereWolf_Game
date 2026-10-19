@@ -145,7 +145,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
       `CUU`, `DOC`, `BAN`), `MaQuyTac` (BR01–BR14), `TrangThaiVan`, `LoiNghiepVu` kèm mã lỗi;
       hai cổng `DongHo`, `NguonNgauNhien` và bản giả cho kiểm thử (`DongHoGia` tua được,
       `NgauNhienCoHat` theo hạt giống)
-- [ ] **1.2** `[A]` `domain/luat/`: `BoLuatChoi` — sáu thuộc tính, `chophep(maQuyTac)`,
+- [x] **1.2** `[A]` `domain/luat/`: `BoLuatChoi` — sáu thuộc tính, `chophep(maQuyTac)`,
       `kiemTraHopLe()`, `layMoTa()`, `saoChep()` trả bản đóng băng. `CauHinhVai` —
       `tongSoVai()`, `kiemTraHopLe(soNguoi)` theo UC11 bước 3 và **Q06**
       · Kiểm thử: mọi tổ hợp 6–12 người hợp lệ/không hợp lệ; bản sao đóng băng không sửa được

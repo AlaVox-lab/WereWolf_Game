@@ -233,7 +233,7 @@ flowchart LR
 
 ## 5. Mô hình miền
 
-*Chưa cài đặt.* Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
+*Đang cài đặt* — xong `domain/chung/` và `domain/luat/` (mục 5.3); các mục còn lại chưa. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
 thuộc tính, phương thức **giữ nguyên như sơ đồ** để người chấm dò được từ sơ đồ xuống mã —
 xem mục 13.
 
@@ -296,6 +296,20 @@ BR14 là hệ quả trực tiếp của bảng này: Sói đã chết rơi khỏ
 Đóng gói sáu quy tắc tùy biến. Lớp vai và bộ xử lý **không đọc thuộc tính boolean rải rác**
 mà gọi `chophep(MaQuyTac.BR06)`. Thêm quy tắc tùy biến mới chỉ cần thêm một thuộc tính và
 một nhánh tra cứu. Bảng thuộc tính ↔ quy tắc ↔ lớp chịu ảnh hưởng: `game-rules.md` mục 2.
+
+**Đã cài đặt** — `domain/luat/BoLuatChoi.ts` (hạng mục 1.2):
+
+- `chophep(ma)` trả *đúng* khi quy tắc đang bật; tám quy tắc cố định **luôn** trả *đúng*.
+- Bộ luật của phòng sửa bằng `datQuyTac(ma, dangBat)`; đặt quy tắc cố định ném `QUY_TAC_CO_DINH`.
+- **Bất biến trong ván** (nguyên tắc 2.3) cài bằng `saoChep()`: trả bản mới **đã khóa và
+  `Object.freeze`** — mọi `datQuyTac()` trên nó ném `BO_LUAT_DA_KHOA` (cơ sở của TC20). `VanDau`
+  phải giữ bản `saoChep()`, không bao giờ giữ tham chiếu tới bộ luật của phòng.
+- `layGiaTri()` trả đối tượng thuần sáu thuộc tính — dùng để lưu và chiếu góc nhìn.
+
+**`CauHinhVai`** — `domain/luat/CauHinhVai.ts`: bất biến, khóa theo `LoaiVai` (`domain/chung/`,
+trùng tên lớp con của `VaiTro`). `kiemTraHopLe(soNguoi)` trả **danh sách vi phạm có mã**
+(`THIEU_SOI`, `QUA_NHIEU_SOI`, `VUOT_GIOI_HAN_VAI`…) thay vì ném lỗi, để giao diện chỉ rõ
+từng vi phạm (UC11 luồng 3a). Giới hạn theo Q06 là hằng số tĩnh của lớp.
 
 ### 5.4. Các lớp thực thể còn lại
 
