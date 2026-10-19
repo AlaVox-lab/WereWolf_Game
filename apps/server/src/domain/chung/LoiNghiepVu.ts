@@ -22,6 +22,9 @@ export type MaLoi =
   | 'NHAT_KY_DA_DONG'
   | 'NHAT_KY_CHUA_CONG_KHAI'
   | 'DA_BO_PHIEU'
+  | 'KHONG_CO_QUYEN_BAU'
+  | 'PHIEN_DA_CHOT'
+  | 'KHONG_THE_BAU_LAI'
   | 'CHUYEN_TRANG_THAI_KHONG_HOP_LE';
 
 export class LoiNghiepVu extends Error {

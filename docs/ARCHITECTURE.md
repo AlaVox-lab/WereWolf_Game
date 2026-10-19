@@ -233,7 +233,7 @@ flowchart LR
 
 ## 5. Mô hình miền
 
-*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1), `domain/van/` (mục 5.4); các mục còn lại chưa. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
+*Đang cài đặt* — xong `domain/chung/`, `domain/luat/` (mục 5.3), `domain/vaitro/` (mục 5.1), `domain/van/`, `domain/baucu/` (mục 5.4); các mục còn lại chưa. Ánh xạ 1:1 với Class Diagram (`docs/diagrams/03-class-loi.puml`). Tên lớp,
 thuộc tính, phương thức **giữ nguyên như sơ đồ** để người chấm dò được từ sơ đồ xuống mã —
 xem mục 13.
 
@@ -336,6 +336,16 @@ Theo mục 9.4 tài liệu gốc: `TaiKhoan`, `HoSoNguoiChoi`, `PhongChoi`, `Cau
 | `KetQuaDem` | `themNguoiChet()` bỏ qua người đã có — BR08 đúng tự nhiên. `chot()` khóa lại |
 | `NhatKyVan` | Chỉ ghi thêm, sự kiện đóng băng. **Không tự đọc giờ** — người gọi truyền `thoiDiem` từ `DongHo`. Chỉ `xuatBanCongKhai()` được sau `dong()` |
 | `NguyenNhanChet` | `BI_CAN`, `BI_DOC`, `BI_TREO_CO`, `BI_BAN` — không bao giờ lộ ra khi công bố buổi sáng |
+
+**Đã cài đặt trong `domain/baucu/`** (hạng mục 1.7):
+
+| Lớp | Điểm cần biết |
+|---|---|
+| `PhieuBau` | Bất biến; `nguoiBiBauId = null` là bỏ trắng |
+| `PhienBauCu` | Nhận danh sách **cử tri** (người còn sống) và **ứng viên** (mặc định = cử tri). Mỗi người một phiếu (12.3). **Không tự hẹn giờ** — bộ điều phối gọi `kiemPhieu()` khi đủ phiếu hoặc hết giờ, ai chưa bầu coi như bỏ trắng. `kiemPhieu(luat)` chốt phiên và trả `KetQuaPhien`: `TREO_CO`, `KHONG_AI` (không phiếu hợp lệ, hoặc hòa khi BR11 bật, hoặc vòng lại vẫn hòa), hay `BAU_LAI` (hòa khi BR11 tắt — Q03). `taoVongBauLai()` mở phiên mới chỉ giữa người hòa |
+
+`LuotChoi.ganPhienBauCu()` nhận tối đa hai phiên: phiên chính, và vòng bầu lại chỉ khi phiên
+chính ra `BAU_LAI`. `phienBauCu` trả phiên đang có hiệu lực.
 
 ### 5.5. Các lớp điều khiển
 

@@ -167,7 +167,7 @@ chạy xanh. Đây là giai đoạn kiểm chứng Class Diagram — mọi thay 
 - [x] **1.6** `[A]` `BoGiaiQuyetDem.xuLyDayChuyen()`: hàng đợi Thợ săn theo mục 16.3 tài liệu
       gốc, nhận một hàm chọn mục tiêu bất đồng bộ; áp **Q02** khi BR09 tắt
       · Kiểm thử: **TC09, TC10, TC18**; thuật toán luôn dừng khi mọi Thợ săn bắn lẫn nhau
-- [ ] **1.7** `[B]` `domain/baucu/`: `PhieuBau`, `PhienBauCu` — `ghiPhieu` (mỗi người một phiếu,
+- [x] **1.7** `[B]` `domain/baucu/`: `PhieuBau`, `PhienBauCu` — `ghiPhieu` (mỗi người một phiếu,
       cho bỏ trắng), `kiemPhieu`, `xuLyHoa` theo BR11 và **Q03**
       · Kiểm thử: **TC11, TC19**; bỏ phiếu hai lần bị chặn; người chết không được bầu
 - [ ] **1.8** `[B]` `application/BoKiemTraThangThua` đúng công thức mục 16.4 tài liệu gốc

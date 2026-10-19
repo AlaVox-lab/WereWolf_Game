@@ -116,6 +116,7 @@ class LuotChoi {
   + soThuTu : int
   + ghiYDinh(hd) : void
   + ganKetQuaDem(kq) : void
+  + ganPhienBauCu(phien) : void
 }
 class NhatKyVan {
   + ghiSuKien(loai, duLieu, thoiDiem) : SuKien
@@ -134,8 +135,28 @@ class KetQuaDem {
   + themNguoiDuocCuu(id) : void
   + coNguoiChet() : boolean
 }
-class PhienBauCu
-class PhieuBau
+class PhienBauCu {
+  + soLuot : int
+  + thoiHan : long
+  + laVongBauLai : boolean
+  - danhSachPhieu : List<PhieuBau>
+  - ketQua : KetQuaPhien
+  + ghiPhieu(nguoiBau, nguoiBiBau, thoiDiem) : PhieuBau
+  + daDuPhieu() : boolean
+  + kiemPhieu(luat) : KetQuaPhien
+  + xuLyHoa(nguoiHoa, luat) : KetQuaPhien
+  + taoVongBauLai(thoiHan) : PhienBauCu
+}
+class PhieuBau {
+  + nguoiBauId : String
+  + nguoiBiBauId : String
+  + thoiDiem : long
+}
+note right of PhienBauCu
+  KetQuaPhien: TREO_CO | KHONG_AI | BAU_LAI.
+  BR11 tắt: hòa thì bầu lại một lần giữa người hòa,
+  vòng lại vẫn hòa thì không ai chết (Q03).
+end note
 class BoDieuPhoiVan
 class BoGiaiQuyetDem {
   - chuoiBuoc : List<BuocGiaiQuyet>
@@ -165,6 +186,7 @@ NguoiChoi "1" -- "0..*" HanhDongDem
 VanDau "1" *-- "0..*" LuotChoi
 LuotChoi "1" o-- "0..*" HanhDongDem
 LuotChoi "1" o-- "0..1" KetQuaDem
+LuotChoi "1" o-- "0..2" PhienBauCu
 VanDau "1" *-- "1" NhatKyVan
 VanDau "1" *-- "0..*" KetQuaDem
 VanDau "1" *-- "0..*" PhienBauCu
