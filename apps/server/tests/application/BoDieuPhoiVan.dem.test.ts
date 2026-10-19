@@ -1,17 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { BoDieuPhoiVan, docLuaChon } from '../../src/application/BoDieuPhoiVan.js';
-import { BoHenGio } from '../../src/application/BoHenGio.js';
-import { CongLuaChon } from '../../src/application/CongLuaChon.js';
+import { docLuaChon } from '../../src/application/BoDieuPhoiVan.js';
 import {
-  DongHoGia,
   LoaiHanhDong,
   LoaiVai,
   LoiNghiepVu,
-  NgauNhienCoHat,
   Phe,
   TrangThaiVan,
 } from '../../src/domain/chung/index.js';
-import { BoLuatChoi, CauHinhVai } from '../../src/domain/luat/index.js';
 import {
   BaoVe,
   DanLang,
@@ -21,7 +16,8 @@ import {
   TienTri,
   type VaiTro,
 } from '../../src/domain/vaitro/index.js';
-import { NguoiChoi, NguyenNhanChet, VanDau } from '../../src/domain/van/index.js';
+import { NguyenNhanChet } from '../../src/domain/van/index.js';
+import { chayKichBan as chay, taoTran as tao, xaHangDoi } from './kichBan.js';
 
 // Ván 8 người: soi, bv (Bảo vệ), tt (Tiên tri), pt (Phù thủy), ts (Thợ săn), A, B, C (Dân làng).
 const VAI: Record<string, () => VaiTro> = {
@@ -34,75 +30,8 @@ const VAI: Record<string, () => VaiTro> = {
   B: () => new DanLang(),
   C: () => new DanLang(),
 };
-const CAU_HINH = new CauHinhVai({
-  [LoaiVai.Soi]: 1,
-  [LoaiVai.BaoVe]: 1,
-  [LoaiVai.TienTri]: 1,
-  [LoaiVai.PhuThuy]: 1,
-  [LoaiVai.ThoSan]: 1,
-  [LoaiVai.DanLang]: 3,
-});
-
-function taoTran() {
-  const nguoiChoi = Object.entries(VAI).map(([id, tao], i) => {
-    const nc = new NguoiChoi(id, `tk-${id}`, i + 1);
-    nc.nhanVai(tao());
-    return nc;
-  });
-  const van = new VanDau('v1', 'ph1', nguoiChoi, new BoLuatChoi());
-  van.chuyenPha('batDauVan');
-  van.chuyenPha('chiaVaiXong');
-  const dongHo = new DongHoGia();
-  const boHenGio = new BoHenGio(dongHo);
-  const cong = new CongLuaChon(boHenGio);
-  const dieuPhoi = new BoDieuPhoiVan(van, CAU_HINH, {
-    boHenGio,
-    congLuaChon: cong,
-    nguonNgauNhien: new NgauNhienCoHat(1),
-  });
-  return { van, dongHo, cong, dieuPhoi };
-}
-
-const xaHangDoi = async () => {
-  for (let i = 0; i < 5; i++) await new Promise<void>((r) => setImmediate(r));
-};
-
-/**
- * Chạy `hua` tới khi xong: mỗi vòng xả hàng đợi microtask, ghi ai vừa được mời, trả lời theo
- * `kichBan` (không có trong kịch bản thì để hết giờ), rồi tua đồng hồ 1 giây.
- */
-async function chayKichBan<T>(
-  tran: ReturnType<typeof taoTran>,
-  hua: Promise<T>,
-  kichBan: Record<string, unknown> = {},
-) {
-  const { dongHo, cong, van } = tran;
-  let xong = false;
-  let ketQua: T | undefined;
-  hua.then((v) => {
-    xong = true;
-    ketQua = v;
-  });
-  const thuTuMoi: { id: string; luc: number }[] = [];
-  const dangMoi = new Set<string>();
-  const ids = van.layDanhSachNguoiChoi().map((n) => n.id);
-  for (let vong = 0; vong < 2_000 && !xong; vong++) {
-    await xaHangDoi();
-    for (const id of ids) {
-      const moi = cong.dangChoNguoi(id);
-      if (moi && !dangMoi.has(id)) {
-        thuTuMoi.push({ id, luc: dongHo.bayGio() });
-        if (id in kichBan) cong.ghiNhan(id, kichBan[id]);
-      }
-      if (moi && cong.dangChoNguoi(id)) dangMoi.add(id);
-      else dangMoi.delete(id);
-    }
-    await xaHangDoi();
-    if (!xong) dongHo.tua(1_000);
-  }
-  if (!xong) throw new Error('kịch bản không kết thúc');
-  return { ketQua: ketQua as T, thuTuMoi, thoiGian: dongHo.bayGio() };
-}
+const taoTran = () => tao(VAI);
+const chayKichBan = chay;
 
 describe('BoDieuPhoiVan — khung pha đêm (2.2a)', () => {
   it('thứ tự bước đêm sinh từ doUuTien của các vai trong cấu hình', () => {

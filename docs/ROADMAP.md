@@ -214,7 +214,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
       chuyền Thợ săn; thời lượng bước là cấu hình
       · Kiểm thử: thứ tự gọi; vai bỏ lượt khi hết giờ; bước giả của vai đã chết; Tiên tri nhận
       đúng phe; một đêm đầy đủ tới `GIAI_QUYET_DEM`
-- [ ] **2.2b** `[A]` Pha đêm — **phần riêng từng vai**: Sói đồng thuận trên kênh Sói, hết giờ thì
+- [x] **2.2b** `[A]` Pha đêm — **phần riêng từng vai**: Sói đồng thuận trên kênh Sói, hết giờ thì
       chọn ngẫu nhiên trong mục tiêu đã đề xuất (BR12, **Q07**); Phù thủy được báo nạn nhân và cờ
       an toàn (BR07); đêm 1 theo BR03 và **Q01**
       · Kiểm thử: **TC12**; nhiều Sói; BR03 tắt

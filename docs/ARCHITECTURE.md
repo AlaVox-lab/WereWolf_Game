@@ -466,8 +466,17 @@ và `application/CongLuaChon.ts` (2.1). Sơ đồ: `docs/diagrams/06-state-van-d
     và góc nhìn biết đang lượt vai nào.
   - Thời lượng là `CauHinhThoiGian` (`application/CauHinhThoiGian.ts`), mặc định theo
     `game-rules.md` mục 4.
-  - **Chưa có** (2.2b): đồng thuận nhiều Sói — hiện mỗi Sói ghi một ý định `CAN` riêng và bộ giải
-    quyết lấy ý định đầu tiên; báo cờ an toàn cho Phù thủy; đêm 1 theo BR03 (Q01).
+  - **Lượt tập thể** (2.2b): vai có `laHanhDongTapThe()` (chỉ `Soi`) đi nhánh riêng — bộ điều
+    phối rẽ theo **khả năng của vai**, không theo tên vai. Mỗi thành viên đề xuất qua
+    `CongLuaChon` và được **mời lại để đổi ý** với thời gian còn lại của bước (một hạn chung).
+    Chốt sớm khi mọi thành viên còn sống cùng chọn một người, rồi hủy lời mời còn lại. Hết giờ:
+    chọn bằng `NguonNgauNhien` trong các mục tiêu **khác nhau** đã đề xuất, xếp theo thứ tự ghế —
+    kết quả chỉ phụ thuộc hạt giống (BR12, TC12). Không ai đề xuất thì không có ý định (Q07).
+    Cả nhóm ghi **đúng một** ý định `CAN`.
+  - `layThongTinNanNhan()` (2.2b) trả `{ nanNhanId, anToan }` của đêm đang chạy từ ý định — dữ
+    liệu báo trước cho Phù thủy (BR07); góc nhìn (2.6) chỉ đưa cho Phù thủy.
+  - **BR03 tắt** (Q01, 2.2b): đêm 1 bỏ hẳn lượt tập thể, và lời mời từ chối ý định `DOC` với
+    `VI_PHAM_RANG_BUOC` — đêm 1 không ai chết.
 
 **Thiết kế gốc**:
 

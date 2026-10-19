@@ -1,5 +1,6 @@
 import { LoaiHanhDong } from '../domain/chung/LoaiHanhDong.js';
 import type { LoaiVai } from '../domain/chung/LoaiVai.js';
+import { MaQuyTac } from '../domain/chung/MaQuyTac.js';
 import { LoiNghiepVu } from '../domain/chung/LoiNghiepVu.js';
 import type { NguonNgauNhien } from '../domain/chung/NguonNgauNhien.js';
 import type { Phe } from '../domain/chung/Phe.js';
@@ -77,6 +78,16 @@ export class BoDieuPhoiVan {
     return this.buocDemHienTai;
   }
 
+  /**
+   * Thông tin báo trước cho Phù thủy trong đêm đang chạy (BR07): nạn nhân Sói đã chốt và mục tiêu
+   * đó đã được Bảo vệ đỡ chưa. Tính từ ý định — góc nhìn (2.6) chỉ đưa cho Phù thủy, trong lượt
+   * của Phù thủy.
+   */
+  layThongTinNanNhan(): { nanNhanId: string | null; anToan: boolean } {
+    const luot = this.van.luotHienTai > 0 ? this.van.layLuotHienTai() : null;
+    return BoGiaiQuyetDem.xemNanNhan(luot?.layYDinh() ?? []);
+  }
+
   /** Mọi kết quả soi của một Tiên tri, theo thứ tự đêm. */
   layKetQuaSoi(tienTriId: string): readonly KetQuaSoi[] {
     return this.ketQuaSoi.get(tienTriId) ?? [];
@@ -126,22 +137,21 @@ export class BoDieuPhoiVan {
     return ketQua;
   }
 
-  /** Mời mọi người còn sống giữ vai `loai` hành động cùng lúc; bước xong khi tất cả xong. */
+  /**
+   * Một bước đêm. Vai không còn ai sống: chờ giả (Q05). Vai hành động tập thể: cả nhóm đồng
+   * thuận một ý định. Còn lại: mỗi người giữ vai hành động riêng, cùng lúc.
+   */
   private async chayBuoc(loai: LoaiVai, luot: LuotChoi): Promise<void> {
     const nguoiGiu = this.van.layNguoiConSong().filter((n) => n.vaiTro.loaiVai === loai);
-    if (nguoiGiu.length === 0) {
-      await this.choBuocGia();
-      return;
-    }
+    const tapThe = this.cacVaiMau.taoVai(loai).laHanhDongTapThe();
+    // Q01 — BR03 tắt: đêm 1 không ai chết, nên bỏ hẳn lượt cắn tập thể.
+    if (tapThe && this.laDemDauKhongChet(luot)) return;
+    if (nguoiGiu.length === 0) return this.choBuocGia();
     const thoiHan = this.thoiGian.luotVai[loai] ?? THOI_GIAN_MAC_DINH.luotVai[loai] ?? 25_000;
+    if (tapThe) return this.chayBuocTapThe(nguoiGiu, luot, thoiHan);
     await Promise.all(
       nguoiGiu.map(async (nguoiChoi) => {
-        const nc = this.taoNguCanh(nguoiChoi, luot);
-        const hanhDong = await this.phuThuoc.congLuaChon.cho<HanhDongDem>(
-          nguoiChoi.id,
-          thoiHan,
-          (tho) => nguoiChoi.vaiTro.thucHienLuot(nc, docLuaChon(tho)),
-        );
+        const hanhDong = await this.moiHanhDong(nguoiChoi, luot, thoiHan);
         if (!hanhDong) return; // BR12 — hết giờ thì bỏ lượt
         luot.ghiYDinh(hanhDong);
         if (hanhDong.loaiHanhDong === LoaiHanhDong.SOI_THONG_TIN) {
@@ -149,6 +159,70 @@ export class BoDieuPhoiVan {
         }
       }),
     );
+  }
+
+  /**
+   * Lượt tập thể (UC13 luồng con Sói). Mỗi thành viên đề xuất qua `CongLuaChon`; đề xuất xong được
+   * mời lại để **đổi ý** trong thời gian còn lại của bước. Chốt sớm khi mọi thành viên còn sống
+   * cùng chọn một người. Hết giờ: chọn ngẫu nhiên trong các mục tiêu đã đề xuất (BR12); không ai
+   * đề xuất thì không có ý định nào (Q07). Chỉ ghi **một** ý định cho cả nhóm.
+   */
+  private async chayBuocTapThe(
+    nhom: readonly NguoiChoi[],
+    luot: LuotChoi,
+    thoiHan: number,
+  ): Promise<void> {
+    const henGio = this.phuThuoc.boHenGio;
+    const hetHan = henGio.bayGio() + thoiHan;
+    const deXuat = new Map<string, HanhDongDem>();
+    const dongThuan = () =>
+      deXuat.size === nhom.length &&
+      new Set([...deXuat.values()].map((h) => h.mucTieuId)).size === 1;
+
+    await Promise.all(
+      nhom.map(async (thanhVien) => {
+        for (;;) {
+          const conLai = hetHan - henGio.bayGio();
+          if (conLai <= 0 || dongThuan()) return;
+          const hanhDong = await this.moiHanhDong(thanhVien, luot, conLai);
+          if (!hanhDong) return;
+          deXuat.set(thanhVien.id, hanhDong);
+          if (dongThuan()) {
+            for (const khac of nhom) this.phuThuoc.congLuaChon.huy(khac.id);
+            return;
+          }
+        }
+      }),
+    );
+
+    // Theo thứ tự ghế để kết quả chỉ phụ thuộc hạt giống, không phụ thuộc thứ tự bấm nút.
+    const cacDeXuat = nhom.map((n) => deXuat.get(n.id)).filter((h) => h !== undefined);
+    const mucTieu = [...new Set(cacDeXuat.map((h) => h.mucTieuId))];
+    if (mucTieu.length === 0) return; // Q07
+    const chon = mucTieu[this.phuThuoc.nguonNgauNhien.soNguyen(mucTieu.length)]!;
+    luot.ghiYDinh(cacDeXuat.find((h) => h.mucTieuId === chon)!);
+  }
+
+  /** Mời một người hành động; lựa chọn được kiểm bằng chính luật của vai. */
+  private moiHanhDong(
+    nguoiChoi: NguoiChoi,
+    luot: LuotChoi,
+    thoiHan: number,
+  ): Promise<HanhDongDem | null> {
+    const nc = this.taoNguCanh(nguoiChoi, luot);
+    return this.phuThuoc.congLuaChon.cho<HanhDongDem>(nguoiChoi.id, thoiHan, (tho) => {
+      const hanhDong = nguoiChoi.vaiTro.thucHienLuot(nc, docLuaChon(tho));
+      // Q01 — BR03 tắt: đêm 1 Phù thủy không được dùng độc.
+      if (hanhDong.loaiHanhDong === LoaiHanhDong.DOC && this.laDemDauKhongChet(luot)) {
+        throw new LoiNghiepVu('VI_PHAM_RANG_BUOC', 'BR03 tắt: đêm 1 không ai chết');
+      }
+      return hanhDong;
+    });
+  }
+
+  /** BR03 tắt và đang ở đêm 1 (Q01). */
+  private laDemDauKhongChet(luot: LuotChoi): boolean {
+    return luot.soThuTu === 1 && !this.van.boLuatChoi.chophep(MaQuyTac.BR03);
   }
 
   /** Q05 — vai không còn ai sống vẫn "diễn" một bước dài ngẫu nhiên. */

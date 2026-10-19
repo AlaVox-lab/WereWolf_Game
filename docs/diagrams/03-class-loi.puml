@@ -10,6 +10,7 @@ abstract class VaiTro {
   + moTaNangLuc : String
   + laHanhDongDem() : boolean
   + coKyNangKhiChet() : boolean
+  + laHanhDongTapThe() : boolean
   + thucHienLuot(nc, luaChon) : HanhDongDem
   + kichHoatKhiChet(nc, luaChon) : HanhDongDem
   + layDanhSachMucTieu(nc, loai) : List<NguoiChoi>
@@ -27,7 +28,9 @@ class BaoVe {
   - mucTieuDemTruoc : String
   + capNhatMucTieuDemTruoc(mt) : void
 }
-class Soi
+class Soi {
+  + laHanhDongTapThe() : boolean
+}
 class TienTri
 class PhuThuy {
   - conThuocCuu : boolean
@@ -177,10 +180,12 @@ class BoDieuPhoiVan {
   + xuLyPhaDem() : Promise<KetQuaDem>
   + layBuocDemHienTai() : LoaiVai
   + layKetQuaSoi(tienTriId) : List<KetQuaSoi>
+  + layThongTinNanNhan() : NanNhan
 }
 note top of BoDieuPhoiVan
-  Pha đêm (2.2a): bước sinh từ doUuTien của vai trong cấu hình;
-  vai không còn ai sống vẫn chờ giả 8–15 giây (Q05).
+  Pha đêm (2.2): bước sinh từ doUuTien của vai trong cấu hình;
+  vai không còn ai sống vẫn chờ giả 8–15 giây (Q05);
+  vai laHanhDongTapThe() đồng thuận, hết giờ chọn ngẫu nhiên (BR12).
   Pha ngày làm ở 2.3.
 end note
 class BoGiaiQuyetDem {

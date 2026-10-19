@@ -35,6 +35,15 @@ export abstract class VaiTro {
   }
 
   /**
+   * Đúng nếu cả nhóm cùng vai hành động **chung một lần** và phải đồng thuận — bảng 9.1.2 tài liệu
+   * gốc: "Sói — hành động tập thể". `Soi` ghi đè. Bộ điều phối rẽ nhánh theo khả năng này, không
+   * theo tên vai.
+   */
+  laHanhDongTapThe(): boolean {
+    return false;
+  }
+
+  /**
    * Khung xử lý một lượt đêm: kiểm tra vai có năng lực đêm, mục tiêu nằm trong danh sách được
    * phép, ràng buộc riêng của vai, rồi mới để lớp con tạo ý định.
    */

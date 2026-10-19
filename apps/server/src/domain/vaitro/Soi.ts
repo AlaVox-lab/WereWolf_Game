@@ -22,6 +22,10 @@ export class Soi extends VaiTro {
     return true;
   }
 
+  override laHanhDongTapThe(): boolean {
+    return true;
+  }
+
   /** Sói chỉ cắn người không thuộc phe Sói — Q13. */
   override layDanhSachMucTieu(nc: NguCanhHanhDong): NguoiChoiTrongVan[] {
     return super.layDanhSachMucTieu(nc).filter((m) => m.vaiTro.phe !== Phe.SOI);
