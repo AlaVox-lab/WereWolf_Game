@@ -532,7 +532,8 @@ tự chuyển pha** — pha chỉ đổi khi máy chủ đẩy góc nhìn mới.
 
 ## 8. Khuôn mẫu: góc nhìn theo người chơi — PC04
 
-*Chưa cài đặt.* Hiện thực nguyên tắc 2.1.
+*Đã cài* — `application/taoGocNhin.ts`, kiểu `GocNhinNguoiChoi` ở `packages/shared/src/gocNhin.ts`
+(hạng mục 2.6). Chưa gắn Socket.IO (4.7). Hiện thực nguyên tắc 2.1.
 
 **Một hàm duy nhất quyết định ai thấy gì**: `taoGocNhin(van, nguoiChoiId): GocNhinNguoiChoi`.
 Mọi dữ liệu trạng thái ván gửi xuống trình duyệt **đều là kết quả của hàm này**. Không có
@@ -553,8 +554,28 @@ nhìn cho từng người (tối đa 12, rẻ) và đẩy riêng vào phòng soc
 (BR13) không cần cơ chế gì thêm — gửi lại ảnh chụp hiện tại là đủ. Tin nhắn trò chuyện đi
 riêng theo phòng socket của kênh, thành viên phòng do `BoQuanLyKenh` quyết định.
 
-**Kiểm chứng tự động ST05**: bộ kiểm thử tích hợp chặn bắt **mọi** gói tin máy chủ gửi cho
-một người chơi và khẳng định không gói nào chứa vai của người khác — hạng mục ROADMAP 4.11.
+**Như đã cài** (2.6):
+
+- `taoGocNhin(dieuPhoi, nguoiChoiId)` chọn **tường minh** từng trường — không tuần tự hóa nguyên
+  đối tượng miền. Người khác chỉ có `{ id, thuTuGhe, conSong }`.
+- Hai phương thức đa hình mới trên `VaiTro` để góc nhìn không phải hỏi tên vai:
+  `layCacLuaChon(nc)` (Phù thủy trả hai nhóm `CUU`, `DOC`; vai khác một nhóm) và
+  `layTrangThaiKyNang()` (Bảo vệ: mục tiêu đêm trước; Phù thủy: hai lọ — cũng là dữ liệu cho cột
+  `trang_thai_ky_nang`, PC09).
+- **Việc cần làm** lấy từ `BoDieuPhoiVan.layLoiMoi()` — lời mời ghi sẵn danh sách lựa chọn lúc mời;
+  lời mời có nhóm `CUU` mang thêm `nanNhan` (BR07). BR03 tắt thì đêm 1 bỏ nhóm `DOC`.
+- **Hạn pha** (`layHetHanPha()`) chỉ có ở công bố, thảo luận, bỏ phiếu; ban đêm luôn `null` —
+  đếm ngược của bước đêm chỉ người được mời thấy, qua `viecCanLam.hetHanLuc` (Q05).
+- **Kết quả ngày công khai** bỏ `nguoiBanId`: chỉ người bị treo, có bầu lại không, ai chết thêm —
+  công bố "X bắn Y" là lộ X là Thợ săn (Q09).
+- **Tiến độ bỏ phiếu** là số đếm `{ daBau, tong }`, không tên.
+- `ketThuc` (phe thắng, vai của tất cả) chỉ khi `KET_THUC`.
+
+**Kiểm chứng**: `tests/application/taoGocNhin.test.ts` chạy trọn một ván, sau **mỗi sự kiện**
+dựng góc nhìn của **mọi người** và quét: không mã vai nào ngoài vai của chính người xem, Dân
+thường không thấy chữ phe `"SOI"`, người khác không có trường nào ngoài ba trường công khai. Đã
+thử cố tình gửi kèm vai người khác — bài kiểm thử đỏ ngay. Bản tích hợp chặn **gói tin thật**
+qua Socket.IO là hạng mục ROADMAP 4.11.
 
 ---
 

@@ -3,7 +3,12 @@ import type { LoaiVai } from '../chung/LoaiVai.js';
 import { LoiNghiepVu } from '../chung/LoiNghiepVu.js';
 import type { Phe } from '../chung/Phe.js';
 import type { HanhDongDem } from '../van/HanhDongDem.js';
-import type { LuaChon, NguCanhHanhDong, NguoiChoiTrongVan } from './NguCanhHanhDong.js';
+import type {
+  LuaChon,
+  NguCanhHanhDong,
+  NguoiChoiTrongVan,
+  NhomLuaChon,
+} from './NguCanhHanhDong.js';
 
 /**
  * Lớp trừu tượng của sáu vai — phân cấp trung tâm (ARCHITECTURE.md mục 5.1).
@@ -41,6 +46,22 @@ export abstract class VaiTro {
    */
   laHanhDongTapThe(): boolean {
     return false;
+  }
+
+  /**
+   * Các nhóm lựa chọn của vai trong lượt — mặc định một nhóm gồm `layDanhSachMucTieu()`. Vai có
+   * nhiều loại hành động (Phù thủy) ghi đè để trả một nhóm cho mỗi loại.
+   */
+  layCacLuaChon(nc: NguCanhHanhDong): NhomLuaChon[] {
+    return [{ mucTieu: this.layDanhSachMucTieu(nc) }];
+  }
+
+  /**
+   * Trạng thái riêng của vai dưới dạng dữ liệu thuần — chiếu vào góc nhìn của **chính chủ** và lưu
+   * vào cột JSON `trang_thai_ky_nang` (PC09). Mặc định rỗng.
+   */
+  layTrangThaiKyNang(): Record<string, unknown> {
+    return {};
   }
 
   /**

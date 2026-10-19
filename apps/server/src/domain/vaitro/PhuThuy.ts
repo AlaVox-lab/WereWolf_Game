@@ -4,7 +4,12 @@ import { LoiNghiepVu } from '../chung/LoiNghiepVu.js';
 import { MaQuyTac } from '../chung/MaQuyTac.js';
 import { Phe } from '../chung/Phe.js';
 import { HanhDongDem } from '../van/HanhDongDem.js';
-import type { LuaChon, NguCanhHanhDong, NguoiChoiTrongVan } from './NguCanhHanhDong.js';
+import type {
+  LuaChon,
+  NguCanhHanhDong,
+  NguoiChoiTrongVan,
+  NhomLuaChon,
+} from './NguCanhHanhDong.js';
 import { VaiTro } from './VaiTro.js';
 
 /**
@@ -54,6 +59,18 @@ export class PhuThuy extends VaiTro {
 
   layConThuocCuu(): boolean {
     return this.conThuocCuu;
+  }
+
+  /** Hai nhóm: cứu (chỉ nạn nhân Sói, khi còn lọ) và độc (khi còn lọ). */
+  override layCacLuaChon(nc: NguCanhHanhDong): NhomLuaChon[] {
+    return [
+      { loai: LoaiHanhDong.CUU, mucTieu: this.layDanhSachMucTieu(nc, LoaiHanhDong.CUU) },
+      { loai: LoaiHanhDong.DOC, mucTieu: this.layDanhSachMucTieu(nc, LoaiHanhDong.DOC) },
+    ];
+  }
+
+  override layTrangThaiKyNang(): Record<string, unknown> {
+    return { conThuocCuu: this.conThuocCuu, conThuocDoc: this.conThuocDoc };
   }
 
   layConThuocDoc(): boolean {

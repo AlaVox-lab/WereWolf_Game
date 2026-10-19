@@ -42,6 +42,10 @@ export class BaoVe extends VaiTro {
     return this.mucTieuDemTruoc;
   }
 
+  override layTrangThaiKyNang(): Record<string, unknown> {
+    return { mucTieuDemTruoc: this.mucTieuDemTruoc };
+  }
+
   /**
    * Ghi người được đỡ trong đêm vừa giải quyết (`null` nếu bỏ lượt). Chỉ `BoGiaiQuyetDem` gọi,
    * ở bước giải quyết — không gọi lúc ghi ý định.

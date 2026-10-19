@@ -32,6 +32,19 @@ export interface PhuThuocDieuPhoi {
   readonly thoiGian?: CauHinhThoiGian;
 }
 
+/** Một lời mời đang mở — để góc nhìn biết người đó đang phải làm gì, chọn trong những ai. */
+export interface LoiMoiDangMo {
+  readonly viec: LoaiViec;
+  readonly hetHanLuc: number;
+  readonly luaChon: readonly {
+    readonly loai?: LoaiHanhDong;
+    readonly mucTieu: readonly string[];
+  }[];
+  readonly choPhepBoTrang: boolean;
+  /** Chỉ có trong lượt của vai được báo nạn nhân (Phù thủy — BR07). */
+  readonly nanNhan?: { readonly nanNhanId: string | null; readonly anToan: boolean };
+}
+
 /** Kết quả soi trả riêng cho Tiên tri (UC13 luồng con Tiên tri). */
 export interface KetQuaSoi {
   readonly luot: number;
@@ -42,6 +55,8 @@ export interface KetQuaSoi {
 /** Kết quả một ngày: kết quả kiểm phiếu và các phát bắn của Thợ săn bị treo cổ. */
 export interface KetQuaNgay {
   readonly ketQuaPhien: KetQuaPhien;
+  /** Có vòng bầu lại không (Q03). */
+  readonly coBauLai: boolean;
   readonly phatBan: readonly PhatBan[];
 }
 
@@ -94,6 +109,8 @@ export class BoDieuPhoiVan {
   private readonly cacVaiMau: BoChiaVai;
   private buocDemHienTai: LoaiVai | null = null;
   private readonly ketQuaSoi = new Map<string, KetQuaSoi[]>();
+  private readonly loiMoi = new Map<string, LoiMoiDangMo>();
+  private hetHanPha: number | null = null;
 
   constructor(
     readonly van: VanDau,
@@ -154,6 +171,16 @@ export class BoDieuPhoiVan {
     return this.ketQuaNgay;
   }
 
+  /** Lời mời đang mở của một người, `null` nếu không được mời gì lúc này. */
+  layLoiMoi(nguoiChoiId: string): LoiMoiDangMo | null {
+    return this.loiMoi.get(nguoiChoiId) ?? null;
+  }
+
+  /** Hạn của pha ngày đang chạy (công bố, thảo luận, bỏ phiếu); ban đêm luôn `null` (Q05). */
+  layHetHanPha(): number | null {
+    return this.hetHanPha;
+  }
+
   /** Mọi kết quả soi của một Tiên tri, theo thứ tự đêm. */
   layKetQuaSoi(tienTriId: string): readonly KetQuaSoi[] {
     return this.ketQuaSoi.get(tienTriId) ?? [];
@@ -185,6 +212,7 @@ export class BoDieuPhoiVan {
       );
     }
     const luot = this.van.taoLuotMoi();
+    this.hetHanPha = null;
     for (const loai of this.layThuTuBuocDem()) {
       this.datBuocDem(loai);
       await this.chayBuoc(loai, luot);
@@ -263,7 +291,9 @@ export class BoDieuPhoiVan {
         this.moiThoSanBan(thoSan, ungVien),
       );
     }
-    this.ketQuaNgay = { ketQuaPhien, phatBan };
+    const coBauLai = this.van.layLuotHienTai().layDanhSachPhienBauCu().length > 1;
+    this.ketQuaNgay = { ketQuaPhien, coBauLai, phatBan };
+    this.hetHanPha = null;
     this.suKien.phat({ loai: 'KET_QUA_NGAY', ketQua: this.ketQuaNgay }, { loai: 'TAT_CA' });
     this.kiemTraVaChuyen();
     return this.ketQuaNgay;
@@ -290,12 +320,14 @@ export class BoDieuPhoiVan {
     const henGio = this.phuThuoc.boHenGio;
     const cuTri = this.van.layNguoiConSong().map((n) => n.id);
     const phien = new PhienBauCu(luot.soThuTu, cuTri, henGio.bayGio() + this.thoiGian.boPhieu);
+    this.hetHanPha = phien.thoiHan;
     luot.ganPhienBauCu(phien);
     await this.thuPhieu(phien, this.thoiGian.boPhieu);
     const ketQua = phien.kiemPhieu(this.van.boLuatChoi);
     if (ketQua.loai !== 'BAU_LAI') return ketQua;
 
     const vongLai = phien.taoVongBauLai(henGio.bayGio() + this.thoiGian.bauLai);
+    this.hetHanPha = vongLai.thoiHan;
     luot.ganPhienBauCu(vongLai);
     await this.thuPhieu(vongLai, this.thoiGian.bauLai);
     return vongLai.kiemPhieu(this.van.boLuatChoi);
@@ -310,8 +342,15 @@ export class BoDieuPhoiVan {
     const cuTri = this.van.layNguoiConSong().filter((n) => !phien.daBoPhieu(n.id));
     await Promise.all(
       cuTri.map((n) =>
-        this.moi(n.id, thoiHan, 'BO_PHIEU', (tho) =>
-          phien.ghiPhieu(n.id, docPhieu(tho), henGio.bayGio()),
+        this.moi(
+          n.id,
+          thoiHan,
+          {
+            viec: 'BO_PHIEU',
+            luaChon: [{ mucTieu: phien.layDanhSachUngVien() }],
+            choPhepBoTrang: true,
+          },
+          (tho) => phien.ghiPhieu(n.id, docPhieu(tho), henGio.bayGio()),
         ),
       ),
     );
@@ -336,20 +375,30 @@ export class BoDieuPhoiVan {
   private moi<T>(
     nguoiChoiId: string,
     thoiHan: number,
-    viec: LoaiViec,
+    moTa: Omit<LoiMoiDangMo, 'hetHanLuc'>,
     kiemTra: (tho: unknown) => T,
   ): Promise<T | null> {
     const cong = this.phuThuoc.congLuaChon;
     const hua = cong.cho(nguoiChoiId, thoiHan, kiemTra);
+    const hetHanLuc = cong.layHetHanLuc(nguoiChoiId)!;
+    const loiMoi: LoiMoiDangMo = { ...moTa, hetHanLuc };
+    this.loiMoi.set(nguoiChoiId, loiMoi);
+    // Chỉ xóa đúng lời mời này — Sói đổi ý được mời lại ngay, không được xóa nhầm lời mời mới.
+    void hua.finally(() => {
+      if (this.loiMoi.get(nguoiChoiId) === loiMoi) this.loiMoi.delete(nguoiChoiId);
+    });
     this.suKien.phat(
-      { loai: 'MOI_HANH_DONG', nguoiChoiId, viec, hetHanLuc: cong.layHetHanLuc(nguoiChoiId)! },
+      { loai: 'MOI_HANH_DONG', nguoiChoiId, viec: moTa.viec, hetHanLuc },
       { loai: 'NGUOI_CHOI', nguoiChoiId },
     );
     return hua;
   }
 
+  /** Chờ một pha ngày có đếm giờ — hạn được công khai cho cả làng qua góc nhìn. */
   private choHen(ma: string, thoiHan: number): Promise<void> {
-    return new Promise((xong) => this.phuThuoc.boHenGio.datHen(ma, thoiHan, xong));
+    return new Promise((xong) => {
+      this.hetHanPha = this.phuThuoc.boHenGio.datHen(ma, thoiHan, xong);
+    });
   }
 
   /**
@@ -425,7 +474,24 @@ export class BoDieuPhoiVan {
     thoiHan: number,
   ): Promise<HanhDongDem | null> {
     const nc = this.taoNguCanh(nguoiChoi, luot);
-    return this.moi<HanhDongDem>(nguoiChoi.id, thoiHan, 'HANH_DONG_DEM', (tho) => {
+    const demDauKhongChet = this.laDemDauKhongChet(luot);
+    const cacNhom = nguoiChoi.vaiTro
+      .layCacLuaChon(nc)
+      .filter((nhom) => !(demDauKhongChet && nhom.loai === LoaiHanhDong.DOC))
+      .map((nhom) => ({
+        ...(nhom.loai ? { loai: nhom.loai } : {}),
+        mucTieu: nhom.mucTieu.map((m) => m.id),
+      }));
+    const moTa = {
+      viec: 'HANH_DONG_DEM' as const,
+      luaChon: cacNhom,
+      choPhepBoTrang: false,
+      // Vai có nhóm "cứu" là vai được báo nạn nhân — BR07.
+      ...(cacNhom.some((n) => n.loai === LoaiHanhDong.CUU)
+        ? { nanNhan: this.layThongTinNanNhan() }
+        : {}),
+    };
+    return this.moi<HanhDongDem>(nguoiChoi.id, thoiHan, moTa, (tho) => {
       const hanhDong = nguoiChoi.vaiTro.thucHienLuot(nc, docLuaChon(tho));
       // Q01 — BR03 tắt: đêm 1 Phù thủy không được dùng độc.
       if (hanhDong.loaiHanhDong === LoaiHanhDong.DOC && this.laDemDauKhongChet(luot)) {
@@ -468,7 +534,12 @@ export class BoDieuPhoiVan {
 
   private moiThoSanBan(thoSan: NguoiChoi, ungVien: readonly NguoiChoi[]): Promise<string | null> {
     const hopLe = ungVien.map((n) => n.id);
-    return this.moi(thoSan.id, this.thoiGian.thoSanBan, 'THO_SAN_BAN', (tho) => {
+    const moTa = {
+      viec: 'THO_SAN_BAN' as const,
+      luaChon: [{ mucTieu: hopLe }],
+      choPhepBoTrang: false,
+    };
+    return this.moi(thoSan.id, this.thoiGian.thoSanBan, moTa, (tho) => {
       const { mucTieuId } = docLuaChon(tho);
       if (!hopLe.includes(mucTieuId)) throw new LoiNghiepVu('MUC_TIEU_KHONG_HOP_LE', mucTieuId);
       return mucTieuId;

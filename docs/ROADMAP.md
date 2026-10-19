@@ -227,7 +227,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
       trả danh sách người được xem mỗi kênh cho tầng thời gian thực
 - [x] **2.5** `[C]` `BoPhatSuKien` (Observer): sự kiện miền kèm **đối tượng nhận** — tất cả,
       một người, phe Sói, người chết. Chưa gắn Socket.IO
-- [ ] **2.6** `[C]` `taoGocNhin(van, nguoiChoiId)` và kiểu `GocNhinNguoiChoi` trong
+- [x] **2.6** `[C]` `taoGocNhin(van, nguoiChoiId)` và kiểu `GocNhinNguoiChoi` trong
       `packages/shared` theo ARCHITECTURE mục 8 và **Q09**
       · Kiểm thử: với **mọi** người chơi ở **mọi** pha của một ván mô phỏng, góc nhìn không chứa
       vai người khác (trừ đồng đội Sói, trừ khi ván đã kết thúc) — bản đơn vị của ST05

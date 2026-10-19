@@ -28,6 +28,15 @@ export interface NguCanhHanhDong {
   readonly nanNhanBiCanId?: string | null;
 }
 
+/**
+ * Một nhóm lựa chọn mà vai đưa ra trong lượt: loại hành động (nếu vai có nhiều loại) và các mục
+ * tiêu hợp lệ. Góc nhìn dùng nó để hiển thị "việc cần làm" mà không phải hỏi tên vai.
+ */
+export interface NhomLuaChon {
+  readonly loai?: LoaiHanhDong;
+  readonly mucTieu: readonly NguoiChoiTrongVan[];
+}
+
 /** Lựa chọn của người chơi trong lượt của mình. */
 export interface LuaChon {
   readonly mucTieuId: string;

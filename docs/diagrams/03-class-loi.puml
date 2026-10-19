@@ -11,6 +11,8 @@ abstract class VaiTro {
   + laHanhDongDem() : boolean
   + coKyNangKhiChet() : boolean
   + laHanhDongTapThe() : boolean
+  + layCacLuaChon(nc) : List<NhomLuaChon>
+  + layTrangThaiKyNang() : Map
   + thucHienLuot(nc, luaChon) : HanhDongDem
   + kichHoatKhiChet(nc, luaChon) : HanhDongDem
   + layDanhSachMucTieu(nc, loai) : List<NguoiChoi>
@@ -27,6 +29,7 @@ class DanLang
 class BaoVe {
   - mucTieuDemTruoc : String
   + capNhatMucTieuDemTruoc(mt) : void
+  + layTrangThaiKyNang() : Map
 }
 class Soi {
   + laHanhDongTapThe() : boolean
@@ -37,6 +40,8 @@ class PhuThuy {
   - conThuocDoc : boolean
   + truThuocCuu() : void
   + truThuocDoc() : void
+  + layCacLuaChon(nc) : List<NhomLuaChon>
+  + layTrangThaiKyNang() : Map
 }
 class ThoSan {
   + coKyNangKhiChet() : boolean
@@ -188,6 +193,8 @@ class BoDieuPhoiVan {
   + layCongBoSang() : List<String>
   + layKetQuaNgay() : KetQuaNgay
   + dangLuotTapThe() : boolean
+  + layLoiMoi(nguoiChoiId) : LoiMoiDangMo
+  + layHetHanPha() : long
   + suKien : BoPhatSuKien
 }
 note top of BoDieuPhoiVan
@@ -195,6 +202,7 @@ note top of BoDieuPhoiVan
   vai không còn ai sống vẫn chờ giả 8–15 giây (Q05);
   vai laHanhDongTapThe() đồng thuận, hết giờ chọn ngẫu nhiên (BR12).
   kiemTraVaChuyen() gọi hai lần mỗi lượt: sauDem() và cuối xuLyPhaNgay().
+  Hàm taoGocNhin(dieuPhoi, id) chiếu ván thành GocNhinNguoiChoi (PC04).
 end note
 class BoGiaiQuyetDem {
   - chuoiBuoc : List<BuocGiaiQuyet>

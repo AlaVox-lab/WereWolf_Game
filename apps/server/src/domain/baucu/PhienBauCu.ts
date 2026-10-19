@@ -54,6 +54,11 @@ export class PhienBauCu {
     return phieu;
   }
 
+  /** Số người được bỏ phiếu — cho chỉ báo tiến độ dạng số (nguyên tắc giao diện 14.2). */
+  laySoCuTri(): number {
+    return this.cuTri.size;
+  }
+
   daBoPhieu(nguoiBauId: string): boolean {
     return this.danhSachPhieu.some((p) => p.nguoiBauId === nguoiBauId);
   }

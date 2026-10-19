@@ -10,3 +10,5 @@ export interface PhanHoiSucKhoe {
   ungDung: string;
   thoiDiem: string;
 }
+
+export type * from './gocNhin.js';
