@@ -14,22 +14,21 @@
 
 | Mục | Giá trị |
 |---|---|
-| Cập nhật lần cuối | 2026-10-19 |
+| Cập nhật lần cuối | 2026-10-20 |
 | Phiên bản hiện tại | **`v0.2.0`** — Lõi miền, phát hành 19/10 ([release](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.2.0)). Bỏ qua `v0.1.0` vì Giai đoạn 0 chỉ còn 0.9, không phải mã |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
-| Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2** xong 10/11 (2.1–2.9) |
+| Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2 hoàn thành** (11/11) |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
 | Có mã nguồn chưa | **Có công cụ, mới bắt đầu mã nghiệp vụ**: điểm cuối `/api/health`, trang tạm, `domain/chung/` (kiểu dùng chung, hai cổng `DongHo`, `NguonNgauNhien`), `domain/luat/` (`BoLuatChoi`, `CauHinhVai`), `domain/vaitro/` (`VaiTro` và sáu lớp con), `domain/van/` (`NguoiChoi`, `VanDau`, `LuotChoi`, `KetQuaDem`, `NhatKyVan`), `domain/baucu/` (`PhienBauCu`, `PhieuBau`), `domain/kenh/` (`KenhChat` và ba lớp con), `application/BoGiaiQuyetDem`, `application/BoKiemTraThangThua`, `application/BoChiaVai` |
 | Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
-| Kiểm thử tự động | 279 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 29 pha đêm, 18 pha ngày, 9 `BoQuanLyKenh`, 8 `BoPhatSuKien`, 9 `taoGocNhin`, 7 nhật ký, 7 `NguoiChoiAo`, 14 mô phỏng) · độ phủ dòng lệnh 99 % · **20 / 20 TC** · 0 / 5 ST (ST01, ST02, ST04 ở 2.10) |
+| Kiểm thử tự động | 284 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 29 pha đêm, 18 pha ngày, 9 `BoQuanLyKenh`, 8 `BoPhatSuKien`, 9 `taoGocNhin`, 7 nhật ký, 7 `NguoiChoiAo`, 14 mô phỏng, 5 hệ thống) · độ phủ dòng lệnh 99 % · **20 / 20 TC** · **3 / 5 ST** không giao diện (ST01, ST02, ST04; ST03, ST05 cần máy chủ thời gian thực) |
 | Thiết kế giao diện | Chưa làm — tới Giai đoạn 3 thì **chờ người dùng kết nối Higgsfield** và đưa ý tưởng, không tự thiết kế |
 
-**Một câu tóm tắt trạng thái**: kho đã dựng xong công cụ — `npm run dev` chạy máy chủ và trang
-web tạm, `npm test` / `lint` / `typecheck` xanh, lint chặn được lõi miền nhập ra ngoài. Luật
-mơ hồ và bộ công nghệ đã chốt. Lõi miền vừa có mảnh đầu tiên (1.1). Còn thiếu Git và lần chạy
-thử PostgreSQL.
+**Một câu tóm tắt trạng thái**: toàn bộ luật chơi và bộ điều phối ván đã xong — một ván chạy
+trọn bằng người chơi ảo, 1 000 ván 6–12 người kết thúc đúng lúc, 0 lỗi, 20/20 TC và ST01, ST02,
+ST04 xanh. Chưa có máy chủ thời gian thực, cơ sở dữ liệu và giao diện (Giai đoạn 3–5).
 
 **Phân công** (theo mục 1.6 tài liệu gốc — **cần gán tên** ở hạng mục 0.9):
 
@@ -288,11 +287,29 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 - [x] **1 000 ván 6–12 người: 1 000/1 000 kết thúc, 0 lỗi, 0,85 giây thật** — tỉ lệ thắng ở mục
       Ghi chú kỹ thuật
 
+**Kiểm thử hệ thống không giao diện** — hạng mục 2.10, khép Giai đoạn 2
+
+- [x] `tests/system/heThong.test.ts` — **ST01** (6 người, hạt giống 1, Dân thắng sau 5 lượt),
+      **ST02** (8 người, hạt giống 1, Sói thắng sau 5 lượt, đủ bốn nguyên nhân chết): phe thắng khớp
+      công thức, nhật ký liền mạch, trạng thái cuối dựng lại được chỉ từ nhật ký, màn kết thúc của
+      từng người công bố đúng phe
+- [x] **ST04** — dây chuyền Thợ săn ban đêm (cắn ts1 → ts1 bắn ts2 → ts2 bắn s1, công bố sáng
+      `[ts1, ts2, s1]`) và ban ngày (treo ts1 → bắn ts2 → bắn s1, ván đi tiếp vì S < D)
+- [x] **Tiêu chí hoàn thành**: 1 000 ván 6–12 người, bộ luật bật tắt theo hạt giống — đều kết thúc
+      đúng lúc, 0 lỗi, phe thắng khớp BR01/BR02; nằm trong `npm test`. CI chạy thêm
+      `npm run mo-phong -- --so-nguoi 6-12 --so-van 1000`
+- [x] `moPhongMotVan` thêm `quanSat` và trả `conSong`
+- [x] Thử đột biến `S ≥ D` → `S > D`: ST02 và bài 1 000 ván đỏ
+- [x] Đầu ra cho báo cáo: `docs/bao-cao/mo-phong-giai-doan-2.md` — nhật ký ván ST02 đối chiếu
+      Sequence Diagram pha đêm, bảng tỉ lệ thắng 1 000 ván
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 2 — Điều phối ván và người chơi ảo.** Hạng mục kế tiếp: **2.10** — kiểm thử hệ thống không giao diện ST01, ST02, ST04; khép Giai đoạn 2, cắt `v0.3.0`.
+**Giai đoạn 2 hoàn thành** (20/10) — chờ người dùng đồng ý cắt `v0.3.0`. Giai đoạn 3 (thiết kế
+giao diện) **chờ người dùng kết nối Higgsfield** và đưa ý tưởng; Giai đoạn 4 (máy chủ, Prisma,
+Socket.IO) không cần thiết kế, làm trước được nếu người dùng muốn.
 
 ---
 
@@ -303,7 +320,7 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 1. **Mời hai thành viên còn lại và giảng viên** vào kho GitHub (phần còn lại của 0.1)
 2. **0.9 phần còn lại** — gán tên cho nhãn A/B/C, xác nhận tuần học kỳ để chỉnh lịch `ROADMAP.md`
 4. **Cập nhật tài liệu gốc `.docx`** theo bảng khác biệt ở `docs/diagrams/README.md` — trước mốc M4
-5. **2.2 → 2.10** — điều phối ván và người chơi ảo
+5. **Cắt `v0.3.0`** — khép Giai đoạn 2, khi người dùng đồng ý
 6. **Chốt Q12, Q13** — không chặn việc gì, đã cài theo đề xuất
 
 ### Chờ giảng viên

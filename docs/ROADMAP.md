@@ -239,7 +239,7 @@ trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.
 - [x] **2.9** `[C]` `scripts/mo-phong.ts`: `npm run mo-phong -- --so-nguoi 8 --hat-giong 42
       --so-van 1000` chạy hàng loạt ván toàn người chơi ảo, in nhật ký một ván hoặc thống kê
       tỉ lệ thắng của nhiều ván
-- [ ] **2.10** `[A][B]` Kiểm thử hệ thống không giao diện: **ST01** (6 người, Dân thắng) và
+- [x] **2.10** `[A][B]` Kiểm thử hệ thống không giao diện: **ST01** (6 người, Dân thắng) và
       **ST02** (8 người, Sói thắng) theo hạt giống cố định; **ST04** dây chuyền Thợ săn
 
 **Tiêu chí hoàn thành**: 1 000 ván ngẫu nhiên 6–12 người đều kết thúc, không ném lỗi, phe

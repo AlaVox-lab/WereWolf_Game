@@ -591,10 +591,10 @@ qua Socket.IO là hạng mục ROADMAP 4.11.
 ## 9. Khuôn mẫu: tính xác định và nhật ký ván — PC03
 
 *Đã cài* — cổng `DongHo`, `NguonNgauNhien` (1.1); `NhatKyVan` (1.4); ghi nhật ký suốt ván trong
-`BoDieuPhoiVan` (2.7); bộ mô phỏng hàng loạt (2.9).
+`BoDieuPhoiVan` (2.7); bộ mô phỏng hàng loạt (2.9); kiểm thử hệ thống không giao diện (2.10).
 
 **Bộ mô phỏng** — `infrastructure/bot/moPhong.ts` + `scripts/mo-phong.ts` (2.9):
-`moPhongMotVan({ soNguoi, hatGiong, cauHinhVai?, luat?, thoiGian? })` chạy trọn một ván toàn người
+`moPhongMotVan({ soNguoi, hatGiong, cauHinhVai?, luat?, thoiGian?, quanSat? })` chạy trọn một ván toàn người
 chơi ảo qua **đúng đường bắt đầu ván thật** (người chơi chưa có vai → `batDauVan` → `BoChiaVai` →
 `chiaVaiXong` → `chayVan()`). Mỗi vòng đợi mọi lời hứa đang treo chạy xong rồi gọi
 `DongHoGia.tuaToiHenKeTiep()` — 1 000 ván mất dưới một giây thật. Có `gioiHanBuoc` chống lặp vô
@@ -606,7 +606,17 @@ npm run mo-phong -- --so-nguoi 6-12 --so-van 1000   # bảng thống kê theo s�
 npm run mo-phong -- --hat-giong 42 --tat BR11       # tắt quy tắc tùy biến, lặp được --tat
 ```
 
-Lệnh thoát mã 1 nếu có ván ném lỗi hoặc không kết thúc — dùng được trong CI.
+Lệnh thoát mã 1 nếu có ván ném lỗi hoặc không kết thúc — CI chạy 1 000 ván sau `npm test`.
+`quanSat(dieuPhoi)` được gọi trước khi ván chạy để kiểm thử nghe `BoPhatSuKien` và dựng góc nhìn
+sau ván; kết quả trả kèm `conSong` — trạng thái cuối để đối chiếu BR01/BR02.
+
+**Kiểm thử hệ thống** — `apps/server/tests/system/heThong.test.ts` (2.10): ST01, ST02 chạy bằng
+`moPhongMotVan` với hạt giống cố định; ST04 dùng bộ điều khiển kịch bản `tests/application/kichBan.ts`
+để dựng đúng dây chuyền Thợ săn. Bài 1 000 ván kiểm phe thắng bằng **công thức viết lại độc lập**
+với `BoKiemTraThangThua`, trên cả trạng thái cuối lẫn trạng thái dựng lại chỉ từ nhật ký, và kiểm
+ván kết thúc **đúng lúc** — không lần `CHUYEN_PHA` nào xảy ra khi đã có phe thỏa BR01/BR02. Đột
+biến `S ≥ D` thành `S > D` làm đỏ ST02 và bài 1 000 ván. Đầu ra cho báo cáo:
+[`bao-cao/mo-phong-giai-doan-2.md`](bao-cao/mo-phong-giai-doan-2.md).
 
 **Ghi nhật ký như đã cài** (2.7): mọi dòng đi qua `BoDieuPhoiVan.ghi()`, thời điểm lấy từ
 `BoHenGio`. Ghi **trực tiếp** chứ không qua `BoPhatSuKien`, vì sự kiện công khai cố tình thiếu ý

@@ -24,6 +24,8 @@ export interface TuyChonMoPhong {
   readonly nguoiChoiAo?: CauHinhNguoiChoiAo;
   /** Chặn trên số lần nhảy đồng hồ — chống vòng lặp vô tận nếu có lỗi. */
   readonly gioiHanBuoc?: number;
+  /** Gọi một lần ngay sau khi dựng bộ điều phối, trước khi ván chạy — để kiểm thử đăng ký nghe sự kiện. */
+  readonly quanSat?: (dieuPhoi: BoDieuPhoiVan) => void;
 }
 
 export interface KetQuaMoPhong {
@@ -32,6 +34,8 @@ export interface KetQuaMoPhong {
   /** Thời gian giả lập của cả ván, mili giây. */
   readonly thoiGianGiaLap: number;
   readonly vai: Readonly<Record<string, LoaiVai>>;
+  /** Mã những người còn sống lúc kết thúc — trạng thái cuối để đối chiếu BR01/BR02. */
+  readonly conSong: readonly string[];
   readonly nhatKy: readonly SuKien[];
 }
 
@@ -71,6 +75,7 @@ export async function moPhongMotVan(tuyChon: TuyChonMoPhong): Promise<KetQuaMoPh
     nguonNgauNhien: nguon,
     ...(tuyChon.thoiGian ? { thoiGian: tuyChon.thoiGian } : {}),
   });
+  tuyChon.quanSat?.(dieuPhoi);
   nguoiChoi.forEach((n, i) =>
     new NguoiChoiAo(
       n.id,
@@ -110,6 +115,7 @@ export async function moPhongMotVan(tuyChon: TuyChonMoPhong): Promise<KetQuaMoPh
     soLuot: van.luotHienTai,
     thoiGianGiaLap: dongHo.bayGio(),
     vai,
+    conSong: van.layNguoiConSong().map((n) => n.id),
     nhatKy: van.nhatKy.xuatBanCongKhai(),
   };
 }

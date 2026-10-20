@@ -19,4 +19,5 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+      - run: npm run mo-phong -- --so-nguoi 6-12 --so-van 1000
       - run: npm run build --workspace @moonvillage/web
