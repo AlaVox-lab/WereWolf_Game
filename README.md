@@ -19,7 +19,7 @@ Trường Đại học Thủ Dầu Một.
 
 Đã có **toàn bộ luật chơi và bộ điều phối ván** — một ván chạy trọn vẹn bằng người chơi ảo, chưa có
 máy chủ thời gian thực và giao diện. Bản phát hành mới nhất:
-[v0.2.0 — Lõi miền](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.2.0). Chi tiết
+[v0.3.0 — Điều phối ván](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.3.0). Chi tiết
 tiến độ: [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md).
 
 ## Trò chơi

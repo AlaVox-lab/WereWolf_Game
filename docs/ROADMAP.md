@@ -200,7 +200,7 @@ làm ở G2). Độ phủ `domain/` ≥ 90 %. Lint xác nhận `domain/` không 
 
 ## Giai đoạn 2 — Điều phối ván và người chơi ảo
 
-**Tuần 5–6** · **Phiên bản**: `v0.3.0` · **Trạng thái**: Đang làm · **Điều kiện bắt đầu**: G1 xong — đạt 19/10
+**Tuần 5–6** · **Phiên bản**: `v0.3.0` (đã phát hành 20/10) · **Trạng thái**: **Hoàn thành 20/10** · **Điều kiện bắt đầu**: G1 xong — đạt 19/10
 
 Mục tiêu: một ván chạy **trọn vẹn không cần giao diện** — người chơi ảo tự chơi với nhau
 trên đồng hồ tua nhanh, từ chia vai tới công bố phe thắng.

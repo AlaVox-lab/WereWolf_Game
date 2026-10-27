@@ -15,7 +15,7 @@
 | Mục | Giá trị |
 |---|---|
 | Cập nhật lần cuối | 2026-10-20 |
-| Phiên bản hiện tại | **`v0.2.0`** — Lõi miền, phát hành 19/10 ([release](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.2.0)). Bỏ qua `v0.1.0` vì Giai đoạn 0 chỉ còn 0.9, không phải mã |
+| Phiên bản hiện tại | **`v0.3.0`** — Điều phối ván, phát hành 20/10 ([release](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.3.0)). Trước đó `v0.2.0` — Lõi miền, 19/10. Bỏ qua `v0.1.0` vì Giai đoạn 0 chỉ còn 0.9, không phải mã |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
 | Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2 hoàn thành** (11/11) |
 | Tuần học kỳ | **Chưa xác nhận** ngày bắt đầu học kỳ |
@@ -302,12 +302,13 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 - [x] Thử đột biến `S ≥ D` → `S > D`: ST02 và bài 1 000 ván đỏ
 - [x] Đầu ra cho báo cáo: `docs/bao-cao/mo-phong-giai-doan-2.md` — nhật ký ván ST02 đối chiếu
       Sequence Diagram pha đêm, bảng tỉ lệ thắng 1 000 ván
+- [x] Phát hành **`v0.3.0` — Điều phối ván** trên GitHub (thẻ trên commit `385eeab`)
 
 ---
 
 ## Đang làm
 
-**Giai đoạn 2 hoàn thành** (20/10) — chờ người dùng đồng ý cắt `v0.3.0`. Giai đoạn 3 (thiết kế
+**Giai đoạn 2 hoàn thành** (20/10), đã phát hành **`v0.3.0`**. Giai đoạn 3 (thiết kế
 giao diện) **chờ người dùng kết nối Higgsfield** và đưa ý tưởng; Giai đoạn 4 (máy chủ, Prisma,
 Socket.IO) không cần thiết kế, làm trước được nếu người dùng muốn.
 
@@ -319,9 +320,9 @@ Socket.IO) không cần thiết kế, làm trước được nếu người dùn
 
 1. **Mời hai thành viên còn lại và giảng viên** vào kho GitHub (phần còn lại của 0.1)
 2. **0.9 phần còn lại** — gán tên cho nhãn A/B/C, xác nhận tuần học kỳ để chỉnh lịch `ROADMAP.md`
-4. **Cập nhật tài liệu gốc `.docx`** theo bảng khác biệt ở `docs/diagrams/README.md` — trước mốc M4
-5. **Cắt `v0.3.0`** — khép Giai đoạn 2, khi người dùng đồng ý
-6. **Chốt Q12, Q13** — không chặn việc gì, đã cài theo đề xuất
+3. **Cập nhật tài liệu gốc `.docx`** theo bảng khác biệt ở `docs/diagrams/README.md` — trước mốc M4
+4. **Chốt Q12, Q13** — không chặn việc gì, đã cài theo đề xuất
+5. **Giai đoạn 3 hoặc 4** — G3 chờ người dùng + Higgsfield; G4 (máy chủ, Prisma, Socket.IO) làm trước được
 
 ### Chờ giảng viên
 
