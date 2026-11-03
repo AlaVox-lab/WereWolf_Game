@@ -1,19 +1,20 @@
 ' State Machine Diagram của Ván đấu
-' Nguồn: Tài liệu dự án toàn diện, Hình 11.1. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+' Mỗi nhãn là một phương thức của TrangThaiVanDau; tests/domain/trangthai.test.ts viết lại sơ đồ này thành bảng. Khác Hình 11.1 tài liệu gốc, xem README.
 @startuml
 [*] --> ChoDuNguoi
 ChoDuNguoi --> DangChiaVai : batDauVan()
 DangChiaVai --> PhaDem : chiaVaiXong()
-PhaDem --> GiaiQuyetDem : hetGio / duHanhDong
-GiaiQuyetDem --> PhaCongBo : chuaKetThuc
-GiaiQuyetDem --> KetThuc : thoaDieuKien
+PhaDem --> GiaiQuyetDem : ketThucDem()
+GiaiQuyetDem --> PhaCongBo : chuaKetThuc()
+GiaiQuyetDem --> KetThuc : thoaDieuKien()
 PhaCongBo --> PhaThaoLuan : congBoXong()
-PhaThaoLuan --> PhaBoPhieu : hetGioThaoLuan
-PhaBoPhieu --> GiaiQuyetPhieu : duPhieu / hetGio
-GiaiQuyetPhieu --> PhaDem : chuaKetThuc
-GiaiQuyetPhieu --> KetThuc : thoaDieuKien
-ChoDuNguoi --> HuyVan : quaNguongMatKetNoi
-PhaDem --> HuyVan : quaNguongMatKetNoi
+PhaThaoLuan --> PhaBoPhieu : hetGioThaoLuan()
+PhaBoPhieu --> GiaiQuyetPhieu : ketThucBoPhieu()
+GiaiQuyetPhieu --> PhaDem : chuaKetThuc()
+GiaiQuyetPhieu --> KetThuc : thoaDieuKien()
+state "Mọi trạng thái\nchưa kết thúc" as Moi
+Moi --> HuyVan : quaNguongMatKetNoi()
+note right of Moi : Q04 — quá nửa người còn sống\nmất kết nối liên tục > 120 giây
 KetThuc --> [*]
 HuyVan --> [*]
 @enduml

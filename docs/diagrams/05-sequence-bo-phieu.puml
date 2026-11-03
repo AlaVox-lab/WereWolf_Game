@@ -1,35 +1,44 @@
 ' Sequence Diagram pha bỏ phiếu
-' Nguồn: Tài liệu dự án toàn diện, Hình 10.2. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+' Vẽ lại theo mã BoDieuPhoiVan.xuLyPhaNgay() ngày 03/11/2026 — khác Hình 10.2 tài liệu gốc, xem README.
 @startuml
-actor "Người chơi" as NC
-participant "BoDieuPhoiVan" as DP
-participant "PhienBauCu" as PB
-participant "VanDau" as VD
-participant "BoKiemTraThangThua" as KT
-DP -> PB : moPhien(danhSachConSong)
-loop Với mỗi người chơi còn sống
-  NC -> PB : boPhieu(mucTieu)
-  PB -> PB : ghiPhieu(phieu)
+skinparam sequenceMessageAlign left
+actor "Người chơi\ncòn sống" as NC
+participant ":CongLuaChon" as CL
+participant ":BoDieuPhoiVan" as DP
+participant ":PhienBauCu" as PB
+participant ":VanDau" as VD
+participant ":BoGiaiQuyetDem" as GQ
+participant ":BoKiemTraThangThua" as KT
+
+DP -> VD : chuyenPha(hetGioThaoLuan)
+create PB
+DP -> PB : new PhienBauCu(soLuot, cuTri, thoiHan)
+loop với mỗi cử tri còn sống (song song)
+  DP -> CL : cho(nguoiChoiId, thoiHan, kiemTra)
+  NC -> CL : ghiNhan(nguoiChoiId, mucTieu | bỏ trắng)
+  CL -> PB : ghiPhieu(nguoiBauId, nguoiBiBauId, thoiDiem)
+  note right : hết giờ chưa bầu = bỏ trắng
 end
-DP -> PB : chotPhien()
-PB -> PB : kiemPhieu()
-alt Có một người nhiều phiếu nhất
-  PB -> VD : danhDauChet(nguoiBiTreo)
-  opt Người bị treo là Thợ săn
-    PB -> NC : yeuCauChonMucTieu()
-    NC -> PB : chonMucTieu(X)
-    PB -> VD : danhDauChet(X)
-  end
-else Hòa phiếu
-  PB -> DP : khongAiBiLoai()
-  note right : BR11
+DP -> PB : kiemPhieu(boLuatChoi)
+alt BAU_LAI (hòa và BR11 tắt — Q03)
+  DP -> PB : taoVongBauLai(thoiHan)
+  PB --> DP : vongLai
+  DP -> DP : thu phiếu vòng lại như trên
+  DP -> PB : kiemPhieu(boLuatChoi)
+end
+DP -> VD : chuyenPha(ketThucBoPhieu)
+alt TREO_CO
+  DP -> VD : danhDauChet(nguoiBiTreo)
+  DP -> GQ : xuLyDayChuyen(van, [nguoiBiTreo], moiThoSanBan)
+  note right : Thợ săn bị treo được bắn nếu BR09 bật
+else KHONG_AI_CHET (hòa — BR11)
+  note over DP : không ai bị treo cổ
 end
 DP -> KT : kiemTra(van)
-alt Đã thỏa điều kiện
-  KT --> DP : PHE_THANG
+alt CHUA_KET_THUC
+  DP -> VD : chuyenPha(chuaKetThuc)
+  note right : sang pha đêm lượt kế tiếp
+else có phe thắng
   DP -> VD : ketThuc(pheThang)
-else Chưa thỏa
-  KT --> DP : CHUA_KET_THUC
-  DP -> VD : chuyenPha(DEM)
 end
 @enduml

@@ -1,56 +1,57 @@
 ' Sequence Diagram pha đêm
-' Nguồn: Tài liệu dự án toàn diện, Hình 10.1. Sửa sơ đồ thì cập nhật cả tài liệu gốc.
+' Vẽ lại theo mã BoDieuPhoiVan.xuLyPhaDem() và sauDem() ngày 03/11/2026 — khác Hình 10.1 tài liệu gốc, xem README.
 @startuml
-actor "Bảo vệ" as BV
-actor "Sói" as SO
-actor "Tiên tri" as TT
-actor "Phù thủy" as PT
-participant "BoDieuPhoiVan" as DP
-participant "BoGiaiQuyetDem" as GQ
-participant "VanDau" as VD
-participant "BoKiemTraThangThua" as KT
-DP -> VD : chuyenPha(DEM)
-DP -> DP : locVaiCoNangLucDem()
-DP -> DP : sapXepTheoDoUuTien()
-group Độ ưu tiên 10 — Bảo vệ
-  DP -> BV : yeuCauHanhDong()
-  BV -> DP : chonMucTieu(A)
-  DP -> DP : kiemTraRangBuoc(A)
-  note right : BR06 không đỡ trùng đêm trước
-  DP -> GQ : ghiNhanYDinh(BAO_VE, A)
+skinparam sequenceMessageAlign left
+actor "Người chơi\n(có vai)" as NC
+participant ":CongLuaChon" as CL
+participant ":BoDieuPhoiVan" as DP
+participant ":VanDau" as VD
+participant ":LuotChoi" as LC
+participant ":VaiTro" as VT
+participant ":BoGiaiQuyetDem" as GQ
+participant ":BoKiemTraThangThua" as KT
+participant ":BoPhatSuKien" as SK
+
+DP -> VD : taoLuotMoi()
+VD --> DP : luot
+DP -> DP : layThuTuBuocDem()
+note right of DP : Thứ tự sinh từ doUuTien của vai trong\ncấu hình (Bảo vệ 10, Sói 20, Tiên tri 30,\nPhù thủy 40) — không viết cứng (PC09)
+loop với mỗi bước đêm
+  alt không còn ai sống giữ vai này
+    DP -> DP : choBuocGia()
+    note right : chờ ngẫu nhiên 8–15 giây (Q05)
+  else còn người giữ vai
+    DP -> VT : layCacLuaChon(nc)
+    VT --> DP : danh sách mục tiêu hợp lệ
+    DP -> CL : cho(nguoiChoiId, thoiHan, kiemTra)
+    DP -> SK : phat(MOI_HANH_DONG)\nchỉ gửi người được mời
+    NC -> CL : ghiNhan(nguoiChoiId, luaChon)
+    CL -> VT : thucHienLuot(nc, luaChon)
+    note right : Template Method: kiểm mục tiêu,\nràng buộc BR04–BR06 rồi dungNangLuc()
+    VT --> CL : HanhDongDem
+    CL --> DP : HanhDongDem (hoặc null khi hết giờ — BR12)
+    DP -> LC : ghiYDinh(hanhDong)
+    note right : chỉ GHI ý định,\nchưa đổi trạng thái người chơi
+  end
 end
-group Độ ưu tiên 20 — Sói
-  DP -> SO : yeuCauHanhDong()
-  SO -> DP : deXuatMucTieu(B)
-  DP -> DP : kiemTraDongThuan()
-  DP -> GQ : ghiNhanYDinh(CAN, B)
-end
-group Độ ưu tiên 30 — Tiên tri
-  DP -> TT : yeuCauHanhDong()
-  TT -> DP : chonMucTieu(C)
-  DP -> VD : layPheCua(C)
-  VD --> DP : phe
-  DP --> TT : ketQuaSoi(phe)
-  note right : Chỉ đọc, không ghi ý định
-end
-group Độ ưu tiên 40 — Phù thủy
-  DP -> GQ : layNanNhanHienTai()
-  GQ --> DP : B
-  DP -> PT : thongBaoNanNhan(B)
-  PT -> DP : dungThuocCuu(B)
-  DP -> GQ : ghiNhanYDinh(CUU, B)
-end
-DP -> GQ : giaiQuyet()
+DP -> VD : chuyenPha(ketThucDem)
+DP -> GQ : giaiQuyet(van)
 activate GQ
-GQ -> GQ : sapXepYDinhTheoDoUuTien()
-GQ -> GQ : apDungBaoVe()
-GQ -> GQ : apDungCan()
-GQ -> GQ : apDungCuu()
-GQ -> GQ : apDungDoc()
+GQ -> LC : layYDinh()
+GQ -> GQ : sắp theo doUuTien, chạy chuỗi\nbuocBaoVe → buocCan → buocCuu → buocDoc
 GQ -> VD : danhDauChet(danhSach)
 GQ --> DP : ketQuaDem
 deactivate GQ
+DP -> GQ : xuLyDayChuyen(van, nguoiChet, moiThoSanBan)
+GQ --> DP : danh sách phát bắn (BR09, BR10)
 DP -> KT : kiemTra(van)
-KT --> DP : CHUA_KET_THUC
-DP -> VD : chuyenPha(NGAY)
+alt CHUA_KET_THUC
+  KT --> DP : CHUA_KET_THUC
+  DP -> VD : chuyenPha(chuaKetThuc)
+  DP -> SK : phat(CONG_BO_SANG)\nkhông kèm nguyên nhân chết
+else có phe thắng
+  KT --> DP : PHE_SOI_THANG / PHE_DAN_THANG
+  DP -> VD : ketThuc(pheThang)
+  DP -> SK : phat(KET_THUC)
+end
 @enduml
