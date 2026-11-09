@@ -14,7 +14,7 @@
 
 | Mục | Giá trị |
 |---|---|
-| Cập nhật lần cuối | 2026-10-20 |
+| Cập nhật lần cuối | 2026-11-09 |
 | Phiên bản hiện tại | **`v0.3.0`** — Điều phối ván, phát hành 20/10 ([release](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.3.0)). Trước đó `v0.2.0` — Lõi miền, 19/10. Bỏ qua `v0.1.0` vì Giai đoạn 0 chỉ còn 0.9, không phải mã |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
 | Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2 hoàn thành** (11/11) |
@@ -23,8 +23,8 @@
 | Kho mã | Riêng tư [`AlaVox-lab/WereWolf_Game`](https://github.com/AlaVox-lab/WereWolf_Game), nhánh `main` và `dev`. CI xanh |
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
-| Kiểm thử tự động | 284 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 29 pha đêm, 18 pha ngày, 9 `BoQuanLyKenh`, 8 `BoPhatSuKien`, 9 `taoGocNhin`, 7 nhật ký, 7 `NguoiChoiAo`, 14 mô phỏng, 5 hệ thống) · độ phủ dòng lệnh 99 % · **20 / 20 TC** · **3 / 5 ST** không giao diện (ST01, ST02, ST04; ST03, ST05 cần máy chủ thời gian thực) |
-| Thiết kế giao diện | Chưa làm — tới Giai đoạn 3 thì **chờ người dùng kết nối Higgsfield** và đưa ý tưởng, không tự thiết kế |
+| Kiểm thử tự động | 285 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 29 pha đêm, 19 pha ngày, 9 `BoQuanLyKenh`, 8 `BoPhatSuKien`, 9 `taoGocNhin`, 7 nhật ký, 7 `NguoiChoiAo`, 14 mô phỏng, 5 hệ thống) · độ phủ dòng lệnh 99 % · **20 / 20 TC** · **3 / 5 ST** không giao diện (ST01, ST02, ST04; ST03, ST05 cần máy chủ thời gian thực) |
+| Thiết kế giao diện | **Đang làm** (09/11) — màn trong ván MH04–MH08 chạy được trong `apps/web`, phát lại ván mô phỏng; còn màn ngoài ván và kênh chat. Xem `docs/design/README.md` |
 
 **Một câu tóm tắt trạng thái**: toàn bộ luật chơi và bộ điều phối ván đã xong — một ván chạy
 trọn bằng người chơi ảo, 1 000 ván 6–12 người kết thúc đúng lúc, 0 lỗi, 20/20 TC và ST01, ST02,
@@ -304,13 +304,31 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
       Sequence Diagram pha đêm, bảng tỉ lệ thắng 1 000 ván
 - [x] Phát hành **`v0.3.0` — Điều phối ván** trên GitHub (thẻ trên commit `385eeab`)
 
+### 09/11 — Giai đoạn 3: giao diện trong ván
+
+Theo ý tưởng người dùng: bàn tròn, ngày/đêm có mặt trời và mặt trăng, đêm mờ vẫn đọc được, huy
+hiệu từng vai, cảnh treo cổ, nhiều lớp chồng chéo. Higgsfield hết credit nên hình vẽ bằng SVG/CSS.
+
+- [x] `styles/tokens.css` — hai không khí đêm/ngày, màu phe, màu từng vai, trạng thái, chữ, khoảng
+      cách, bo góc; phông Cormorant Garamond + Be Vietnam Pro (Fontsource, OFL); thư viện `motion` (MIT)
+- [x] `game/` — cảnh chín lớp có thị sai, mặt trăng/mặt trời làm đồng hồ pha, bàn tròn phối cảnh,
+      sáu huy hiệu vai, thanh trạng thái, bảng việc (đồng hồ vòng, hai lọ Phù thủy), khoảnh khắc
+      (đêm buông, gọi vai, công bố sáng, treo cổ, trúng tên), thẻ vai lật, màn hết ván có bản ghi
+- [x] `xem-truoc/` + `npm run xuat-xem-truoc` — phát lại ván mô phỏng thật từ mọi ghế, tự dừng
+      khi tới lượt người xem; `moPhongMotVan.quanSat` nhận thêm đồng hồ giả để lấy mẫu mỗi giây
+- [x] **Sửa lỗi máy chủ** tìm ra nhờ giao diện: `sauDem()` chuyển sang `PHA_CONG_BO` trước khi ghi
+      danh sách công bố, nên góc nhìn lúc chuyển pha mang người chết của **đêm trước**. Ghi trước
+      rồi mới chuyển; ván xong lúc trời sáng thì danh sách rỗng (TC15). Thêm 1 bài kiểm thử, đột
+      biến trả lại thứ tự cũ thì bài đỏ
+- [x] Kiểm trên trình duyệt ở 1440 × 900 và 375 × 812; 5 ảnh ở `docs/design/`
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 2 hoàn thành** (20/10), đã phát hành **`v0.3.0`**. Giai đoạn 3 (thiết kế
-giao diện) **chờ người dùng kết nối Higgsfield** và đưa ý tưởng; Giai đoạn 4 (máy chủ, Prisma,
-Socket.IO) không cần thiết kế, làm trước được nếu người dùng muốn.
+**Giai đoạn 3 — giao diện.** Xong màn trong ván (MH04–MH08) dạng chạy được. Còn: màn ngoài ván
+MH01–MH03b, kênh Sói và khung chat, danh sách kiểm 3.4. Giai đoạn 4 (máy chủ, Prisma, Socket.IO)
+làm song song được.
 
 ---
 
@@ -339,6 +357,8 @@ Socket.IO) không cần thiết kế, làm trước được nếu người dùn
 | Không bật được quy tắc bảo vệ nhánh | Kho riêng tư gói miễn phí — ai cũng đẩy thẳng được lên `main` | Tuân thủ tự giác: việc mới đi qua pull request vào `dev`. Bật lại nếu chuyển kho công khai |
 | Chưa xác nhận tuần học kỳ | Có thể đã trễ mốc M2, M3 so với `ROADMAP.md` | Xác nhận rồi dời bảng thời gian |
 | Nhãn A/B/C chưa gán người | Chưa phân được hạng mục | Gán ở 0.9 |
+| Mã `apps/web` đặt tên tiếng Việt, trái ARCHITECTURE mục 13 (mã kỹ thuật ở `apps/web` dùng tiếng Anh) | Không ảnh hưởng chạy; lệch quy ước đã ghi | Chờ người dùng chọn: đổi tên sang tiếng Anh, hoặc sửa quy ước cho `apps/web` (và `infrastructure/bot` vốn cũng tiếng Việt) |
+| Góc nhìn lúc chuyển sang `PHA_DEM` còn mang số lượt cũ — lượt mới chỉ tạo khi đêm bắt đầu | Giao diện hiện "Đêm thứ nhất" khoảng một giây trước "Đêm thứ hai"; nhật ký cũng vậy | Tạo lượt mới ngay lúc chuyển pha — đổi luồng `BoDieuPhoiVan`, cần người dùng đồng ý |
 
 ---
 
@@ -369,7 +389,7 @@ Ghi vắn tắt để tránh bàn lại. Phần lớn đến từ tài liệu g�
 | Bộ công nghệ TypeScript toàn tầng | 19/10 — ADR-0001 |
 | Rào chắn phụ thuộc bằng ESLint, không dùng công cụ riêng | `ARCHITECTURE.md` mục 4.1 |
 | `NgauNhienCoHat` và `DongHoGia` thuần, đặt trong `domain/chung/`; bản cài trên giờ hệ thống và nguồn ngẫu nhiên thật sẽ ở `infrastructure/` | Hạng mục 1.1 |
-| Thiết kế giao diện chờ người dùng kết nối Higgsfield | 19/10 |
+| Thiết kế giao diện theo ý tưởng người dùng, dựng thẳng thành bản chạy được trong `apps/web`; hình vẽ bằng SVG/CSS vì Higgsfield hết credit | 09/11 |
 | Commit mang tác giả `AlaVox-lab`, không đổi sang tên thật từng thành viên | 19/10 — nhóm chấp nhận |
 
 ---

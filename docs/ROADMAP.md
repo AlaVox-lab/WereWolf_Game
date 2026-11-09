@@ -257,23 +257,33 @@ thắng theo số người — căn cứ cân bằng bộ vai mặc định.
 Mục tiêu: có bản thiết kế hoàn chỉnh cho mọi màn trong MVP **trước khi** viết dòng giao diện
 đầu tiên. Liên kết và ảnh chụp lưu ở `docs/design/`.
 
-> **DỪNG — chờ người dùng.** Tới giai đoạn này (và mọi việc thiết kế giao diện game/web, kể
-> cả G5) thì **không tự thiết kế**. Người dùng sẽ kết nối **Higgsfield** để sinh giao diện theo
-> ý tưởng riêng đã có. Trợ lý chỉ bắt đầu khi người dùng đưa ý tưởng và kết nối xong.
+> **Đang làm từ 09/11** theo ý tưởng người dùng đưa: bàn tròn mọi người ngồi quanh, chuyển
+> ngày/đêm có mặt trời và mặt trăng, đêm mờ nhưng vẫn đọc được, mỗi lượt vai hiện huy hiệu,
+> bỏ phiếu xong có cảnh treo cổ, nhiều lớp chồng chéo tạo chiều sâu. Higgsfield hết credit nên
+> mọi hình vẽ bằng SVG/CSS trong mã; thiết kế được dựng **thẳng thành bản chạy được** trong
+> `apps/web` (phát lại ván mô phỏng) thay cho bản vẽ tĩnh — ARCHITECTURE mục 8.1.
 
 - [ ] **3.1** Hệ thiết kế: token màu cho **hai không khí đêm và ngày**, màu phe (Dân / Sói),
       màu trạng thái (sống, chết, mất kết nối); cỡ chữ; khoảng cách; bo góc. Bộ phận dùng lại:
       thẻ người chơi, đồng hồ đếm ngược, thẻ vai, nút hành động chính, bong bóng tin nhắn, nhãn
       kênh, thanh "bạn là ai – pha nào – cần làm gì"
+      · *09/11*: xong token hai không khí, màu phe, trạng thái, chữ, khoảng cách, bo góc; thẻ
+      người chơi, đồng hồ vòng, thẻ vai, nút chính, thanh trạng thái. **Còn** bong bóng tin
+      nhắn, nhãn kênh
 - [ ] **3.2** Luồng ngoài ván: MH01 đăng nhập/đăng ký, MH02 trang chủ, MH03 phòng chờ, MH03b
       cấu hình bộ luật
 - [ ] **3.3** Luồng trong ván: MH04 thông báo vai; MH05 pha đêm với **năm biến thể** — Bảo vệ,
       Sói (kèm kênh Sói), Tiên tri (kèm kết quả soi), Phù thủy (kèm nạn nhân và hai lọ), màn chờ
       của Dân làng; MH06 pha ngày; MH07 bỏ phiếu; hộp thoại Thợ săn (UC17); MH08 kết thúc
+      · *09/11*: xong MH04, MH05 (Bảo vệ, Sói, Tiên tri có nhãn kết quả soi, Phù thủy có nạn
+      nhân và hai lọ, màn chờ), MH06, MH07 kèm cảnh treo cổ, bảng Thợ săn, MH08 kèm bản ghi
+      diễn biến. **Còn** kênh Sói và khung chat
 - [ ] **3.4** Rà thiết kế theo sáu nguyên tắc mục 14.2 tài liệu gốc; mỗi màn có bản điện
       thoại 390 px và bản máy tính
 - [ ] **3.5** Xuất token thành `apps/web/src/styles/tokens.css`; chụp ảnh từng màn vào
       `docs/design/`; tạo `docs/design/README.md` ghi liên kết thiết kế và danh sách kiểm 3.4
+      · *09/11*: có `tokens.css`, 5 ảnh màn trong ván, `docs/design/README.md`. **Còn** ảnh
+      màn ngoài ván và danh sách kiểm 3.4
 - [ ] **3.6** *(sau MVP, chỉ cần khung sườn)* MH09 hồ sơ, MH10 bảng xếp hạng, MH11 quản trị
 
 **Tiêu chí hoàn thành**: mọi màn MH01–MH08 và MH03b có thiết kế; danh sách kiểm sáu nguyên

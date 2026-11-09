@@ -24,8 +24,11 @@ export interface TuyChonMoPhong {
   readonly nguoiChoiAo?: CauHinhNguoiChoiAo;
   /** Chặn trên số lần nhảy đồng hồ — chống vòng lặp vô tận nếu có lỗi. */
   readonly gioiHanBuoc?: number;
-  /** Gọi một lần ngay sau khi dựng bộ điều phối, trước khi ván chạy — để kiểm thử đăng ký nghe sự kiện. */
-  readonly quanSat?: (dieuPhoi: BoDieuPhoiVan) => void;
+  /**
+   * Gọi một lần ngay sau khi dựng bộ điều phối, trước khi ván chạy — để kiểm thử đăng ký nghe sự
+   * kiện, hoặc để bản xuất xem trước đặt hẹn lấy mẫu góc nhìn trên chính đồng hồ giả của ván.
+   */
+  readonly quanSat?: (dieuPhoi: BoDieuPhoiVan, dongHo: DongHoGia) => void;
 }
 
 export interface KetQuaMoPhong {
@@ -75,7 +78,7 @@ export async function moPhongMotVan(tuyChon: TuyChonMoPhong): Promise<KetQuaMoPh
     nguonNgauNhien: nguon,
     ...(tuyChon.thoiGian ? { thoiGian: tuyChon.thoiGian } : {}),
   });
-  tuyChon.quanSat?.(dieuPhoi);
+  tuyChon.quanSat?.(dieuPhoi, dongHo);
   nguoiChoi.forEach((n, i) =>
     new NguoiChoiAo(
       n.id,

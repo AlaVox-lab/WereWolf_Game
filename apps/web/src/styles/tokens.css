@@ -1,0 +1,98 @@
+/*
+ * Token thiết kế — Làng Trăng Mờ (hạng mục 3.1, 3.5).
+ *
+ * Hai không khí: đêm (mặc định) và ngày, đổi bằng thuộc tính `data-thoi` trên sân khấu. Mọi
+ * thành phần chỉ đọc token, không viết màu cứng. Màu phe và màu trạng thái giữ nguyên ở cả hai
+ * không khí để người chơi không phải học lại.
+ */
+
+:root {
+  /* Chữ — một mặt chữ trang trọng cho tên vai và tên pha, một mặt chữ đọc cho mọi thứ còn lại. */
+  --chu-trang-trong: 'Cormorant Garamond', 'Times New Roman', serif;
+  --chu-doc: 'Be Vietnam Pro', system-ui, sans-serif;
+
+  --co-chu-nho: 0.8125rem; /* 13px — chú thích ghế, đồng hồ phụ */
+  --co-chu-than: 1rem; /* 16px — mọi chữ đọc */
+  --co-chu-vua: 1.25rem; /* 20px — tiêu đề bảng việc */
+  --co-chu-lon: clamp(2rem, 4.2vw, 3.5rem); /* tên pha */
+  --co-chu-dai: clamp(3rem, 8vw, 7.5rem); /* khoảnh khắc: tên vai, treo cổ, phe thắng */
+
+  /* Khoảng cách theo bậc 4px. */
+  --kc-1: 4px;
+  --kc-2: 8px;
+  --kc-3: 12px;
+  --kc-4: 16px;
+  --kc-6: 24px;
+  --kc-8: 32px;
+  --kc-12: 48px;
+  --le-man: clamp(16px, 2.5vw, 32px);
+
+  /* Bo góc: tấm gỗ vuông vức, huy hiệu tròn hẳn — không có bậc lưng chừng. */
+  --bo-tam: 4px;
+  --bo-tron: 999px;
+
+  /* Màu phe và trạng thái — giống nhau cả ngày lẫn đêm. */
+  --mau-soi: #c4452f;
+  --mau-dan: #7fa86a;
+  --mau-den-long: #e6a646; /* hành động chính, lượt của bạn */
+  --mau-chet: #6d7480;
+  --mau-mat-ket-noi: #8a8fb8;
+
+  /* Màu riêng từng vai — viền huy hiệu. */
+  --vai-Soi: #c4452f;
+  --vai-BaoVe: #6f9fc4;
+  --vai-TienTri: #a98fd4;
+  --vai-PhuThuy: #5fb39a;
+  --vai-ThoSan: #d08a4a;
+  --vai-DanLang: #c9b48a;
+
+  /* Chuyển động. */
+  --nhip-nhanh: 180ms;
+  --nhip-vua: 420ms;
+  --nhip-cham: 1600ms;
+  --em: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Đêm — trời mực, núi chàm, chữ bạc trăng. */
+[data-thoi='dem'] {
+  --troi-cao: #060a13;
+  --troi-giua: #0e1830;
+  --troi-thap: #23304b;
+  --nui-xa: #1a2438;
+  --nui-gan: #121a2a;
+  --rung: #0b111c;
+  --mai-nha: #0f1520;
+  --cua-so: #f0b25a;
+  --suong: rgb(140 160 190 / 0.16);
+  --mat-ban: #3a2a1f;
+  --van-go: #4d3727;
+
+  --tam-1: #141c2b; /* tấm gỗ trên cùng */
+  --tam-2: #0f1522; /* tấm lót thứ nhất */
+  --tam-3: #0a0f19; /* tấm lót thứ hai */
+  --muc: #eee8d8;
+  --muc-phu: #aab4c4;
+  --man-dem: rgb(3 6 13 / 0.62);
+}
+
+/* Ngày — trời rơm sáng, núi xanh xám, chữ mực nâu. */
+[data-thoi='ngay'] {
+  --troi-cao: #8fbcd6;
+  --troi-giua: #c9dbd8;
+  --troi-thap: #f1ddb4;
+  --nui-xa: #8ea3a6;
+  --nui-gan: #5e7466;
+  --rung: #34483c;
+  --mai-nha: #5a3f2e;
+  --cua-so: #2c241c;
+  --suong: rgb(255 248 230 / 0.28);
+  --mat-ban: #8a5f3c;
+  --van-go: #a5754b;
+
+  --tam-1: #f5eedd;
+  --tam-2: #e2d6bb;
+  --tam-3: #c9b994;
+  --muc: #201a14;
+  --muc-phu: #5b5046;
+  --man-dem: rgb(3 6 13 / 0);
+}

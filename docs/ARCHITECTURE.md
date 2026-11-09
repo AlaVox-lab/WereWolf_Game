@@ -204,14 +204,15 @@ WereWolf_Game/
 │   │       ├── domain/                  # đơn vị — TC07, TC08, TC16, TC17, kênh, bộ luật
 │   │       ├── application/             # tích hợp — TC01–TC06, TC09–TC15, TC18–TC20
 │   │       └── system/                  # ST01, ST02, ST04 chạy bằng người chơi ảo, không giao diện
-│   └── web/                             # GIAO DIỆN — React + Vite
+│   └── web/                             # GIAO DIỆN — React + Vite + motion
 │       ├── src/
-│       │   ├── screens/                 # một thư mục cho mỗi màn MH01–MH11
-│       │   ├── components/              # bộ phận dùng lại, dựng theo hệ thiết kế
-│       │   ├── realtime/                # kết nối Socket.IO, kho góc nhìn (Zustand)
-│       │   ├── lib/                     # gọi API, định dạng thời gian, tiện ích
-│       │   └── styles/tokens.css        # token xuất từ Claude Design — nguồn màu duy nhất
-│       └── public/
+│       │   ├── game/                    # màn trong ván MH04–MH08: cảnh nhiều lớp, bàn tròn,
+│       │   │                            #   huy hiệu vai, bảng việc, khoảnh khắc (Giai đoạn 3)
+│       │   ├── xem-truoc/               # phát lại ván mô phỏng khi chưa có máy chủ thời gian thực
+│       │   ├── screens/                 # màn ngoài ván MH01–MH03b, MH09–MH11 — chưa làm
+│       │   ├── realtime/                # kết nối Socket.IO, kho góc nhìn — Giai đoạn 5
+│       │   └── styles/                  # tokens.css (nguồn màu duy nhất), san-khau.css
+│       └── public/xem-truoc/            # van-mau.json — npm run xuat-xem-truoc
 ├── packages/
 │   └── shared/                          # HỢP ĐỒNG giữa máy chủ và giao diện
 │       └── src/                         # kiểu góc nhìn, tên sự kiện socket, lược đồ lệnh
@@ -587,6 +588,24 @@ thử cố tình gửi kèm vai người khác — bài kiểm thử đỏ ngay.
 qua Socket.IO là hạng mục ROADMAP 4.11.
 
 ---
+
+### 8.1. Giao diện chỉ vẽ lại góc nhìn (Giai đoạn 3)
+
+`game/ManChoi` nhận **một** `GocNhinNguoiChoi` và đồng hồ máy chủ, vẽ cảnh — không biết dữ liệu
+đến từ Socket.IO hay từ bản phát lại. Những gì cần diễn hoạt (đêm xuống, gọi vai, công bố sáng,
+treo cổ, trúng tên, hết ván) là **khoảnh khắc** do `game/khoanhKhac.ts` suy từ hai góc nhìn liền
+nhau của cùng một người: lớp trình bày chỉ chọn *lúc nào chiếu cảnh gì*, mọi quyết định của luật
+đã nằm sẵn trong góc nhìn. Chữ hiển thị (tên vai, tên pha, "cần làm gì") ở `game/hienThi.ts`.
+
+Khi chưa có máy chủ thời gian thực, `npm run xuat-xem-truoc` chạy một ván mô phỏng và chụp góc
+nhìn của **từng** người ở mỗi sự kiện miền (và mỗi giây giả lập, để thấy tiến độ bỏ phiếu) vào
+`apps/web/public/xem-truoc/van-mau.json`; `xem-truoc/` phát lại chuỗi đó, đổi được ghế để xem
+cùng ván bằng mắt người khác, và tự dừng khi tới lượt người xem.
+
+**Ý tưởng hình ảnh**: mặt trăng (đêm) hay mặt trời (ngày) đi trên vòng cung trời là **đồng hồ của
+pha**; đêm phủ màn mờ lên cả làng nhưng chừa vầng sáng quanh bàn tròn để vẫn đọc được; mọi khung
+chữ là **tấm gỗ chồng lớp** (hai tấm lót lệch phía sau). Cảnh gồm chín lớp trôi theo con trỏ với
+độ sâu khác nhau. Mọi chuyển động có phương án `prefers-reduced-motion`.
 
 ## 9. Khuôn mẫu: tính xác định và nhật ký ván — PC03
 

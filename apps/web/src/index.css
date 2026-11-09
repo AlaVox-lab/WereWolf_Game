@@ -1,1 +1,33 @@
 @import 'tailwindcss';
+@import '@fontsource/cormorant-garamond/vietnamese-600.css';
+@import '@fontsource/cormorant-garamond/latin-600.css';
+@import '@fontsource/cormorant-garamond/vietnamese-700.css';
+@import '@fontsource/cormorant-garamond/latin-700.css';
+@import '@fontsource/be-vietnam-pro/vietnamese-400.css';
+@import '@fontsource/be-vietnam-pro/latin-400.css';
+@import '@fontsource/be-vietnam-pro/vietnamese-600.css';
+@import '@fontsource/be-vietnam-pro/latin-600.css';
+@import './styles/tokens.css';
+@import './styles/san-khau.css';
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #060a13;
+  color: #eee8d8;
+  font-family: var(--chu-doc);
+  font-size: var(--co-chu-than);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--mau-den-long);
+  outline-offset: 3px;
+}

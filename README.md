@@ -39,7 +39,7 @@ khi số Sói còn sống không ít hơn số người còn lại. Luật đầ
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Kiến trúc, nguyên tắc, khuôn mẫu, quy ước |
 | [`docs/game-rules.md`](docs/game-rules.md) | 6 vai, 14 quy tắc, kịch bản kiểm thử |
 | [`docs/diagrams/`](docs/diagrams/) | 7 sơ đồ UML dạng PlantUML |
-| [`docs/design/`](docs/design/) | Thiết kế giao diện trên Claude Design — làm ở Giai đoạn 3 |
+| [`docs/design/`](docs/design/) | Thiết kế giao diện: ý tưởng, khoảnh khắc, ảnh từng màn |
 | [`docs/adr/`](docs/adr/) | Bản ghi quyết định kiến trúc |
 
 ## Công nghệ
@@ -63,8 +63,14 @@ npm test
 npm run mo-phong
 ```
 
+```bash
+npm run dev:web
+```
+
 `npm run mo-phong` chạy một ván toàn người chơi ảo và in nhật ký; thêm
-`-- --so-nguoi 6-12 --so-van 1000` để xem thống kê tỉ lệ thắng. Giao diện chơi được ở Giai đoạn 5.
+`-- --so-nguoi 6-12 --so-van 1000` để xem thống kê tỉ lệ thắng. `npm run dev:web` mở bản xem trước
+giao diện ở `http://localhost:5173` — phát lại một ván mô phỏng, đổi ghế để xem bằng mắt từng
+người (tạo lại ván mẫu bằng `npm run xuat-xem-truoc`). Chơi thật với nhau ở Giai đoạn 5.
 
 ## Cấu trúc thư mục
 

@@ -4,3 +4,5 @@ coverage
 package-lock.json
 *.md
 *.puml
+# Dữ liệu sinh tự động — npm run xuat-xem-truoc
+apps/web/public/xem-truoc/
