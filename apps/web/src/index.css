@@ -9,6 +9,36 @@
 @import '@fontsource/be-vietnam-pro/latin-600.css';
 @import './styles/tokens.css';
 @import './styles/san-khau.css';
+@import './styles/xac-thuc.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Biến theme mà các component kéo từ registry (shadcn/ui, Magic UI, Motion Primitives) đọc —
+ * ánh xạ về token của dự án, không sửa mã component.
+ */
+@theme inline {
+  --color-background: var(--tam-1);
+  --color-foreground: var(--muc);
+  --color-card: var(--tam-1);
+  --color-card-foreground: var(--muc);
+  --color-popover: var(--tam-1);
+  --color-popover-foreground: var(--muc);
+  --color-primary: var(--mau-den-long);
+  --color-primary-foreground: #1d150c;
+  --color-secondary: var(--tam-2);
+  --color-secondary-foreground: var(--muc);
+  --color-muted: var(--tam-2);
+  --color-muted-foreground: var(--muc-phu);
+  --color-accent: var(--tam-2);
+  --color-accent-foreground: var(--muc);
+  --color-destructive: var(--mau-soi);
+  --color-border: color-mix(in srgb, var(--muc) 16%, transparent);
+  --color-input: color-mix(in srgb, var(--muc) 24%, transparent);
+  --color-ring: var(--mau-den-long);
+  --font-sans: var(--chu-doc);
+  --font-serif: var(--chu-trang-trong);
+}
 
 html,
 body,

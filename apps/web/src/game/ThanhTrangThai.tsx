@@ -1,6 +1,6 @@
 import type { GocNhinNguoiChoi } from '@moonvillage/shared';
-import { motion } from 'motion/react';
-import { HuyHieuVai } from './HuyHieuVai';
+import { TextEffect } from '@/components/ui/text-effect';
+import { AnhVai } from './anhVai';
 import { canLamGi, dongHo, LOI_GOI_VAI, TEN_PHE, tenPha } from './hienThi';
 
 interface Props {
@@ -24,16 +24,10 @@ export function ThanhTrangThai({ g, conLai }: Props) {
       </div>
 
       <div className="thanh-pha" aria-live="polite">
-        {/* Mỗi lần đổi pha tiêu đề mọc lên lại; không chờ bản cũ thoát — tua nhanh không kẹt. */}
-        <motion.h1
-          key={tenPha(g)}
-          className="ten-pha"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
+        {/* Mỗi lần đổi pha tiêu đề hiện lại từng chữ (Motion Primitives — TextEffect). */}
+        <TextEffect key={tenPha(g)} as="h1" per="char" preset="fade-in-blur" className="ten-pha">
           {tenPha(g)}
-        </motion.h1>
+        </TextEffect>
         <p className="can-lam-gi">
           {canLamGi(g)}
           {conLai !== null && conLai > 0 && (
@@ -42,7 +36,7 @@ export function ThanhTrangThai({ g, conLai }: Props) {
         </p>
         {g.buocDem && (
           <p className="buoc-dem">
-            <HuyHieuVai vai={g.buocDem} co={22} />
+            <AnhVai vai={g.buocDem} rong={18} />
             {LOI_GOI_VAI[g.buocDem]}
           </p>
         )}
@@ -54,7 +48,7 @@ export function ThanhTrangThai({ g, conLai }: Props) {
       </div>
 
       <div className={`tam tam-nho thanh-toi ${g.toi.conSong ? '' : 'thanh-toi-chet'}`}>
-        <HuyHieuVai vai={g.toi.loaiVai} co={48} />
+        <AnhVai vai={g.toi.loaiVai} rong={44} />
         <div>
           <p className="phu">Bạn là</p>
           <p className="ten-vai-nho">{g.toi.tenVai}</p>

@@ -68,9 +68,10 @@ npm run dev:web
 ```
 
 `npm run mo-phong` chạy một ván toàn người chơi ảo và in nhật ký; thêm
-`-- --so-nguoi 6-12 --so-van 1000` để xem thống kê tỉ lệ thắng. `npm run dev:web` mở bản xem trước
-giao diện ở `http://localhost:5173` — phát lại một ván mô phỏng, đổi ghế để xem bằng mắt từng
-người (tạo lại ván mẫu bằng `npm run xuat-xem-truoc`). Chơi thật với nhau ở Giai đoạn 5.
+`-- --so-nguoi 6-12 --so-van 1000` để xem thống kê tỉ lệ thắng. `npm run dev:web` mở giao diện ở
+`http://localhost:5173`: màn đăng nhập/đăng ký (chỉ giao diện) dẫn vào `/van-mau` — một ván mô
+phỏng phát lại trong cảnh 3D, đổi ghế để xem bằng mắt từng người (tạo lại ván mẫu bằng
+`npm run xuat-xem-truoc`). Chơi thật với nhau ở Giai đoạn 5.
 
 ## Cấu trúc thư mục
 

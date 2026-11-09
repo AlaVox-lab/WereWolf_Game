@@ -1,0 +1,203 @@
+/* MH01 — đăng nhập và đăng ký. Nền tia trăng (Paper Shaders), quạt thẻ, khung Magic Card. */
+
+.man-xac-thuc {
+  position: fixed;
+  inset: 0;
+  overflow: clip;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 72px);
+  padding: var(--le-man) clamp(16px, 5vw, 80px);
+  background: #060a14;
+  color: var(--muc);
+}
+
+.nen-tia-trang {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Mặt trăng của Mellan treo góc trên — cùng tấm tranh với mặt sau thẻ. */
+.trang-xt {
+  position: absolute;
+  z-index: 0;
+  top: -9vmin;
+  left: -6vmin;
+  width: 44vmin;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: 50% 45%;
+  border-radius: 50%;
+  opacity: 0.55;
+  filter: grayscale(1) contrast(1.1) brightness(1.05);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: trang-troi 40s ease-in-out infinite alternate;
+}
+@keyframes trang-troi {
+  to {
+    transform: translate(2vmin, 1.5vmin) rotate(4deg);
+  }
+}
+
+.xt-trai,
+.xt-phai {
+  position: relative;
+  z-index: 1;
+}
+.xt-trai {
+  display: grid;
+  gap: var(--kc-4);
+  justify-items: start;
+}
+.xt-ten {
+  margin: 0;
+  font-family: var(--chu-trang-trong);
+  font-weight: 700;
+  font-size: clamp(3.25rem, 8vw, 7.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  color: #f4efe2;
+  text-shadow: 0 4px 40px rgb(0 0 0 / 0.6);
+}
+.xt-mo-ta {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 1.125rem;
+  color: #c9d1de;
+}
+
+/* Quạt thẻ. */
+.quat-the {
+  position: relative;
+  width: min(560px, 100%);
+  height: 300px;
+  margin-top: var(--kc-6);
+}
+.quat-la {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 148px;
+  margin: 0 0 0 -74px;
+  transform-origin: 50% 120%;
+  cursor: default;
+}
+.quat-la img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  filter: sepia(0.4) contrast(1.08);
+  box-shadow:
+    0 0 0 3px var(--mau-vai),
+    0 0 0 8px #0f1522,
+    0 24px 40px -14px rgb(0 0 0 / 0.85);
+}
+.quat-la figcaption {
+  opacity: 0;
+  transition: opacity var(--nhip-nhanh);
+  margin-top: 14px;
+  text-align: center;
+  font-family: var(--chu-trang-trong);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #eee8d8;
+}
+.quat-la figcaption.quat-ten-hien {
+  opacity: 1;
+}
+
+/* Khung biểu mẫu. */
+.the-xac-thuc {
+  border-radius: 10px;
+  width: min(440px, 100%);
+  justify-self: center;
+}
+.xt-noi-dung {
+  display: grid;
+  gap: var(--kc-3);
+  padding: clamp(20px, 3vw, 36px);
+}
+.xt-tab {
+  display: flex;
+  gap: var(--kc-6);
+  margin-bottom: var(--kc-2);
+}
+.xt-tab-nut {
+  position: relative;
+  padding-bottom: 6px;
+  color: var(--muc-phu);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--nhip-nhanh);
+}
+.xt-tab-nut[aria-current='page'],
+.xt-tab-nut:hover {
+  color: var(--muc);
+}
+.xt-tab-gach {
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--mau-den-long);
+}
+.xt-tieu-de {
+  margin: 0;
+  font-family: var(--chu-trang-trong);
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+.xt-form {
+  display: grid;
+  gap: var(--kc-4);
+  margin-top: var(--kc-2);
+}
+.o-nhap {
+  display: grid;
+  gap: 6px;
+}
+.o-nhap input {
+  height: 44px;
+  font-size: 1rem;
+}
+.o-loi {
+  margin: 0;
+  color: #f08a74;
+  font-size: var(--co-chu-nho);
+}
+.xt-gui {
+  margin-top: var(--kc-2);
+  height: 46px;
+  font-size: 1rem;
+}
+
+@media (max-width: 900px) {
+  .man-xac-thuc {
+    grid-template-columns: 1fr;
+    align-content: start;
+    overflow-y: auto;
+    padding-top: 12vh;
+  }
+  .quat-the {
+    height: 210px;
+    transform: scale(0.72);
+    transform-origin: 50% 100%;
+    margin: 0 auto;
+  }
+  .xt-trai {
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trang-xt {
+    animation: none;
+  }
+}

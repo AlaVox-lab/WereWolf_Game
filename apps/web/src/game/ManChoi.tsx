@@ -1,9 +1,9 @@
 import type { GocNhinNguoiChoi } from '@moonvillage/shared';
 import { AnimatePresence } from 'motion/react';
-import { useEffect, useMemo, useRef, useState, type PointerEvent, type ReactNode } from 'react';
-import { BanTron, dungGhe } from './BanTron';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { BangViec, type LoaiThuoc } from './BangViec';
-import { Canh } from './Canh';
+import { CanhBaChieu } from './canh3d/CanhBaChieu';
+import { dungGhe } from './ghe';
 import { thoiCua } from './hienThi';
 import type { KhoanhKhac } from './khoanhKhac';
 import { LopKhoanhKhac } from './LopKhoanhKhac';
@@ -21,15 +21,16 @@ interface Props {
   khoanhKhac: KhoanhKhac | null;
   thoiLuongKhoanhKhac: number;
   onXongKhoanhKhac: () => void;
-  /** Lớp phủ riêng của nơi dùng màn này (thẻ vai, bảng điều khiển xem trước…). */
   /** Người xem vừa trả lời việc đang mở (xác nhận hoặc bỏ trắng). */
   onDaTraLoi?: () => void;
+  /** Lớp phủ riêng của nơi dùng màn này (thẻ vai, bảng điều khiển xem trước…). */
   children?: ReactNode;
 }
 
 /**
  * Màn trong ván (MH05–MH08) — chỉ vẽ lại GocNhinNguoiChoi, không biết dữ liệu đến từ máy chủ
- * thật hay từ bản phát lại. Giai đoạn 5 thay nguồn bằng Socket.IO, màn này giữ nguyên.
+ * thật hay từ bản phát lại. Cảnh 3D ở dưới, các lớp chữ DOM ở trên. Giai đoạn 5 thay nguồn dữ
+ * liệu bằng Socket.IO, màn này giữ nguyên.
  */
 export function ManChoi(p: Props) {
   const { g, bayGio } = p;
@@ -64,40 +65,22 @@ export function ManChoi(p: Props) {
       ? g.hetHanPha - bayGio
       : null;
   const kk = p.khoanhKhac;
-  const dangDien = kk && (kk.loai === 'TREO_CO' || kk.loai === 'BI_BAN') ? kk.id : null;
-  const hetVan = g.trangThai === 'KET_THUC' && g.ketThuc && !kk;
-
-  // Thị sai: các lớp cảnh trôi theo con trỏ — ghi thẳng biến CSS, không vẽ lại React.
-  const sanKhau = useRef<HTMLElement>(null);
-  const theoConTro = (e: PointerEvent) => {
-    if (e.pointerType !== 'mouse' || !sanKhau.current) return;
-    const { innerWidth: w, innerHeight: h } = window;
-    sanKhau.current.style.setProperty('--px', String((e.clientX / w - 0.5) * 2));
-    sanKhau.current.style.setProperty('--py', String((e.clientY / h - 0.5) * 2));
-  };
+  const hetVan = g.trangThai === 'KET_THUC' && g.ketThuc !== null && !kk;
+  const ghe = useMemo(() => dungGhe(g, p.ten), [g, p.ten]);
 
   return (
-    <main
-      ref={sanKhau}
-      className="san-khau"
-      data-thoi={thoi}
-      data-trang-thai={g.trangThai}
-      onPointerMove={theoConTro}
-    >
-      <Canh
+    <main className="san-khau" data-thoi={thoi} data-trang-thai={g.trangThai}>
+      <CanhBaChieu
         thoi={thoi}
         tienDoThienThe={p.tienDoThienThe}
-        dangDenLuot={thoi === 'dem' && viec !== null}
-      >
-        <BanTron
-          ghe={dungGhe(g, p.ten)}
-          chonDuoc={chonDuoc}
-          daChon={daChon}
-          onChon={setDaChon}
-          dangDien={dangDien}
-          laDem={thoi === 'dem'}
-        />
-      </Canh>
+        ghe={ghe}
+        chonDuoc={chonDuoc}
+        daChon={daChon}
+        onChon={setDaChon}
+        khoanhKhac={kk}
+        latHet={g.trangThai === 'KET_THUC'}
+      />
+      <div className="man-dem" aria-hidden="true" />
 
       <ThanhTrangThai g={g} conLai={kk ? null : conLai} />
 
@@ -114,7 +97,9 @@ export function ManChoi(p: Props) {
               setNhom(n);
               setDaChon(null);
             }}
+            chonDuoc={chonDuoc}
             daChon={daChon}
+            onChon={setDaChon}
             daGui={daGui}
             onGui={() => {
               setDaGui(true);

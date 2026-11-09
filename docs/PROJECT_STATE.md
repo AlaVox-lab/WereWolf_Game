@@ -14,7 +14,7 @@
 
 | Mục | Giá trị |
 |---|---|
-| Cập nhật lần cuối | 2026-11-09 |
+| Cập nhật lần cuối | 2026-11-10 |
 | Phiên bản hiện tại | **`v0.3.0`** — Điều phối ván, phát hành 20/10 ([release](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.3.0)). Trước đó `v0.2.0` — Lõi miền, 19/10. Bỏ qua `v0.1.0` vì Giai đoạn 0 chỉ còn 0.9, không phải mã |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
 | Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2 hoàn thành** (11/11) |
@@ -24,7 +24,7 @@
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
 | Kiểm thử tự động | 285 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 29 pha đêm, 19 pha ngày, 9 `BoQuanLyKenh`, 8 `BoPhatSuKien`, 9 `taoGocNhin`, 7 nhật ký, 7 `NguoiChoiAo`, 14 mô phỏng, 5 hệ thống) · độ phủ dòng lệnh 99 % · **20 / 20 TC** · **3 / 5 ST** không giao diện (ST01, ST02, ST04; ST03, ST05 cần máy chủ thời gian thực) |
-| Thiết kế giao diện | **Đang làm** (09/11) — màn trong ván MH04–MH08 chạy được trong `apps/web`, phát lại ván mô phỏng; còn màn ngoài ván và kênh chat. Xem `docs/design/README.md` |
+| Thiết kế giao diện | **Đang làm** — MH01 đăng nhập/đăng ký (giao diện) và màn trong ván MH04–MH08 dạng **3D** chạy được trong `apps/web`; thẻ vai là tranh khắc phạm vi công cộng. Còn MH02–MH03b và kênh chat. Xem `docs/design/README.md` |
 
 **Một câu tóm tắt trạng thái**: toàn bộ luật chơi và bộ điều phối ván đã xong — một ván chạy
 trọn bằng người chơi ảo, 1 000 ván 6–12 người kết thúc đúng lúc, 0 lỗi, 20/20 TC và ST01, ST02,
@@ -322,12 +322,38 @@ hiệu từng vai, cảnh treo cổ, nhiều lớp chồng chéo. Higgsfield h�
       biến trả lại thứ tự cũ thì bài đỏ
 - [x] Kiểm trên trình duyệt ở 1440 × 900 và 375 × 812; 5 ảnh ở `docs/design/`
 
+### 10/11 — Dựng lại giao diện: 3D, tranh khắc, component có sẵn
+
+Người dùng: bản 09/11 "chưa đẹp lắm, nhìn khá AI slop" — thêm 3D và motion, dùng bộ thẻ vai trên
+mạng, dùng component có sẵn trong sổ tay SKILLS thay vì tự dựng, không dùng taste-skill nữa;
+thêm màn đăng nhập/đăng ký vì môn học cần đủ use case.
+
+- [x] **Thẻ vai**: không có bộ thẻ Ma Sói nào trên mạng vừa đẹp vừa có giấy phép (bộ đẹp đều
+      của Ultimate Werewolf / Loups-Garous). Người dùng chọn tranh khắc phạm vi công cộng — 7 tranh
+      từ The Met Open Access (Cranach, Dürer ×3, Agostino Veneziano, Bruegel, Mellan), kiểm
+      `isPublicDomain` qua API, nguồn ở `public/the-vai/nguon.json` và `docs/design/README.md`
+- [x] **Cảnh 3D** `game/canh3d/` (three + @react-three/fiber + drei): trời Rayleigh đổi ngày đêm,
+      trăng là tranh Mellan cắt tròn, rừng thông, làng sáng đèn, đom đóm, bàn gỗ, ba ngọn nến,
+      quân người chơi (chết thì ngã ra khỏi bàn), thẻ úp/ngửa lật trong không gian, thẻ vai trồi
+      lên khi gọi vai, giá treo cổ, mũi tên; máy quay theo con trỏ, theo khoảnh khắc, lùi theo
+      tỉ lệ màn hình
+- [x] **Component có sẵn** (shadcn CLI, `apps/web/components.json`): Button, Input, Label
+      (shadcn/ui); MagicCard, AnimatedCircularProgressBar, BorderBeam (Magic UI); TextEffect,
+      TextShimmer (Motion Primitives); GodRays (Paper Shaders). Thay huy hiệu SVG, cảnh SVG, bàn
+      SVG tự vẽ trước đây
+- [x] **MH01** `/dang-nhap`, `/dang-ky` (react-router): quạt thẻ, kiểm dữ liệu nhập, chuyển vào
+      ván mẫu — chỉ giao diện; ràng buộc tên đăng nhập 3–20 ký tự `[a-z0-9_]`, mật khẩu ≥ 8 là
+      **đề xuất**, chốt ở 4.2
+- [x] `apps/web` tắt `exactOptionalPropertyTypes` (mã registry viết theo tsconfig mặc định của
+      shadcn); máy chủ và lõi miền vẫn bật
+
 ---
 
 ## Đang làm
 
-**Giai đoạn 3 — giao diện.** Xong màn trong ván (MH04–MH08) dạng chạy được. Còn: màn ngoài ván
-MH01–MH03b, kênh Sói và khung chat, danh sách kiểm 3.4. Giai đoạn 4 (máy chủ, Prisma, Socket.IO)
+**Giai đoạn 3 — giao diện.** Xong MH01 (giao diện) và màn trong ván MH04–MH08 dạng 3D chạy được.
+Còn: MH02 trang chủ, MH03 phòng chờ, MH03b cấu hình bộ luật, kênh Sói và khung chat, danh sách
+kiểm 3.4. Giai đoạn 4 (máy chủ, Prisma, Socket.IO)
 làm song song được.
 
 ---

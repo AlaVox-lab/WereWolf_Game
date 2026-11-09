@@ -1,7 +1,8 @@
 import type { KetThucCongKhai, SuKienNhatKyCongKhai } from '@moonvillage/shared';
 import { motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
-import { HuyHieuVai } from './HuyHieuVai';
+import { TextEffect } from '@/components/ui/text-effect';
+import { AnhVai } from './anhVai';
 import { TEN_PHE, TEN_VAI, dongHo, thuTu } from './hienThi';
 
 const HANH_DONG: Record<string, string> = {
@@ -58,20 +59,14 @@ export function ManKetThuc({
   return (
     <motion.section
       className={`man-ket-thuc ket-thuc-${thang}`}
-      aria-labelledby="tieu-de-ket-thuc"
+      aria-label="Hết ván"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
-      <motion.h2
-        id="tieu-de-ket-thuc"
-        className="kk-chu-dai"
-        initial={giam ? false : { opacity: 0, y: 40, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <TextEffect as="h2" per="char" preset="scale" className="kk-chu-dai">
         {thang === 'SOI' ? 'Bầy Sói thắng' : 'Dân làng thắng'}
-      </motion.h2>
+      </TextEffect>
       <p className="kk-chu-phu">
         {thang === 'SOI'
           ? 'Số Sói đã bằng số người còn lại — làng thuộc về bầy.'
@@ -87,7 +82,7 @@ export function ManKetThuc({
             animate={{ opacity: 1, rotateY: 0 }}
             transition={{ delay: 0.6 + i * 0.12, duration: 0.6 }}
           >
-            <HuyHieuVai vai={v.loaiVai} co={64} />
+            <AnhVai vai={v.loaiVai} rong={84} />
             <span className="lat-vai-ten">{ten(v.id)}</span>
             <span className="phu">
               {TEN_VAI[v.loaiVai]}

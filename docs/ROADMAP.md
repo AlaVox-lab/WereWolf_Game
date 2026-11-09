@@ -259,9 +259,11 @@ Mục tiêu: có bản thiết kế hoàn chỉnh cho mọi màn trong MVP **tr�
 
 > **Đang làm từ 09/11** theo ý tưởng người dùng đưa: bàn tròn mọi người ngồi quanh, chuyển
 > ngày/đêm có mặt trời và mặt trăng, đêm mờ nhưng vẫn đọc được, mỗi lượt vai hiện huy hiệu,
-> bỏ phiếu xong có cảnh treo cổ, nhiều lớp chồng chéo tạo chiều sâu. Higgsfield hết credit nên
-> mọi hình vẽ bằng SVG/CSS trong mã; thiết kế được dựng **thẳng thành bản chạy được** trong
-> `apps/web` (phát lại ván mô phỏng) thay cho bản vẽ tĩnh — ARCHITECTURE mục 8.1.
+> bỏ phiếu xong có cảnh treo cổ, nhiều lớp chồng chéo tạo chiều sâu. Thiết kế được dựng **thẳng
+> thành bản chạy được** trong `apps/web` (phát lại ván mô phỏng) — ARCHITECTURE mục 8.1.
+> *10/11*: dựng lại theo yêu cầu người dùng — cảnh **3D** (three.js, react-three-fiber, drei),
+> thẻ vai là **tranh khắc phạm vi công cộng** (The Met, CC0), component lấy sẵn từ registry trong
+> sổ tay SKILLS (shadcn/ui, Magic UI, Motion Primitives, Paper Shaders) thay cho tự dựng.
 
 - [ ] **3.1** Hệ thiết kế: token màu cho **hai không khí đêm và ngày**, màu phe (Dân / Sói),
       màu trạng thái (sống, chết, mất kết nối); cỡ chữ; khoảng cách; bo góc. Bộ phận dùng lại:
@@ -272,6 +274,8 @@ Mục tiêu: có bản thiết kế hoàn chỉnh cho mọi màn trong MVP **tr�
       nhắn, nhãn kênh
 - [ ] **3.2** Luồng ngoài ván: MH01 đăng nhập/đăng ký, MH02 trang chủ, MH03 phòng chờ, MH03b
       cấu hình bộ luật
+      · *10/11*: xong **MH01** (giao diện, kiểm dữ liệu nhập; máy chủ ở 4.1–4.2). **Còn** MH02,
+      MH03, MH03b
 - [ ] **3.3** Luồng trong ván: MH04 thông báo vai; MH05 pha đêm với **năm biến thể** — Bảo vệ,
       Sói (kèm kênh Sói), Tiên tri (kèm kết quả soi), Phù thủy (kèm nạn nhân và hai lọ), màn chờ
       của Dân làng; MH06 pha ngày; MH07 bỏ phiếu; hộp thoại Thợ săn (UC17); MH08 kết thúc
@@ -282,8 +286,8 @@ Mục tiêu: có bản thiết kế hoàn chỉnh cho mọi màn trong MVP **tr�
       thoại 390 px và bản máy tính
 - [ ] **3.5** Xuất token thành `apps/web/src/styles/tokens.css`; chụp ảnh từng màn vào
       `docs/design/`; tạo `docs/design/README.md` ghi liên kết thiết kế và danh sách kiểm 3.4
-      · *09/11*: có `tokens.css`, 5 ảnh màn trong ván, `docs/design/README.md`. **Còn** ảnh
-      màn ngoài ván và danh sách kiểm 3.4
+      · *10/11*: có `tokens.css`, 5 ảnh (MH01 ×2, MH04, MH05 3D, MH07 3D), `docs/design/README.md`
+      kèm bảng nguồn tranh. **Còn** ảnh MH02–MH03b và danh sách kiểm 3.4
 - [ ] **3.6** *(sau MVP, chỉ cần khung sườn)* MH09 hồ sơ, MH10 bảng xếp hạng, MH11 quản trị
 
 **Tiêu chí hoàn thành**: mọi màn MH01–MH08 và MH03b có thiết kế; danh sách kiểm sáu nguyên

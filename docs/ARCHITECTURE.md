@@ -204,15 +204,19 @@ WereWolf_Game/
 │   │       ├── domain/                  # đơn vị — TC07, TC08, TC16, TC17, kênh, bộ luật
 │   │       ├── application/             # tích hợp — TC01–TC06, TC09–TC15, TC18–TC20
 │   │       └── system/                  # ST01, ST02, ST04 chạy bằng người chơi ảo, không giao diện
-│   └── web/                             # GIAO DIỆN — React + Vite + motion
+│   └── web/                             # GIAO DIỆN — React + Vite + motion + react-three-fiber
+│       ├── components.json              # registry shadcn — npx shadcn@latest add <component>
 │       ├── src/
-│       │   ├── game/                    # màn trong ván MH04–MH08: cảnh nhiều lớp, bàn tròn,
-│       │   │                            #   huy hiệu vai, bảng việc, khoảnh khắc (Giai đoạn 3)
-│       │   ├── xem-truoc/               # phát lại ván mô phỏng khi chưa có máy chủ thời gian thực
-│       │   ├── screens/                 # màn ngoài ván MH01–MH03b, MH09–MH11 — chưa làm
+│       │   ├── components/ui/           # component kéo từ registry: shadcn/ui, Magic UI, Motion Primitives
+│       │   ├── game/                    # màn trong ván MH04–MH08: thanh trạng thái, bảng việc, lời dẫn
+│       │   │   └── canh3d/              #   cảnh 3D: trời, rừng, làng, bàn, nến, quân, thẻ, giá treo cổ
+│       │   ├── screens/                 # màn ngoài ván: MH01 đăng nhập/đăng ký (giao diện)
+│       │   ├── xem-truoc/               # /van-mau — phát lại ván mô phỏng khi chưa có máy chủ thời gian thực
 │       │   ├── realtime/                # kết nối Socket.IO, kho góc nhìn — Giai đoạn 5
-│       │   └── styles/                  # tokens.css (nguồn màu duy nhất), san-khau.css
-│       └── public/xem-truoc/            # van-mau.json — npm run xuat-xem-truoc
+│       │   └── styles/                  # tokens.css (nguồn màu duy nhất), san-khau.css, xac-thuc.css
+│       └── public/
+│           ├── the-vai/                 # tranh khắc phạm vi công cộng (The Met) + nguon.json
+│           └── xem-truoc/               # van-mau.json — npm run xuat-xem-truoc
 ├── packages/
 │   └── shared/                          # HỢP ĐỒNG giữa máy chủ và giao diện
 │       └── src/                         # kiểu góc nhìn, tên sự kiện socket, lược đồ lệnh
@@ -602,10 +606,17 @@ nhìn của **từng** người ở mỗi sự kiện miền (và mỗi giây gi
 `apps/web/public/xem-truoc/van-mau.json`; `xem-truoc/` phát lại chuỗi đó, đổi được ghế để xem
 cùng ván bằng mắt người khác, và tự dừng khi tới lượt người xem.
 
-**Ý tưởng hình ảnh**: mặt trăng (đêm) hay mặt trời (ngày) đi trên vòng cung trời là **đồng hồ của
-pha**; đêm phủ màn mờ lên cả làng nhưng chừa vầng sáng quanh bàn tròn để vẫn đọc được; mọi khung
-chữ là **tấm gỗ chồng lớp** (hai tấm lót lệch phía sau). Cảnh gồm chín lớp trôi theo con trỏ với
-độ sâu khác nhau. Mọi chuyển động có phương án `prefers-reduced-motion`.
+**Hai tầng**: cảnh 3D (`game/canh3d/`, react-three-fiber) vẽ bàn, quân, thẻ và mọi khoảnh khắc có
+hình; lớp DOM phía trên giữ chữ, bảng việc, thanh trạng thái — chữ tiếng Việt luôn sắc nét, đọc
+được bằng trình đọc màn hình. Cảnh 3D chỉ nhận dữ liệu đã chiếu (`ThongTinGhe` từ `game/ghe.ts`,
+khoảnh khắc đang chiếu) — không đọc `GocNhinNguoiChoi` trực tiếp. Độ "đêm" là **một** số trôi mượt
+mỗi khung hình (`NguCanhCanh`), mọi lớp — trời, đèn, sương, cửa sổ, đom đóm — cùng đọc nên đổi ngày
+đêm đồng bộ. Ghế chọn được trên bàn 3D cũng có danh sách nút tương ứng trong bảng việc (bàn phím,
+trình đọc màn hình).
+
+**Component**: không tự dựng khi registry đã có — `components/ui/` kéo bằng shadcn CLI; biến theme
+của chúng ánh xạ về token ở `index.css`. Thẻ vai là tranh khắc phạm vi công cộng; nguồn ở
+`docs/design/README.md`. Mọi chuyển động có phương án `prefers-reduced-motion`.
 
 ## 9. Khuôn mẫu: tính xác định và nhật ký ván — PC03
 
