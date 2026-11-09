@@ -68,6 +68,33 @@ describe('BoDieuPhoiVan — kiểm tra thắng thua sau đêm (UC14 bước 6)',
     expect(tran.dieuPhoi.layCongBoSang()).toEqual(['A']);
   });
 
+  it('danh sách công bố đã có ngay lúc phát CHUYEN_PHA sang PHA_CONG_BO — không còn của đêm trước', async () => {
+    const tran = taoTran(VAI);
+    const luc: string[][] = [];
+    tran.dieuPhoi.suKien.dangKy((sk) => {
+      if (sk.loai === 'CHUYEN_PHA' && sk.trangThai === T.PHA_CONG_BO) {
+        luc.push([...tran.dieuPhoi.layCongBoSang()]);
+      }
+    });
+    // Đêm 1 Sói cắn A; ngày 1 không ai bị treo; đêm 2 không ai chết.
+    const kichBan = {
+      s: ({ lan, trangThai }: { lan: number; trangThai: TrangThaiVan }) =>
+        trangThai === T.PHA_DEM && lan === 0 ? bau('A') : undefined,
+    };
+    await chayKichBan(
+      tran,
+      (async () => {
+        for (let dem = 0; dem < 2; dem++) {
+          await tran.dieuPhoi.xuLyPhaDem();
+          tran.dieuPhoi.sauDem();
+          if (dem === 0) await tran.dieuPhoi.xuLyPhaNgay();
+        }
+      })(),
+      kichBan,
+    );
+    expect(luc).toEqual([['A'], []]);
+  });
+
   it('sauDem chỉ gọi được ở GIAI_QUYET_DEM', () => {
     expect(() => taoTran(VAI).dieuPhoi.sauDem()).toThrow('CHUYEN_TRANG_THAI_KHONG_HOP_LE');
   });

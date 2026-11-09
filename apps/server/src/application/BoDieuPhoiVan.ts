@@ -268,10 +268,14 @@ export class BoDieuPhoiVan {
     if (this.van.trangThai !== TrangThaiVan.GIAI_QUYET_DEM) {
       throw new LoiNghiepVu('CHUYEN_TRANG_THAI_KHONG_HOP_LE', `sau đêm khi ${this.van.trangThai}`);
     }
+    // Ghi danh sách công bố TRƯỚC khi chuyển pha: góc nhìn chụp lúc phát CHUYEN_PHA sang
+    // PHA_CONG_BO phải thấy người chết của đêm nay, không phải của đêm trước.
+    const ketQua = this.van.layLuotHienTai().ketQuaDem;
+    this.congBoSang = ketQua ? ketQua.layDanhSachChet().map((c) => c.nguoiChoiId) : [];
     const daKetThuc = this.kiemTraVaChuyen();
-    if (!daKetThuc) {
-      const ketQua = this.van.layLuotHienTai().ketQuaDem;
-      this.congBoSang = ketQua ? ketQua.layDanhSachChet().map((c) => c.nguoiChoiId) : [];
+    if (daKetThuc) {
+      this.congBoSang = []; // ván xong lúc trời sáng — không có buổi công bố (TC15)
+    } else {
       this.suKien.phat({ loai: 'CONG_BO_SANG', nguoiChet: this.congBoSang }, { loai: 'TAT_CA' });
     }
     return daKetThuc;
