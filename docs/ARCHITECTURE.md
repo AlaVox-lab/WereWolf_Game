@@ -210,7 +210,7 @@ WereWolf_Game/
 │       │   ├── components/ui/           # component kéo từ registry: shadcn/ui, Magic UI, Motion Primitives
 │       │   ├── game/                    # màn trong ván MH04–MH08: thanh trạng thái, bảng việc, lời dẫn, KhungChat
 │       │   │   └── canh3d/              #   cảnh 3D: trời, rừng, làng, bàn, nến, quân, thẻ, giá treo cổ
-│       │   ├── screens/                 # MH01 (gọi API thật), MH02 TrangChu, MH03/MH03b PhongCho, ManVan (5.5–5.10), MH09 HoSo,
+│       │   ├── screens/                 # MH01 (gọi API thật), MH02 TrangChu, MH03/MH03b PhongCho, ManVan (5.5–5.10), MH09 HoSo, LichSu (UC04),
 │       │   │                            #   KhungUngDung (điều hướng, CanDangNhap)
 │       │   ├── xem-truoc/               # /van-mau — phát lại ván mô phỏng khi chưa có máy chủ thời gian thực
 │       │   ├── lib/api.ts               # goiApi — REST, lỗi thành câu tiếng Việt (5.1)
@@ -396,7 +396,9 @@ vai (`BoChiaVai`), dựng `BoDieuPhoiVan` + `CongLuaChon` + `BoHenGio`, cho ngư
 (hàm tạo truyền từ `main.ts` — tầng ứng dụng không phụ thuộc `infrastructure/bot`), chờ
 `thoiGianXemVai` (MH04) rồi `chayVan()`. `guiLuaChon()` là cửa duy nhất lệnh của người thật vào
 ván — cùng `CongLuaChon` với người chơi ảo. Kết thúc hoặc hủy (Q04) thì báo người nghe: phòng mở
-lại để chơi ván mới, ván được lưu (4.10).
+lại để chơi ván mới, ván được lưu (4.10). **Ván đã lưu** (7.2): `application/van/DichVuLichSu.ts`
+đọc lại qua `KhoVan` — `lichSuCua()` và `xemVan()`; bản ghi diễn tiến lộ vai cả làng nên chỉ
+người đã ngồi trong ván hoặc quản trị viên mở được (`KHONG_CO_QUYEN`).
 
 ### 5.5. Các lớp điều khiển
 
@@ -740,6 +742,7 @@ nửa người còn sống mất kết nối liên tục quá 120 giây thì `So
 | `POST` | `/api/phong` | UC06 |
 | `GET` | `/api/phong` | Phòng công khai đang chờ (MH02) |
 | `GET` | `/api/phong/:maPhong` · `/api/phong-cua-toi` | Xem phòng trước khi vào · phòng mình đang ở |
+| `GET` | `/api/lich-su` · `/api/lich-su/:vanId` | UC04 — ván đã chơi · mở lại nhật ký (chỉ người đã chơi ván đó hoặc quản trị viên) |
 
 Mọi việc **trong phòng và trong ván** — vào phòng, cấu hình, bắt đầu, hành động, bỏ phiếu,
 nhắn tin — đi qua Socket.IO để có thứ tự và phản hồi tức thời.

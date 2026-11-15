@@ -1,45 +1,11 @@
-import type { KetThucCongKhai, SuKienNhatKyCongKhai } from '@moonvillage/shared';
+import type { KetThucCongKhai } from '@moonvillage/shared';
 import { motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { TextEffect } from '@/components/ui/text-effect';
 import { AnhVai } from './anhVai';
-import { TEN_PHE, TEN_VAI, dongHo, thuTu } from './hienThi';
-
-const HANH_DONG: Record<string, string> = {
-  BAO_VE: 'che chắn',
-  CAN: 'cắn',
-  SOI_THONG_TIN: 'soi',
-  CUU: 'cứu',
-  DOC: 'đầu độc',
-  BAN: 'bắn',
-};
-const NGUYEN_NHAN: Record<string, string> = {
-  BI_CAN: 'bị Sói cắn',
-  BI_DOC: 'trúng độc',
-  BI_TREO_CO: 'bị treo cổ',
-  BI_BAN: 'trúng tên Thợ săn',
-};
-
-/** Một dòng bản ghi diễn tiến thành câu — chỉ đọc, đúng như máy chủ ghi. */
-function cau(sk: SuKienNhatKyCongKhai, ten: (id: string) => string): string | null {
-  const d = sk.duLieu as Record<string, unknown>;
-  const t = (k: string) => ten(String(d[k]));
-  switch (sk.loai) {
-    case 'CHUYEN_PHA':
-      return d.trangThai === 'GIAI_QUYET_DEM' ? `Đêm thứ ${thuTu(Number(d.luot))} khép lại` : null;
-    case 'Y_DINH':
-      return `${t('nguoiThucHienId')} ${HANH_DONG[String(d.loaiHanhDong)] ?? d.loaiHanhDong} ${t('mucTieuId')}`;
-    case 'KET_QUA_SOI':
-      return `${t('tienTriId')} thấy ${t('mucTieuId')} thuộc ${TEN_PHE[d.phe as 'DAN' | 'SOI']}`;
-    case 'PHIEU_BAU':
-      return `${t('nguoiBauId')} bầu ${d.nguoiBiBauId ? t('nguoiBiBauId') : 'trắng'}${d.vongBauLai ? ' (bầu lại)' : ''}`;
-    case 'NGUOI_CHET':
-      return `${t('nguoiChoiId')} ${NGUYEN_NHAN[String(d.nguyenNhan)] ?? d.nguyenNhan}`;
-    default:
-      return null;
-  }
-}
+import { TEN_VAI } from './hienThi';
+import { NhatKyVan } from './NhatKyVan';
 
 export function ManKetThuc({
   ketThuc,
@@ -56,9 +22,6 @@ export function ManKetThuc({
   const giam = useReducedMotion();
   const [moNhatKy, setMoNhatKy] = useState(false);
   const thang = ketThuc.pheThang;
-  const dong = ketThuc.nhatKy
-    .map((sk) => ({ sk, cau: cau(sk, ten) }))
-    .filter((x): x is { sk: SuKienNhatKyCongKhai; cau: string } => x.cau !== null);
 
   return (
     <motion.section
@@ -111,16 +74,7 @@ export function ManKetThuc({
           {moNhatKy ? 'Đóng diễn biến' : 'Xem diễn biến cả ván'}
         </Button>
       </div>
-      {moNhatKy && (
-        <ol className="nhat-ky tam">
-          {dong.map(({ sk, cau: c }) => (
-            <li key={sk.thuTu}>
-              <span className="nhat-ky-gio">{dongHo(sk.thoiDiem)}</span>
-              {c}
-            </li>
-          ))}
-        </ol>
-      )}
+      {moNhatKy && <NhatKyVan nhatKy={ketThuc.nhatKy} ten={ten} className="tam" />}
     </motion.section>
   );
 }

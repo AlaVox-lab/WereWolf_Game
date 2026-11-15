@@ -54,6 +54,7 @@ export function KhungUngDung({ children }: { children?: ReactNode }) {
   // Mục nào có trang thì mới hiện — lịch sử, xếp hạng, quản trị thêm dần ở Giai đoạn 7.
   const muc: { den: string; ten: string; quanTri?: boolean }[] = [
     { den: '/', ten: 'Trang chủ' },
+    { den: '/lich-su', ten: 'Lịch sử' },
     { den: '/ho-so', ten: 'Hồ sơ' },
   ];
   return (
@@ -82,7 +83,7 @@ export function KhungUngDung({ children }: { children?: ReactNode }) {
           {muc
             .filter((m) => !m.quanTri || phien.laQuanTri)
             .map((m) => (
-              <NavLink key={m.den} to={m.den} end className="dieu-huong-lien-ket">
+              <NavLink key={m.den} to={m.den} end={m.den === '/'} className="dieu-huong-lien-ket">
                 {m.ten}
               </NavLink>
             ))}

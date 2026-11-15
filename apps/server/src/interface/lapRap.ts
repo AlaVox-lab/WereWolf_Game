@@ -4,6 +4,7 @@ import { createServer } from 'node:http';
 import type { CauHinhThoiGian } from '../application/CauHinhThoiGian.js';
 import type { KhoDuLieu } from '../application/kho/KhoDuLieu.js';
 import { SoDangKyPhong } from '../application/phong/SoDangKyPhong.js';
+import { DichVuLichSu } from '../application/van/DichVuLichSu.js';
 import { DichVuTaiKhoan } from '../application/taikhoan/DichVuTaiKhoan.js';
 import { DichVuLuuVan } from '../application/van/DichVuLuuVan.js';
 import { SoDangKyVan } from '../application/van/SoDangKyVan.js';
@@ -14,6 +15,7 @@ import { taoBoPhien } from '../infrastructure/auth/phien.js';
 import { NguoiChoiAo, type CauHinhNguoiChoiAo } from '../infrastructure/bot/NguoiChoiAo.js';
 import { DongHoThat, NgauNhienThat } from '../infrastructure/thoiGian.js';
 import { createApp } from './api/app.js';
+import { taoRouterLichSu } from './api/lichSu.js';
 import { taoRouterPhong } from './api/phong.js';
 import { moCongSocket } from './ws/congSocket.js';
 
@@ -58,7 +60,11 @@ export function lapRapMayChu(ch: CauHinhMayChu) {
     vanDaLuu.push(hua);
     await hua;
   });
-  const app = createApp({ taiKhoan, phien, routerThem: [taoRouterPhong(phong)] });
+  const app = createApp({
+    taiKhoan,
+    phien,
+    routerThem: [taoRouterPhong(phong), taoRouterLichSu(new DichVuLichSu(ch.kho.van))],
+  });
   const http = createServer(app);
   const socket = moCongSocket(http, {
     taiKhoan,

@@ -132,6 +132,12 @@ class DichVuLuuVan {
 }
 note right of DichVuLuuVan : UC20 — ván xong thì ghi chín bảng nhóm ván,\ncộng hồ sơ và điểm mùa (thắng +3, thua +1) cho người thật
 SoDangKyVan ..> DichVuLuuVan : báo kết thúc
+class DichVuLichSu {
+  + lichSuCua(taiKhoanId) : List<TomTatVan>
+  + xemVan(vanId, nguoiXem) : ChiTietVan
+}
+note right of DichVuLichSu : UC04 — đọc ván đã lưu; nhật ký lộ vai cả làng nên chỉ\nngười đã chơi ván đó hoặc quản trị viên mở được
+DichVuLuuVan ..> DichVuLichSu : ván đã lưu đọc lại
 class VanDau {
   + id : String
   + boLuatChoi : BoLuatChoi

@@ -416,13 +416,21 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
 - [x] **7.1** `screens/HoSo.tsx` (MH09, UC03): đổi biệt danh, chọn một trong sáu tranh thẻ vai làm
       ảnh đại diện, số ván / số thắng (Magic UI number-ticker) và vòng tỉ lệ thắng; lưu xong cập nhật
       phiên trong kho (thanh điều hướng đổi ngay). Kiểu `HoSoCongKhai` ở `packages/shared`
+- [x] **7.2** UC04: `application/van/DichVuLichSu.ts` (`lichSuCua`, `xemVan` — chỉ người đã chơi
+      ván hoặc quản trị viên; đã vẽ lên Class Diagram), REST `GET /api/lich-su` và
+      `/api/lich-su/:vanId`, kiểu `TomTatVanCongKhai`/`ChiTietVanCongKhai`. Kho Prisma trả `null`
+      cho mã ván không phải số (trước đó `BigInt()` ném lỗi). Web `screens/LichSu.tsx`: danh sách
+      ván (vai của mình, thắng/thua/hủy) và trang mở lại ván cũ (lật vai cả làng + diễn biến).
+      Tách `game/NhatKyVan.tsx` dùng chung với MH08 và sửa giờ nhật ký: tính từ sự kiện đầu tiên
+      (trước đó in thẳng mốc tuyệt đối của máy chủ). Kiểm thử: 3 bài REST (`lichSu.test.ts`) + hợp
+      đồng kho; thử thật trên PostgreSQL (người lạ 403, mã lạ 404)
 
 ---
 
 ## Đang làm
 
 **Giai đoạn 5 — giao diện chơi.** Xong 5.1–5.10; còn 5.11 (điện thoại thật qua LAN — cần người).
-Tiếp theo: G7 (xong 7.1, 7.4, 7.5; còn lịch sử, liên kết mời, xếp hạng, báo cáo, quản trị) → G6 → G8. Kiểm thử: 337 đạt, 7 bỏ
+Tiếp theo: G7 (xong 7.1, 7.2, 7.4, 7.5; còn liên kết mời, xếp hạng, báo cáo, quản trị) → G6 → G8. Kiểm thử: 340 đạt, 7 bỏ
 qua (Prisma, cần `DATABASE_URL_TEST`). Bàn giao chi tiết: `E:/Workspace/_scratch/WereWolf_Game/handoff/HANDOFF-2026-11-15-2024.md`.
 
 ---

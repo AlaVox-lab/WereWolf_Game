@@ -306,6 +306,7 @@ export function taoKhoPrisma(db: PrismaClient): KhoDuLieu {
         }));
       },
       async layVan(vanId) {
+        if (!/^\d{1,18}$/.test(vanId)) return null; // mã lạ từ đường dẫn — BigInt() sẽ ném lỗi
         const v = await db.vanDau.findUnique({
           where: { id: BigInt(vanId) },
           include: {

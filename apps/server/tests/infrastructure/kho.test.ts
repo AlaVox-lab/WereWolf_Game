@@ -134,6 +134,9 @@ function hopDong(ten: string, layKho: () => KhoDuLieu) {
       const ct = await kho.van.layVan(vanId);
       expect(ct?.nhatKy.map((s) => s.loai)).toEqual(['CHIA_VAI', 'KET_THUC']);
       expect(ct?.nguoiChoi).toHaveLength(6);
+      // Mã ván lấy từ đường dẫn REST — mã lạ hay không có thì trả null, không ném lỗi (7.2).
+      expect(await kho.van.layVan('khong-phai-so')).toBeNull();
+      expect(await kho.van.layVan('987654321')).toBeNull();
 
       expect(await kho.taiKhoan.layHoSo(ds[3]!.id)).toMatchObject({
         soVanDaChoi: 1,
