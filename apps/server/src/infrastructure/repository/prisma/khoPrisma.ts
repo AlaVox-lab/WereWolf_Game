@@ -31,7 +31,14 @@ type HsDb = {
 };
 
 const tk = (t: TkDb): TaiKhoanLuu => ({ ...t, id: String(t.id) });
-const hs = (h: HsDb): HoSoLuu => ({ ...h, taiKhoanId: String(h.taiKhoanId) });
+// Chọn đúng từng trường — dòng DB còn khóa chính BigInt, trải cả dòng thì JSON hỏng.
+const hs = (h: HsDb): HoSoLuu => ({
+  taiKhoanId: String(h.taiKhoanId),
+  bietDanh: h.bietDanh,
+  anhDaiDien: h.anhDaiDien,
+  soVanDaChoi: h.soVanDaChoi,
+  soVanThang: h.soVanThang,
+});
 const bc = (b: {
   id: bigint;
   vanId: bigint;

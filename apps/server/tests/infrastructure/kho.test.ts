@@ -36,11 +36,13 @@ function hopDong(ten: string, layKho: () => KhoDuLieu) {
       const tk = await kho.taiKhoan.tao({ tenDangNhap: ten, matKhauBam: 'h', bietDanh: 'Ngân' });
       expect((await kho.taiKhoan.timTheoTen(ten))?.id).toBe(tk.id);
       expect((await kho.taiKhoan.timTheoId(tk.id))?.tenDangNhap).toBe(ten);
-      expect(await kho.taiKhoan.layHoSo(tk.id)).toMatchObject({
-        bietDanh: 'Ngân',
-        soVanDaChoi: 0,
-        soVanThang: 0,
-      });
+      const hoSo = await kho.taiKhoan.layHoSo(tk.id);
+      expect(hoSo).toMatchObject({ bietDanh: 'Ngân', soVanDaChoi: 0, soVanThang: 0 });
+      // REST trả thẳng bản ghi này — phải chuyển được sang JSON, không lọt khóa BigInt của DB.
+      expect(Object.keys(hoSo!).sort()).toEqual(
+        ['anhDaiDien', 'bietDanh', 'soVanDaChoi', 'soVanThang', 'taiKhoanId'].sort(),
+      );
+      expect(() => JSON.stringify(hoSo)).not.toThrow();
       await expect(
         kho.taiKhoan.tao({ tenDangNhap: ten, matKhauBam: 'h', bietDanh: 'Trùng' }),
       ).rejects.toThrow();
