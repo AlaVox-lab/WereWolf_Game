@@ -357,6 +357,9 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
 - [x] **4.1** `prisma/schema.prisma` 17 bảng + trigger chặn sửa/xóa `nhat_ky_van`; cổng kho
       `application/kho/` với bản Prisma và bản bộ nhớ chung một bộ kiểm hợp đồng; `seed.ts`.
       PostgreSQL dời sang cổng **5433** — 5432 trên máy đang bị dự án khác chiếm
+- [x] **4.2** `DichVuTaiKhoan` (UC01, UC02, UC03) + lớp `TaiKhoan` ở `application/taikhoan`; bcryptjs,
+      JWT trong cookie httpOnly; REST `/api/tai-khoan/*` kiểm thân bằng Zod; tài khoản bị khóa mất
+      phiên ngay; mã lỗi dịch ra tiếng Việt ở tầng interface. 13 bài kiểm thử
 
 ---
 

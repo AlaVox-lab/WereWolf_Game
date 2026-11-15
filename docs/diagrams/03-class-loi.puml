@@ -96,7 +96,14 @@ class CauHinhVai {
   + tongSoVai() : int
   + kiemTraHopLe(soNguoi) : List<ViPhamCauHinh>
 }
-note top of TaiKhoan : Chưa cài — Giai đoạn 4
+note top of TaiKhoan : Quản lý người dùng — application/taikhoan,
+không thuộc luật chơi (ARCHITECTURE 5.4)
+class DichVuTaiKhoan {
+  + dangKy(tenDangNhap, bietDanh, matKhau) : ThongTinPhien
+  + dangNhap(tenDangNhap, matKhau) : ThongTinPhien
+  + capNhatHoSo(taiKhoanId, duLieu) : HoSoLuu
+}
+DichVuTaiKhoan ..> TaiKhoan : xác thực
 class PhongChoi {
   - maPhong : String
   - trangThai : TrangThaiPhong

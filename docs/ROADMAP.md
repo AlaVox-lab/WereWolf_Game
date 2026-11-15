@@ -304,7 +304,7 @@ thử (chưa cần giao diện).
 
 - [x] **4.1** `[C]` `prisma/schema.prisma` cho các bảng MVP (ARCHITECTURE mục 12), đủ ràng buộc
       `UNIQUE`; trigger chặn sửa/xóa `nhat_ky_van`; `seed.ts` tạo ba tài khoản mẫu
-- [ ] **4.2** `[C]` UC01, UC02: đăng ký, đăng nhập, đăng xuất; băm bcryptjs; JWT trong cookie
+- [x] **4.2** `[C]` UC01, UC02: đăng ký, đăng nhập, đăng xuất; băm bcryptjs; JWT trong cookie
       `httpOnly`; bắt tay Socket.IO đọc cùng cookie đó; tài khoản bị khóa không đăng nhập được
 - [ ] **4.3** `[C]` UC06, UC07, UC10: tạo phòng với mã 6 ký tự, vào phòng, rời phòng, chủ
       phòng loại người; tối đa 12; chuyển chủ phòng theo **Q11**

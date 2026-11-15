@@ -351,8 +351,12 @@ Theo mục 9.4 tài liệu gốc: `TaiKhoan`, `HoSoNguoiChoi`, `PhongChoi`, `Cau
 `VanDau`, `LuotChoi`, `NguoiChoi`, `HanhDongDem`, `KetQuaDem`, `PhienBauCu`, `PhieuBau`,
 `TinNhan`, `BaoCaoViPham`, `NhatKyVan`, `MuaGiai`, `BanGhiXepHang`.
 
-`TaiKhoan` và `HoSoNguoiChoi` là khái niệm quản lý người dùng, không thuộc luật chơi — đặt
-ở `infrastructure/auth` và `repository`, không đặt trong `domain/`. `NguoiChoi` là
+`TaiKhoan` và `HoSoNguoiChoi` là khái niệm quản lý người dùng, không thuộc luật chơi — không đặt
+trong `domain/`. **Đã cài** (4.2): `application/taikhoan/TaiKhoan.ts` (dịch vụ `DichVuTaiKhoan`
+dùng tới nên phải ở tầng ứng dụng, không ở hạ tầng); băm mật khẩu qua cổng `BoMatKhau`, bản cài
+bcryptjs ở `infrastructure/auth/matKhau.ts`; phiên JWT HS256 (jose) trong cookie httpOnly
+`ltm_phien` ở `infrastructure/auth/phien.ts`. Tầng `interface` dịch mã lỗi ra tiếng Việt
+(`interface/thongDiepLoi.ts`) — lõi chỉ ném mã. `NguoiChoi` là
 **hiện thân của tài khoản trong một ván**, chỉ mang mã tài khoản, không mang cả đối tượng.
 
 **Đã cài đặt trong `domain/van/`** (hạng mục 1.4):
@@ -695,7 +699,8 @@ Theo mục 13.2 tài liệu gốc. Không nêu thêm mẫu nào không chỉ ra 
 
 ## 11. Hợp đồng giữa máy chủ và giao diện
 
-*Chưa cài đặt.* Khai báo **một lần** trong `packages/shared`, hai phía dùng chung kiểu.
+Khai báo **một lần** trong `packages/shared`, hai phía dùng chung kiểu. Mọi lỗi có dạng
+`PhanHoiLoi { loi, thongDiep }`. **Đã cài**: REST tài khoản (4.2).
 
 ### 11.1. REST — việc ngoài ván
 
@@ -704,6 +709,7 @@ Theo mục 13.2 tài liệu gốc. Không nêu thêm mẫu nào không chỉ ra 
 | `POST` | `/api/tai-khoan/dang-ky` | UC01 |
 | `POST` | `/api/tai-khoan/dang-nhap` · `/dang-xuat` | UC02 |
 | `GET` | `/api/tai-khoan/toi` | Phiên hiện tại |
+| `GET` · `PATCH` | `/api/tai-khoan/ho-so` | UC03 |
 | `POST` | `/api/phong` | UC06 |
 | `GET` | `/api/phong/:maPhong` | Xem phòng trước khi vào |
 

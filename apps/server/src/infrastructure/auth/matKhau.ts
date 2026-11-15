@@ -13,3 +13,6 @@ export function soMatKhau(matKhau: string, banBam: string): Promise<boolean> {
   if (!banBam.startsWith('$2')) return Promise.resolve(false);
   return bcrypt.compare(matKhau, banBam);
 }
+
+/** Bản cài cổng `BoMatKhau` của tầng ứng dụng. */
+export const boMatKhauBcrypt = { bam: bamMatKhau, so: soMatKhau };
