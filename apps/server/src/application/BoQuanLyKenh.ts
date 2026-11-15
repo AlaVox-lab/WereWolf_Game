@@ -91,6 +91,11 @@ export class BoQuanLyKenh {
     return tinNhan;
   }
 
+  /** Mọi tin nhắn của ván, mọi kênh — chỉ để lưu khi kết thúc (4.10), không gửi cho ai. */
+  layTatCaTinNhan(): readonly TinNhan[] {
+    return this.lichSu;
+  }
+
   /** Lịch sử kênh `loai` cho người xem `nguoiXemId` — không có quyền xem thì ném lỗi. */
   layTinNhan(loai: LoaiKenh, nguoiXemId: string): readonly TinNhan[] {
     if (!this.layKenh(loai).coTheXem(this.van.layNguoiChoi(nguoiXemId))) {

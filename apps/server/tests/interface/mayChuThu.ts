@@ -1,38 +1,80 @@
-// Bộ dựng máy chủ thử dùng chung cho kiểm thử tầng interface — kho bộ nhớ, cổng ngẫu nhiên.
-// Không phải tệp kiểm thử.
+// Bộ dựng máy chủ thử dùng chung cho kiểm thử tầng interface — kho bộ nhớ, cổng ngẫu nhiên, thời
+// lượng pha rút ngắn để một ván chạy trong vài giây. Không phải tệp kiểm thử.
+import type { LenhNguoiChoi, SuKienMayChu } from '@moonvillage/shared';
 import type { AddressInfo } from 'node:net';
-import { SoDangKyPhong } from '../../src/application/phong/SoDangKyPhong.js';
-import { DichVuTaiKhoan } from '../../src/application/taikhoan/DichVuTaiKhoan.js';
-import { NgauNhienCoHat } from '../../src/domain/chung/NguonNgauNhien.js';
-import { boMatKhauBcrypt } from '../../src/infrastructure/auth/matKhau.js';
-import { taoBoPhien } from '../../src/infrastructure/auth/phien.js';
+import { io as ketNoi, type Socket } from 'socket.io-client';
+import type { CauHinhThoiGian } from '../../src/application/CauHinhThoiGian.js';
+import { LoaiVai } from '../../src/domain/chung/LoaiVai.js';
 import { taoKhoBoNho } from '../../src/infrastructure/repository/boNho/khoBoNho.js';
-import { createApp } from '../../src/interface/api/app.js';
-import { taoRouterPhong } from '../../src/interface/api/phong.js';
+import { lapRapMayChu, type CauHinhMayChu } from '../../src/interface/lapRap.js';
 
-export async function taoMayChuThu() {
-  const kho = taoKhoBoNho();
-  const taiKhoan = new DichVuTaiKhoan(kho.taiKhoan, boMatKhauBcrypt);
-  const phong = new SoDangKyPhong({
-    kho,
-    nguonNgauNhien: new NgauNhienCoHat(7),
+export const THOI_GIAN_NHANH: CauHinhThoiGian = {
+  luotVai: {
+    [LoaiVai.BaoVe]: 400,
+    [LoaiVai.Soi]: 500,
+    [LoaiVai.TienTri]: 400,
+    [LoaiVai.PhuThuy]: 400,
+  },
+  thoSanBan: 400,
+  buocGiaToiThieu: 40,
+  buocGiaToiDa: 80,
+  congBo: 40,
+  thaoLuan: 80,
+  boPhieu: 500,
+  bauLai: 300,
+};
+
+export async function taoMayChuThu(them: Partial<CauHinhMayChu> = {}) {
+  const may = lapRapMayChu({
+    kho: taoKhoBoNho(),
+    biMatPhien: 'bi-mat-kiem-thu',
     choPhepNguoiChoiAo: true,
+    thoiGian: THOI_GIAN_NHANH,
+    thoiGianXemVai: 60,
+    nguoiChoiAo: { treToiThieu: 5, treToiDa: 25 },
+    chuKyLamMoiMs: 100,
+    ...them,
   });
-  const app = createApp({
-    taiKhoan,
-    phien: taoBoPhien('bi-mat-kiem-thu'),
-    routerThem: [taoRouterPhong(phong)],
+  may.http.listen(0);
+  await new Promise<void>((r) => may.http.once('listening', () => r()));
+  const url = `http://localhost:${(may.http.address() as AddressInfo).port}`;
+  return { ...may, url };
+}
+
+export type SocketThu = Socket<SuKienMayChu, LenhNguoiChoi>;
+
+/** Mở kết nối Socket.IO mang cookie phiên — như trình duyệt đã đăng nhập. */
+export function moSocket(
+  url: string,
+  cookie: string,
+  ganTruoc?: (s: SocketThu) => void,
+): Promise<SocketThu> {
+  const s: SocketThu = ketNoi(url, {
+    path: '/socket.io',
+    transports: ['websocket'],
+    extraHeaders: { cookie },
+    reconnection: false,
+    forceNew: true,
+    autoConnect: false,
   });
-  const server = app.listen(0);
-  await new Promise<void>((r) => server.once('listening', () => r()));
-  const url = `http://localhost:${(server.address() as AddressInfo).port}`;
-  return {
-    url,
-    kho,
-    taiKhoan,
-    phong,
-    dong: () => new Promise<void>((r) => server.close(() => r())),
-  };
+  // Gắn trình nghe trước khi nối: máy chủ gửi ảnh chụp ngay lúc kết nối (BR13).
+  ganTruoc?.(s);
+  s.connect();
+  return new Promise((ok, loi) => {
+    s.once('connect', () => ok(s));
+    s.once('connect_error', (e) => loi(e));
+  });
+}
+
+/** Gửi lệnh và chờ acknowledgement. */
+export function lenh<K extends keyof LenhNguoiChoi>(
+  s: SocketThu,
+  ten: K,
+  duLieu: Parameters<LenhNguoiChoi[K]>[0],
+) {
+  return new Promise<{ ok: boolean; loi?: string }>((ok) =>
+    (s.emit as (...a: unknown[]) => void)(ten, duLieu, ok),
+  );
 }
 
 /** Trình duyệt tối giản: nhớ cookie phiên giữa các lần gọi. */
@@ -57,4 +99,15 @@ export function taoNguoiDung(url: string) {
       return { status: res.status, body: chu ? JSON.parse(chu) : null };
     },
   };
+}
+
+/** Đăng ký một tài khoản mới, trả người dùng đã đăng nhập. */
+export async function nguoiMoi(url: string, ten: string) {
+  const u = taoNguoiDung(url);
+  await u.goi('/api/tai-khoan/dang-ky', 'POST', {
+    tenDangNhap: ten,
+    bietDanh: ten,
+    matKhau: 'matkhau123',
+  });
+  return u;
 }

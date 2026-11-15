@@ -714,7 +714,16 @@ Theo mục 13.2 tài liệu gốc. Không nêu thêm mẫu nào không chỉ ra 
 ## 11. Hợp đồng giữa máy chủ và giao diện
 
 Khai báo **một lần** trong `packages/shared`, hai phía dùng chung kiểu. Mọi lỗi có dạng
-`PhanHoiLoi { loi, thongDiep }`. **Đã cài**: REST tài khoản (4.2).
+`PhanHoiLoi { loi, thongDiep }`. **Đã cài**: REST (4.2, 4.3), Socket.IO (4.7–4.9) — hợp đồng ở
+`packages/shared/src/socket.ts`, cổng ở `interface/ws/congSocket.ts`, lắp ráp ở
+`interface/lapRap.ts` (dùng chung cho `main.ts` và kiểm thử).
+
+**Cổng Socket.IO như đã cài**: bắt tay đọc cùng cookie phiên với REST; mỗi tài khoản một phòng
+socket `tk:<id>` (nhiều tab). Mọi dữ liệu ván gửi đi là `GocNhinNguoiChoi` của **chính** người
+nhận — dựng lại sau mỗi sự kiện ván và mỗi lệnh, chỉ gửi khi khác lần trước, cộng một nhịp làm
+mới mỗi giây (tiến độ bỏ phiếu của người chơi ảo không phát sự kiện). Lệnh kiểm bằng Zod, trả lời
+qua acknowledgement. BR13: kết nối lại nhận ngay ảnh chụp phòng, góc nhìn, lịch sử kênh. Q04: quá
+nửa người còn sống mất kết nối liên tục quá 120 giây thì `SoDangKyVan.huyVan()`.
 
 ### 11.1. REST — việc ngoài ván
 
@@ -738,8 +747,9 @@ Mỗi lệnh kiểm bằng lược đồ Zod và trả lời qua *acknowledgemen
 | Lệnh | Ai gửi | Use case |
 |---|---|---|
 | `phong:vao` · `phong:roi` | Người chơi | UC07 |
-| `phong:cau-hinh-vai` · `phong:cau-hinh-luat` | Chủ phòng | UC08, UC25 |
-| `phong:loai` · `phong:them-nguoi-ao` | Chủ phòng | UC10, kiểm thử |
+| `phong:cau-hinh-vai` · `phong:goi-y-vai` · `phong:cau-hinh-luat` | Chủ phòng | UC08, UC25 |
+| `phong:loai` · `phong:cong-khai` | Chủ phòng | UC10, MH02 |
+| `phong:them-nguoi-ao` · `phong:bot-nguoi-ao` | Chủ phòng | 4.5 |
 | `phong:bat-dau` | Chủ phòng | UC11 |
 | `van:hanh-dong` | Người được mời hành động | UC13, UC17 |
 | `van:bo-phieu` | Người còn sống | UC16 |
@@ -751,7 +761,9 @@ Mỗi lệnh kiểm bằng lược đồ Zod và trả lời qua *acknowledgemen
 |---|---|---|
 | `phong:cap-nhat` | Cả phòng | Thành viên, cấu hình vai, tóm tắt bộ luật |
 | `van:goc-nhin` | **Riêng từng người** | `GocNhinNguoiChoi` — mục 8 |
-| `kenh:tin-nhan` | Phòng socket của kênh | Một tin nhắn |
+| `kenh:tin-nhan` | Người xem kênh lúc phát | Một tin nhắn |
+| `kenh:lich-su` | Riêng từng người | Lịch sử các kênh mình xem được — khi vào ván, kết nối lại |
+| `phien:ket-thuc` | Riêng từng người | Tài khoản bị khóa — buộc rời (UC23) |
 
 Thêm một điểm cuối hoặc sự kiện mới thì cập nhật mục này.
 

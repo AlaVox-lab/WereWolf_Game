@@ -369,6 +369,9 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       `CHO_PHEP_NGUOI_CHOI_AO=true`; mỗi người ảo chỉ ngồi một phòng
 - [x] **4.6** `SoDangKyVan`: UC11 bắt đầu ván từ phòng (chia vai, dựng bộ điều phối, người chơi
       ảo vào ghế, chờ xem thẻ), khóa phòng, mở lại khi xong; hủy ván Q04; Class Diagram thêm lớp
+- [x] **4.7–4.9** Cổng Socket.IO `interface/ws/congSocket.ts`: bắt tay bằng cookie, lệnh phòng và
+      ván kiểm Zod, chỉ gửi góc nhìn riêng (ST05 rà gói tin trong kiểm thử), kênh chat UC18 qua
+      `BoQuanLyKenh`, BR13 kết nối lại, Q04 hủy ván; `interface/lapRap.ts` lắp ráp dùng chung
 
 ---
 

@@ -314,12 +314,12 @@ thử (chưa cần giao diện).
       `CHO_PHEP_NGUOI_CHOI_AO=true`
 - [x] **4.6** `[A]` UC11: bắt đầu ván → `BoChiaVai` → `BoDieuPhoiVan`; sổ đăng ký ván đang chạy
       trong bộ nhớ; khóa phòng không cho người mới vào
-- [ ] **4.7** `[B]` Cổng Socket.IO: phòng socket cá nhân, kênh Sói, kênh người chết; ánh xạ đối
+- [x] **4.7** `[B]` Cổng Socket.IO: phòng socket cá nhân, kênh Sói, kênh người chết; ánh xạ đối
       tượng nhận của `BoPhatSuKien`; nhận lệnh `van:hanh-dong`, `van:bo-phieu` qua lược đồ Zod
       rồi chuyển vào `CongLuaChon`; **mọi dữ liệu ván gửi đi là `GocNhinNguoiChoi`**
-- [ ] **4.8** `[B]` UC18: `kenh:gui` kiểm quyền bằng `BoQuanLyKenh`, lưu `tin_nhan`, phát tới
+- [x] **4.8** `[B]` UC18: `kenh:gui` kiểm quyền bằng `BoQuanLyKenh`, lưu `tin_nhan`, phát tới
       đúng phòng socket của kênh
-- [ ] **4.9** `[A]` BR13: mất kết nối không dừng ván, lượt bị bỏ lỡ coi như bỏ qua; kết nối lại
+- [x] **4.9** `[A]` BR13: mất kết nối không dừng ván, lượt bị bỏ lỡ coi như bỏ qua; kết nối lại
       nhận ngay ảnh chụp góc nhìn hiện tại; hủy ván theo **Q04**
 - [ ] **4.10** `[B]` Lưu bền: ván, người chơi trong ván, lượt, ý định, phiếu, nhật ký; UC20 —
       khi kết thúc thì cộng `soVanDaChoi`, `soVanThang` vào hồ sơ
