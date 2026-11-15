@@ -321,7 +321,7 @@ thử (chưa cần giao diện).
       đúng phòng socket của kênh
 - [x] **4.9** `[A]` BR13: mất kết nối không dừng ván, lượt bị bỏ lỡ coi như bỏ qua; kết nối lại
       nhận ngay ảnh chụp góc nhìn hiện tại; hủy ván theo **Q04**
-- [ ] **4.10** `[B]` Lưu bền: ván, người chơi trong ván, lượt, ý định, phiếu, nhật ký; UC20 —
+- [x] **4.10** `[B]` Lưu bền: ván, người chơi trong ván, lượt, ý định, phiếu, nhật ký; UC20 —
       khi kết thúc thì cộng `soVanDaChoi`, `soVanThang` vào hồ sơ
 - [ ] **4.11** `[A]` Kiểm thử tích hợp: 2 ứng dụng khách socket + 4 người chơi ảo chơi trọn
       một ván; **bộ chặn gói tin quét mọi gói máy chủ gửi và khẳng định không có vai người

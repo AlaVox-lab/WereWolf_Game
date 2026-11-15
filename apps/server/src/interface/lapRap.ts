@@ -5,6 +5,7 @@ import type { CauHinhThoiGian } from '../application/CauHinhThoiGian.js';
 import type { KhoDuLieu } from '../application/kho/KhoDuLieu.js';
 import { SoDangKyPhong } from '../application/phong/SoDangKyPhong.js';
 import { DichVuTaiKhoan } from '../application/taikhoan/DichVuTaiKhoan.js';
+import { DichVuLuuVan } from '../application/van/DichVuLuuVan.js';
 import { SoDangKyVan } from '../application/van/SoDangKyVan.js';
 import type { DongHo } from '../domain/chung/DongHo.js';
 import type { NguonNgauNhien } from '../domain/chung/NguonNgauNhien.js';
@@ -49,6 +50,14 @@ export function lapRapMayChu(ch: CauHinhMayChu) {
     choPhepNguoiChoiAo: ch.choPhepNguoiChoiAo,
     soDangKyVan: van,
   });
+  // UC20 — ván xong thì lưu (4.10). Lỗi lưu không làm hỏng phòng; ghi nhật ký máy chủ.
+  const luuVan = new DichVuLuuVan(ch.kho.van, (ma) => phong.phongIdCua(ma));
+  const vanDaLuu: Promise<string>[] = [];
+  van.dangKyKetThuc(async (v) => {
+    const hua = luuVan.luu(v, dongHo.bayGio());
+    vanDaLuu.push(hua);
+    await hua;
+  });
   const app = createApp({ taiKhoan, phien, routerThem: [taoRouterPhong(phong)] });
   const http = createServer(app);
   const socket = moCongSocket(http, {
@@ -68,6 +77,8 @@ export function lapRapMayChu(ch: CauHinhMayChu) {
     phong,
     van,
     socket,
+    /** Lời hứa lưu của các ván đã kết thúc — kiểm thử chờ cho chắc. */
+    vanDaLuu,
     async dong() {
       await socket.dong();
       await new Promise<void>((r) => http.close(() => r()));

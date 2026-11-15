@@ -372,6 +372,9 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
 - [x] **4.7–4.9** Cổng Socket.IO `interface/ws/congSocket.ts`: bắt tay bằng cookie, lệnh phòng và
       ván kiểm Zod, chỉ gửi góc nhìn riêng (ST05 rà gói tin trong kiểm thử), kênh chat UC18 qua
       `BoQuanLyKenh`, BR13 kết nối lại, Q04 hủy ván; `interface/lapRap.ts` lắp ráp dùng chung
+- [x] **4.10** `DichVuLuuVan` (UC20): ván xong ghi người chơi, lượt, ý định, kết quả đêm, phiên,
+      phiếu, tin nhắn, nhật ký; cộng hồ sơ và điểm mùa (thắng +3, thua +1) chỉ cho người thật; ván
+      hủy vẫn ghi nhưng không cộng. Đã chạy trên PostgreSQL thật
 
 ---
 

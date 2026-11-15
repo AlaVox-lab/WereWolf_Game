@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { SoDangKyPhong } from '../../src/application/phong/SoDangKyPhong.js';
 import type { ThongTinPhien } from '../../src/application/taikhoan/DichVuTaiKhoan.js';
+import { DichVuLuuVan } from '../../src/application/van/DichVuLuuVan.js';
 import { SoDangKyVan, type VanDangChay } from '../../src/application/van/SoDangKyVan.js';
 import { DongHoGia, NgauNhienCoHat, Phe, TrangThaiVan } from '../../src/domain/chung/index.js';
 import { NguoiChoiAo } from '../../src/infrastructure/bot/NguoiChoiAo.js';
@@ -100,5 +101,42 @@ describe('SoDangKyVan — bắt đầu và chạy trọn ván', () => {
     expect(ketThuc[0]).toMatchObject({ vanId, ketQua: null });
     expect(ketThuc[0]!.van.trangThai).toBe(TrangThaiVan.HUY_VAN);
     expect(phong.chieu(ma).trangThai).toBe('CHO');
+  });
+});
+
+describe('DichVuLuuVan — bản ghi ván UC20 (4.10)', () => {
+  it('ván xong: đủ người, lượt, nhật ký; chỉ người thật được cộng điểm thắng +3, thua +1', async () => {
+    const { dongHo, phong, ketThuc } = dung(5);
+    const ma = await phongSanSang(phong);
+    phong.batDauVan(ma, 't1');
+    await chayHet(dongHo, () => ketThuc.length > 0);
+    const v = ketThuc[0]!;
+    const luu = new DichVuLuuVan(taoKhoBoNho().van, () => 'phong-1');
+    const bg = luu.dungBanGhi(v, dongHo.bayGio());
+    expect(bg).toMatchObject({ phongId: 'phong-1', trangThai: 'KET_THUC', pheThang: v.ketQua });
+    expect(bg.nguoiChoi).toHaveLength(6);
+    expect(bg.luot).toHaveLength(bg.soLuot);
+    expect(bg.nhatKy[0]!.loai).toBe('CHIA_VAI');
+    expect(bg.nhatKy.at(-1)!.loai).toBe('KET_THUC');
+    expect(bg.nhatKy.every((s, i) => i === 0 || s.thoiDiem >= bg.nhatKy[i - 1]!.thoiDiem)).toBe(
+      true,
+    );
+    const toi = v.van.layNguoiChoi('t1');
+    const thang = toi.vaiTro.phe === v.ketQua;
+    expect(bg.diemCong).toEqual([{ taiKhoanId: 't1', diem: thang ? 3 : 1, thang }]);
+    expect(
+      bg.luot
+        .flatMap((l) => l.phien)
+        .every((p) => ['TREO_CO', 'KHONG_AI', 'BAU_LAI'].includes(p.ketQua)),
+    ).toBe(true);
+  });
+
+  it('ván bị hủy (Q04) vẫn ghi lại nhưng không cộng điểm cho ai', async () => {
+    const { van, phong, ketThuc } = dung();
+    const ma = await phongSanSang(phong);
+    const vanId = phong.batDauVan(ma, 't1');
+    van.huyVan(vanId);
+    const bg = new DichVuLuuVan(taoKhoBoNho().van, () => 'p').dungBanGhi(ketThuc[0]!, 0);
+    expect(bg).toMatchObject({ trangThai: 'HUY_VAN', pheThang: null, diemCong: [] });
   });
 });

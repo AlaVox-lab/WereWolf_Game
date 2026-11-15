@@ -172,6 +172,7 @@ bám theo nó. Còn phải cập nhật lại vào tài liệu gốc `.docx`.
 |---|---|---|---|
 | Q12 | UC25 bước 4 yêu cầu "kiểm tra tính hợp lệ của tổ hợp đã chọn" và có luồng ngoại lệ 4a "tổ hợp không hợp lệ", nhưng tài liệu **không nêu tổ hợp nào bị cấm** — sáu quy tắc độc lập với nhau | Không cấm tổ hợp nào; `BoLuatChoi.kiemTraHopLe()` hiện luôn trả rỗng và giữ làm điểm mở rộng. Đã cài theo đề xuất này — chốt khác thì chỉ sửa một phương thức | 1.2, 4.4 |
 | Q13 | **Mục tiêu hợp lệ** tài liệu không nêu: Sói cắn đồng loại được không? Tiên tri soi chính mình? Phù thủy đầu độc chính mình? | Sói chỉ cắn người không thuộc phe Sói; Tiên tri không soi chính mình; Phù thủy không độc chính mình (vẫn tự cứu được khi BR04 tắt). Đã cài theo đề xuất — mỗi điểm là một dòng lọc trong `layDanhSachMucTieu()` của vai đó | 1.3 |
+| Q14 | **Điểm xếp hạng mùa** (ROADMAP 7.4) tài liệu gốc chưa định nghĩa | Thắng +3, thua +1 cho người thật chơi trọn ván; ván hủy không tính; bằng điểm xét tỉ lệ thắng rồi số ván — **người dùng chốt 15/11/2026** | 4.10, 7.5 |
 
 ---
 

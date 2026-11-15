@@ -126,6 +126,12 @@ class SoDangKyVan {
 }
 SoDangKyPhong ..> SoDangKyVan : UC11 bắt đầu ván
 SoDangKyVan "1" o-- "0..*" BoDieuPhoiVan : ván đang chạy
+class DichVuLuuVan {
+  + dungBanGhi(van, ketThucLuc) : VanDaKetThuc
+  + luu(van, ketThucLuc) : String
+}
+note right of DichVuLuuVan : UC20 — ván xong thì ghi chín bảng nhóm ván,\ncộng hồ sơ và điểm mùa (thắng +3, thua +1) cho người thật
+SoDangKyVan ..> DichVuLuuVan : báo kết thúc
 class VanDau {
   + id : String
   + boLuatChoi : BoLuatChoi
