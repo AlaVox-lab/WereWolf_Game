@@ -436,13 +436,20 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       điều kiện báo cáo, quyền AC03, khóa từ báo cáo → bị đẩy khỏi phòng + ngắt socket + không
       đăng nhập được, mở khóa, không khóa quản trị viên, tổng quan). Thử thật trên trình duyệt +
       PostgreSQL với ván hai người thật
+- [x] **8.1–8.4** (một commit theo yêu cầu người dùng): xuất lại 8 sơ đồ (`npm run so-do`,
+      PlantUML trong Docker); bảng ảnh màn thật MH01–MH11 có cột nguồn, thêm ảnh MH03b, MH04,
+      MH05, MH06 từ ván thật; viết lại bảng đường dẫn ở `docs/design/README.md`;
+      `docs/bao-ve/kich-ban-trinh-dien.md` (10 phút, phương án dự phòng) và
+      `docs/bao-ve/cau-hoi-du-kien.md` (10 câu). **8.5 còn** — luyện trình diễn cần cả nhóm
 
 ---
 
 ## Đang làm
 
 **Giai đoạn 5 — giao diện chơi.** Xong 5.1–5.10; còn 5.11 (điện thoại thật qua LAN — cần người).
-**Giai đoạn 7 xong** (mọi UC01–UC25 có đường chạy trên giao diện). Tiếp theo: G8 → G6. Kiểm thử: 347 đạt, 7 bỏ
+**Giai đoạn 7 xong** (mọi UC01–UC25 có đường chạy trên giao diện). **G8**: xong 8.1–8.4, còn
+8.5 (luyện tập — cần người). Còn lại: G6 (biên bản kiểm thử, Docker, buổi chơi thử), 5.11,
+0.9, đánh dấu 3.4–3.5. Kiểm thử: 347 đạt, 7 bỏ
 qua (Prisma, cần `DATABASE_URL_TEST`). Bàn giao chi tiết: `E:/Workspace/_scratch/WereWolf_Game/handoff/HANDOFF-2026-11-15-2024.md`.
 
 ---

@@ -423,14 +423,22 @@ diện; bảng truy vết phụ lục A không còn ô trống.
 
 **Tuần 15** · Mốc M6
 
-- [ ] **8.1** `[C]` Xuất ảnh bảy sơ đồ từ `docs/diagrams/` phiên bản cuối, chèn báo cáo
-- [ ] **8.2** `[ALL]` Ảnh chụp màn hình thật cho MH01–MH11, đặt cạnh ảnh thiết kế tương ứng
-- [ ] **8.3** `[ALL]` Kịch bản trình diễn 10 phút: chơi một ván có dây chuyền Thợ săn, bật tắt
+- [x] **8.1** `[C]` Xuất ảnh bảy sơ đồ từ `docs/diagrams/` phiên bản cuối, chèn báo cáo
+      · *16/11*: `npm run so-do` xuất 8 sơ đồ (kèm ERD) ra `docs/diagrams/out/` (SVG + PNG,
+      không commit) sau khi Class Diagram thêm các dịch vụ G7
+- [x] **8.2** `[ALL]` Ảnh chụp màn hình thật cho MH01–MH11, đặt cạnh ảnh thiết kế tương ứng
+      · bảng MH01–MH11 kèm cột nguồn (ván thật / ván mẫu) ở `docs/design/README.md`
+- [x] **8.3** `[ALL]` Kịch bản trình diễn 10 phút: chơi một ván có dây chuyền Thợ săn, bật tắt
       một quy tắc để thấy hành vi đổi (cặp TC08/TC16), mở công cụ phát triển chứng minh ST05
-- [ ] **8.4** `[ALL]` Chuẩn bị câu hỏi dự kiến: vì sao tách ghi ý định và giải quyết; vì sao
+      · `docs/bao-ve/kich-ban-trinh-dien.md` — dòng thời gian từng phút; dây chuyền Thợ săn
+      chứng minh bằng ST04 (vai chia ngẫu nhiên nên ván trực tiếp không bảo đảm có)
+- [x] **8.4** `[ALL]` Chuẩn bị câu hỏi dự kiến: vì sao tách ghi ý định và giải quyết; vì sao
       Chủ phòng kế thừa Người chơi; vì sao Thợ săn là `extend`; mẫu nào ở đâu
+      · `docs/bao-ve/cau-hoi-du-kien.md` — 10 câu, mỗi câu chỉ vào mã / sơ đồ / bài kiểm
 - [ ] **8.5** `[ALL]` Luyện trình diễn ít nhất hai lần; phương án dự phòng khi mạng lỗi (chạy
       toàn bộ trên một máy với người chơi ảo)
+      · phương án dự phòng đã viết trong kịch bản (`KHO=bo-nho`, `/van-mau`); **còn** hai buổi
+      luyện — cần cả nhóm
 
 ---
 

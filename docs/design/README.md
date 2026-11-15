@@ -1,18 +1,25 @@
 # Thiết kế giao diện — Làng Trăng Mờ
 
-Thiết kế Giai đoạn 3 được dựng **thẳng thành bản chạy được** trong `apps/web`. Ảnh trong thư mục
-này chụp từ bản chạy đó.
+Thiết kế Giai đoạn 3 được dựng **thẳng thành bản chạy được** trong `apps/web`, rồi nối máy chủ
+thật ở Giai đoạn 5 và 7. Ảnh trong thư mục này chụp từ bản chạy đó (mục *Ảnh màn thật*).
 
 ```bash
+npm run dev:server
 npm run dev:web
 ```
 
-Mở `http://localhost:5173`:
+Mở `http://localhost:5173` (tài khoản seed: `ngan` / `langtrang1`, quản trị `quantri` / `quantri123`):
 
 | Đường dẫn | Màn | Ghi chú |
 |---|---|---|
-| `/dang-nhap`, `/dang-ky` | MH01 — UC02, UC01 | **Chỉ giao diện**: kiểm dữ liệu nhập rồi mở ván mẫu. Máy chủ tài khoản làm ở ROADMAP 4.1–4.2 |
-| `/van-mau` | MH04–MH08 | Phát lại một ván mô phỏng thật (8 người, hạt giống 1). Đổi ghế để xem bằng mắt người khác; tới lượt người xem thì tự dừng chờ chọn |
+| `/dang-nhap`, `/dang-ky` | MH01 — UC02, UC01 | Gọi API thật; `?tiep=` đưa về trang trước (liên kết mời) |
+| `/` | MH02 — UC06, UC07 | Dựng phòng, vào bằng mã sáu ô, phòng công khai |
+| `/phong/:ma` | MH03, MH03b → MH04–MH08 | Phòng chờ và cấu hình luật; khi ván bắt đầu là màn chơi 3D thật qua Socket.IO. Cũng là liên kết mời (UC09) |
+| `/lich-su`, `/lich-su/:vanId` | UC04, UC21 | Ván đã chơi, mở lại nhật ký, báo cáo vi phạm |
+| `/xep-hang` | MH10 — UC05 | Bảng mùa hiện tại |
+| `/ho-so` | MH09 — UC03 | Đổi tên, ảnh đại diện, thống kê |
+| `/quan-tri` | MH11 — UC22–UC24 | Chỉ quản trị viên |
+| `/van-mau` | MH04–MH08 | Phát lại một ván mô phỏng (8 người, hạt giống 1), không cần đăng nhập — dùng khi trình diễn mất mạng |
 
 Tạo lại ván mẫu: `npm run xuat-xem-truoc`.
 
@@ -70,22 +77,32 @@ khung 2:3, lưu ở `apps/web/public/the-vai/`; dữ liệu nguồn ở `nguon.j
 Không dùng bộ thẻ *Ultimate Werewolf* hay *Loups-Garous de Thiercelieux*: tranh có bản quyền. Các bộ
 "miễn phí" trên mạng đều không ghi giấy phép.
 
-## Ảnh
+## Ảnh màn thật (ROADMAP 8.2)
 
-| Tệp | Màn |
-|---|---|
-| `mh01-dang-nhap.jpg` | MH01 — đăng nhập: tia trăng, quạt thẻ, khung Magic Card |
-| `mh01-dang-ky-bao-loi.jpg` | MH01 — đăng ký, gửi trống: báo lỗi từng ô |
-| `mh02-trang-chu.jpg` | MH02 — trang chủ: dựng phòng, nhập mã sáu ô, phòng đang mở cửa |
-| `mh03-phong-cho.jpg` | MH03 — phòng chờ: bàn tròn mười hai ghế, bộ vai có kiểm tức thời |
-| `mh08-ket-thuc.jpg` | MH08 — ván thật kết thúc: phe thắng, lật vai cả làng, "Về phòng chờ" |
-| `mh09-ho-so.jpg` | MH09 — hồ sơ: thống kê, đổi tên, chọn tranh thẻ làm ảnh đại diện |
-| `uc04-lich-su.jpg` | UC04 — mở lại ván cũ: lật vai cả làng, diễn biến từng lượt |
-| `mh10-xep-hang.jpg` | MH10 — bảng vàng mùa: bục ba người đầu và bảng điểm |
-| `mh11-quan-tri.jpg` | MH11 — quản trị: số liệu, ván thắng theo phe, thẻ báo cáo và tài khoản |
-| `mh04-the-vai.jpg` | MH04 — thẻ Bảo vệ lật ngửa |
-| `mh05-dem-3d.jpg` | MH05 — đêm thứ hai, lượt Bảo vệ: quân người chết đã ngã, bảng việc có vòng đếm ngược |
-| `mh07-treo-co-3d.jpg` | MH07 — cảnh treo cổ sau bỏ phiếu |
+Thiết kế dựng thẳng thành mã nên ảnh thiết kế **chính là** ảnh màn chạy. Cột *Nguồn* cho biết
+ảnh chụp từ ván thật (máy chủ + PostgreSQL, 1–2 người thật và người chơi ảo) hay từ ván mẫu.
+
+| Màn | Tệp | Nội dung | Nguồn |
+|---|---|---|---|
+| MH01 | `mh01-dang-nhap.jpg` | Đăng nhập: tia trăng, quạt thẻ, khung Magic Card | bản chạy |
+| MH01 | `mh01-dang-ky-bao-loi.jpg` | Đăng ký gửi trống: báo lỗi từng ô | bản chạy |
+| MH02 | `mh02-trang-chu.jpg` | Dựng phòng, nhập mã sáu ô, phòng đang mở cửa | ván thật |
+| MH03 | `mh03-phong-cho.jpg` | Bàn tròn mười hai ghế, bộ vai có kiểm tức thời | ván thật |
+| MH03b | `mh03b-luat-choi.jpg` | Thẻ "Luật chơi": sáu công tắc kèm nội dung luật | ván thật |
+| MH04 | `mh04-the-vai-that.jpg` | Thẻ Sói lật ngửa lúc chia bài | ván thật |
+| MH04 | `mh04-the-vai.jpg` | Thẻ Bảo vệ lật ngửa | ván mẫu |
+| MH05 | `mh05-dem-kenh-soi.jpg` | Đêm thứ nhất, lượt Sói: kênh "Bầy Sói" tự mở, bảng việc | ván thật |
+| MH05 | `mh05-dem-3d.jpg` | Đêm thứ hai, lượt Bảo vệ: quân người chết đã ngã | ván mẫu |
+| MH06 | `mh06-ngay-thao-luan.jpg` | Ban ngày, thảo luận: kênh chung, đồng hồ pha | ván thật |
+| MH07 | `mh07-treo-co-3d.jpg` | Cảnh treo cổ sau bỏ phiếu | ván mẫu |
+| MH08 | `mh08-ket-thuc.jpg` | Phe thắng, lật vai cả làng, "Về phòng chờ" | ván thật |
+| MH09 | `mh09-ho-so.jpg` | Thống kê, đổi tên, chọn tranh thẻ làm ảnh đại diện | ván thật |
+| MH10 | `mh10-xep-hang.jpg` | Bục ba người đầu và bảng điểm mùa | ván thật |
+| MH11 | `mh11-quan-tri.jpg` | Số liệu, ván thắng theo phe, thẻ báo cáo, tài khoản | ván thật |
+| UC04 | `uc04-lich-su.jpg` | Mở lại ván cũ: lật vai cả làng, diễn biến từng lượt | ván thật |
+
+Ảnh chụp trong khung xem trước của trình duyệt nên có tấm bị cắt mép phải; chụp lại toàn màn
+hình trước khi chèn báo cáo nếu cần.
 
 ## Còn thiếu
 
