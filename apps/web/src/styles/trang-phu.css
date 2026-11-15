@@ -1,0 +1,141 @@
+/* Các trang phụ Giai đoạn 7: hồ sơ MH09, lịch sử, xếp hạng MH10, quản trị MH11. */
+
+/* ——— MH09 hồ sơ ——— */
+.hs-dau {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 32px);
+}
+.hs-anh-lon {
+  width: clamp(96px, 14vw, 140px);
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  filter: sepia(0.4) contrast(1.08);
+  box-shadow:
+    0 0 0 3px var(--mau-vai),
+    0 0 0 8px #0f1522,
+    0 24px 40px -14px rgb(0 0 0 / 0.85);
+}
+.hs-ten-khoi {
+  display: grid;
+  gap: var(--kc-2);
+  min-width: 0;
+}
+.hs-ten-khoi .tc-tieu-de {
+  overflow-wrap: anywhere;
+}
+.hs-so-lieu {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--kc-4);
+}
+.hs-o-so {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--kc-1);
+  padding: var(--kc-4);
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--muc) 10%, transparent);
+  background: color-mix(in srgb, var(--tam-1) 80%, transparent);
+}
+.hs-so {
+  font-family: var(--chu-trang-trong);
+  font-weight: 700;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  line-height: 1;
+  color: #f4efe2;
+}
+.hs-vong {
+  width: 72px;
+  height: 72px;
+  font-size: 1rem;
+}
+.hs-form {
+  display: grid;
+  gap: var(--kc-6);
+  max-width: 720px;
+}
+.hs-form .o-nhap {
+  max-width: 360px;
+}
+.hs-chon-anh {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--kc-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.hs-chon-anh legend {
+  margin-bottom: var(--kc-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.hs-anh {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: var(--co-chu-nho);
+  color: var(--muc-phu);
+}
+.hs-anh img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 5px;
+  filter: sepia(0.4) grayscale(0.4) brightness(0.75);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--muc) 18%, transparent);
+  transition:
+    filter var(--nhip-nhanh),
+    transform var(--nhip-vua) var(--em),
+    box-shadow var(--nhip-nhanh);
+}
+.hs-anh:hover img {
+  filter: sepia(0.4);
+  transform: translateY(-4px);
+}
+.hs-anh-chon {
+  color: var(--muc);
+  font-weight: 600;
+}
+.hs-anh-chon img {
+  filter: sepia(0.4) contrast(1.08);
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 0 2px var(--mau-vai),
+    0 14px 24px -10px rgb(0 0 0 / 0.9);
+}
+.hs-anh:has(input:focus-visible) img {
+  outline: 2px solid var(--mau-den-long);
+  outline-offset: 3px;
+}
+.hs-dau-chon {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  padding: 3px;
+  border-radius: 50%;
+  background: var(--mau-den-long);
+  color: #1d150c;
+}
+.hs-luu {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kc-4);
+}
+
+@media (max-width: 560px) {
+  .hs-chon-anh {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .hs-so-lieu {
+    gap: var(--kc-2);
+  }
+}

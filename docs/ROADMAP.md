@@ -392,7 +392,7 @@ Các use case còn lại trong phạm vi đã chốt. Mỗi nhóm là một bả
 
 **`v1.1.0` — Hồ sơ và lịch sử**
 
-- [ ] **7.1** `[C]` UC03 + MH09: cập nhật biệt danh, ảnh đại diện; thống kê số ván, tỉ lệ thắng
+- [x] **7.1** `[C]` UC03 + MH09: cập nhật biệt danh, ảnh đại diện; thống kê số ván, tỉ lệ thắng
 - [ ] **7.2** `[C]` UC04: danh sách ván đã chơi; mở lại nhật ký diễn tiến của ván cũ
 - [ ] **7.3** `[C]` UC09: sinh liên kết mời vào phòng
 

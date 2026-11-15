@@ -51,8 +51,11 @@ export function KhungUngDung({ children }: { children?: ReactNode }) {
     useKho.getState().datPhien(null);
     di('/dang-nhap');
   };
-  // Mục nào có trang thì mới hiện — lịch sử, xếp hạng, hồ sơ, quản trị thêm ở Giai đoạn 7.
-  const muc: { den: string; ten: string; quanTri?: boolean }[] = [{ den: '/', ten: 'Trang chủ' }];
+  // Mục nào có trang thì mới hiện — lịch sử, xếp hạng, quản trị thêm dần ở Giai đoạn 7.
+  const muc: { den: string; ten: string; quanTri?: boolean }[] = [
+    { den: '/', ten: 'Trang chủ' },
+    { den: '/ho-so', ten: 'Hồ sơ' },
+  ];
   return (
     <div className="khung-ung-dung" data-thoi="dem">
       <GodRays

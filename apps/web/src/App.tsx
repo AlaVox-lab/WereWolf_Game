@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { CanDangNhap, KhungUngDung, useNapPhien } from './screens/KhungUngDung';
+import { HoSo } from './screens/HoSo';
 import { ManXacThuc } from './screens/ManXacThuc';
 import { PhongCho } from './screens/PhongCho';
 import { TrangChu } from './screens/TrangChu';
@@ -34,6 +35,7 @@ function DuongDan() {
       <Route element={<CanDangNhap />}>
         <Route element={<KhungUngDung />}>
           <Route index element={<TrangChu />} />
+          <Route path="/ho-so" element={<HoSo />} />
         </Route>
         {/* Phòng tự bọc khung khi chờ; trong ván màn chơi chiếm trọn màn hình. */}
         <Route path="/phong/:ma" element={<PhongCho />} />

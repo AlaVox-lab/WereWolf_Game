@@ -25,3 +25,13 @@ export interface PhanHoiLoi {
   loi: string;
   thongDiep: string;
 }
+
+/** Hồ sơ người chơi (UC03, MH09) — `GET/PATCH /api/tai-khoan/ho-so`. */
+export interface HoSoCongKhai {
+  taiKhoanId: string;
+  bietDanh: string;
+  /** Mã tranh thẻ vai làm ảnh đại diện. */
+  anhDaiDien: string;
+  soVanDaChoi: number;
+  soVanThang: number;
+}

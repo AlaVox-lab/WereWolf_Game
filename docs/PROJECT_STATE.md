@@ -408,13 +408,21 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       khung: trong ván chiếm trọn màn hình. `ketNoi.ts` giữ góc nhìn khi phòng mở lại trước ảnh
       chụp cuối, chỉ bỏ góc nhìn dở khi nối lại thấy ván đã khác; giữ socket trên `globalThis`
       để HMR không mất kết nối. Đánh dấu luôn 3.1–3.3
+- [x] MH08 thử thật: ván 1 người + 5 ảo chơi trọn tới "Bầy Sói thắng", "Về phòng chờ" trở lại phòng
+      đủ người — **tiêu chí Giai đoạn 5 đạt**
+- [x] Sửa lỗi kho Prisma: `GET /api/tai-khoan/ho-so` hỏng (Express không chuyển được BigInt) vì
+      ánh xạ hồ sơ trải cả dòng DB kèm khóa chính BigInt; nay chọn đúng từng trường, kiểm thử hợp
+      đồng kiểm bản ghi chuyển được sang JSON (đỏ trước khi sửa, xanh sau — chạy trên PostgreSQL)
+- [x] **7.1** `screens/HoSo.tsx` (MH09, UC03): đổi biệt danh, chọn một trong sáu tranh thẻ vai làm
+      ảnh đại diện, số ván / số thắng (Magic UI number-ticker) và vòng tỉ lệ thắng; lưu xong cập nhật
+      phiên trong kho (thanh điều hướng đổi ngay). Kiểu `HoSoCongKhai` ở `packages/shared`
 
 ---
 
 ## Đang làm
 
 **Giai đoạn 5 — giao diện chơi.** Xong 5.1–5.10; còn 5.11 (điện thoại thật qua LAN — cần người).
-Tiếp theo: G7 (hồ sơ, lịch sử, xếp hạng, quản trị) → G6 → G8. Kiểm thử: 337 đạt, 7 bỏ
+Tiếp theo: G7 (xong 7.1, 7.4, 7.5; còn lịch sử, liên kết mời, xếp hạng, báo cáo, quản trị) → G6 → G8. Kiểm thử: 337 đạt, 7 bỏ
 qua (Prisma, cần `DATABASE_URL_TEST`). Bàn giao chi tiết: `E:/Workspace/_scratch/WereWolf_Game/handoff/HANDOFF-2026-11-15-2024.md`.
 
 ---
