@@ -2,7 +2,7 @@ import type { PhongCongKhai, TomTatPhong } from '@moonvillage/shared';
 import { DoorOpen, RefreshCw, Users } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { Button } from '@/components/ui/button';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
@@ -33,6 +33,7 @@ function HangGhe({ co, toiDa }: { co: number; toiDa: number }) {
  */
 export function TrangChu() {
   const di = useNavigate();
+  const thongBao = (useLocation().state as { thongBao?: string } | null)?.thongBao;
   const giam = useReducedMotion();
   const phien = useKho((s) => s.phien)!;
   const [ds, setDs] = useState<TomTatPhong[] | null>(null);
@@ -113,6 +114,11 @@ export function TrangChu() {
       <motion.header className="tc-chao" {...hienLen(0)}>
         <p className="tc-loi-chao">Chào {phien.bietDanh},</p>
         <h1 className="tc-tieu-de">Đêm nay làng họp ở đâu?</h1>
+        {thongBao && (
+          <p className="tc-phong-cu" role="status">
+            {thongBao}
+          </p>
+        )}
         {phongCu && (
           <p className="tc-phong-cu" role="status">
             Bạn vẫn đang ngồi trong phòng <b>{phongCu.maPhong}</b>.{' '}

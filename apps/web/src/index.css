@@ -11,6 +11,7 @@
 @import './styles/san-khau.css';
 @import './styles/xac-thuc.css';
 @import './styles/khung.css';
+@import './styles/phong-cho.css';
 
 @custom-variant dark (&:is(.dark *));
 

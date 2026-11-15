@@ -345,7 +345,7 @@ tính luật.
 - [x] **5.2** `[C]` MH01 đăng nhập và đăng ký
       · *15/11*: gọi API thật (commit `1d01246`); đăng nhập xong vào `/` (hoặc `?tiep=` nội bộ)
 - [x] **5.3** `[C]` MH02 trang chủ: tạo phòng, nhập mã phòng
-- [ ] **5.4** `[C]` MH03 phòng chờ và MH03b cấu hình bộ luật: danh sách thành viên, cấu hình vai
+- [x] **5.4** `[C]` MH03 phòng chờ và MH03b cấu hình bộ luật: danh sách thành viên, cấu hình vai
       có kiểm tức thời, sáu công tắc kèm mô tả, tóm tắt luật cho mọi người, nút thêm người chơi ảo
 - [ ] **5.5** `[A]` MH04 thông báo vai: vai, mô tả năng lực, đồng đội nếu là Sói
 - [ ] **5.6** `[A]` MH05 pha đêm: năm biến thể theo thiết kế 3.3; chỉ báo tiến độ **dạng số**;
