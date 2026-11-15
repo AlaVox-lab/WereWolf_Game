@@ -312,7 +312,7 @@ thử (chưa cần giao diện).
       `BoLuatChoi` của lõi miền; phát tóm tắt bộ luật cho cả phòng; chặn khi ván đã bắt đầu
 - [x] **4.5** `[C]` Thêm/bớt người chơi ảo vào phòng — **chỉ khi** biến môi trường
       `CHO_PHEP_NGUOI_CHOI_AO=true`
-- [ ] **4.6** `[A]` UC11: bắt đầu ván → `BoChiaVai` → `BoDieuPhoiVan`; sổ đăng ký ván đang chạy
+- [x] **4.6** `[A]` UC11: bắt đầu ván → `BoChiaVai` → `BoDieuPhoiVan`; sổ đăng ký ván đang chạy
       trong bộ nhớ; khóa phòng không cho người mới vào
 - [ ] **4.7** `[B]` Cổng Socket.IO: phòng socket cá nhân, kênh Sói, kênh người chết; ánh xạ đối
       tượng nhận của `BoPhatSuKien`; nhận lệnh `van:hanh-dong`, `van:bo-phieu` qua lược đồ Zod

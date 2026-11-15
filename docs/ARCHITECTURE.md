@@ -387,6 +387,13 @@ chơi = mã tài khoản. `application/phong/SoDangKyPhong.ts` giữ phòng đan
 tài khoản tối đa một phòng, mã 6 ký tự không có ký tự dễ nhầm, báo phòng đổi qua người nghe
 (Observer) để tầng Socket.IO phát `phong:cap-nhat`.
 
+**Ván đang chạy** (4.6): `application/van/SoDangKyVan.ts` — `batDau()` dựng `VanDau` từ phòng, chia
+vai (`BoChiaVai`), dựng `BoDieuPhoiVan` + `CongLuaChon` + `BoHenGio`, cho người chơi ảo vào ghế
+(hàm tạo truyền từ `main.ts` — tầng ứng dụng không phụ thuộc `infrastructure/bot`), chờ
+`thoiGianXemVai` (MH04) rồi `chayVan()`. `guiLuaChon()` là cửa duy nhất lệnh của người thật vào
+ván — cùng `CongLuaChon` với người chơi ảo. Kết thúc hoặc hủy (Q04) thì báo người nghe: phòng mở
+lại để chơi ván mới, ván được lưu (4.10).
+
 ### 5.5. Các lớp điều khiển
 
 | Lớp | Trách nhiệm |

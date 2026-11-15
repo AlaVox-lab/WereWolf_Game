@@ -117,6 +117,15 @@ class SoDangKyPhong {
   + chieu(maPhong) : PhongCongKhai
 }
 SoDangKyPhong "1" o-- "0..*" PhongChoi : phòng đang mở
+class SoDangKyVan {
+  + batDau(phong, chuPhongId, laNguoiChoiAo) : VanDangChay
+  + guiLuaChon(nguoiChoiId, luaChonTho) : void
+  + guiTin(nguoiChoiId, kenh, noiDung) : void
+  + gocNhin(vanId, nguoiChoiId) : GocNhinNguoiChoi
+  + huyVan(vanId) : void
+}
+SoDangKyPhong ..> SoDangKyVan : UC11 bắt đầu ván
+SoDangKyVan "1" o-- "0..*" BoDieuPhoiVan : ván đang chạy
 class VanDau {
   + id : String
   + boLuatChoi : BoLuatChoi

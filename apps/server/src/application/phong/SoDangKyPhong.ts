@@ -11,6 +11,7 @@ import { CauHinhVai } from '../../domain/luat/CauHinhVai.js';
 import type { NguonNgauNhien } from '../../domain/chung/NguonNgauNhien.js';
 import { PhongChoi, TrangThaiPhong } from '../../domain/phong/PhongChoi.js';
 import type { KhoDuLieu } from '../kho/KhoDuLieu.js';
+import type { SoDangKyVan } from '../van/SoDangKyVan.js';
 import type { ThongTinPhien } from '../taikhoan/DichVuTaiKhoan.js';
 
 /** Bảng chữ của mã phòng — bỏ 0/O, 1/I/L cho dễ đọc to. */
@@ -30,6 +31,8 @@ export interface PhuThuocSoDangKy {
   nguonNgauNhien: NguonNgauNhien;
   /** Biến môi trường CHO_PHEP_NGUOI_CHOI_AO (ROADMAP 4.5). */
   choPhepNguoiChoiAo: boolean;
+  /** Sổ ván — có thì phòng bắt đầu được ván (4.6). */
+  soDangKyVan?: SoDangKyVan;
 }
 
 /**
@@ -45,7 +48,42 @@ export class SoDangKyPhong {
   private readonly nguoiAo = new Map<string, string>();
   private readonly nguoiNghe = new Set<(maPhong: string) => void>();
 
-  constructor(private readonly phu: PhuThuocSoDangKy) {}
+  constructor(private readonly phu: PhuThuocSoDangKy) {
+    phu.soDangKyVan?.dangKyKetThuc((v) => this.khiVanKetThuc(v.maPhong));
+  }
+
+  /**
+   * UC11 — chủ phòng bắt đầu ván. Phòng khóa (không ai vào thêm) tới khi ván kết thúc; bản ghi
+   * phòng trong cơ sở dữ liệu nhận trạng thái, bộ vai và bộ luật lúc bắt đầu.
+   */
+  batDauVan(maPhong: string, chuPhongId: string): string {
+    if (!this.phu.soDangKyVan) throw new LoiNghiepVu('KHONG_CO_QUYEN', 'máy chủ chưa bật ván');
+    const p = this.lay(maPhong);
+    const v = this.phu.soDangKyVan.batDau(p.phong, chuPhongId, (id) => this.nguoiAo.has(id));
+    p.vanId = v.vanId;
+    void this.phu.kho.phong
+      .capNhatPhong(p.phongId, {
+        trangThai: p.phong.trangThai,
+        cauHinhVai: p.phong.layCauHinhVai().layDanhSach(),
+        boLuat: p.phong.layBoLuat().layGiaTri(),
+      })
+      .catch((loi) => console.error('Không cập nhật được phòng', loi));
+    this.bao(maPhong);
+    return v.vanId;
+  }
+
+  /** Khóa chính bảng phong_choi của phòng — để lưu ván (4.10). */
+  phongIdCua(maPhong: string): string {
+    return this.lay(maPhong).phongId;
+  }
+
+  private khiVanKetThuc(maPhong: string): void {
+    const p = this.phong.get(maPhong);
+    if (!p) return;
+    p.phong.ketThucVan();
+    p.vanId = null;
+    this.bao(maPhong);
+  }
 
   /** Đăng ký nghe phòng đổi; trả hàm hủy. */
   dangKy(nghe: (maPhong: string) => void): () => void {

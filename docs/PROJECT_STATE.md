@@ -367,6 +367,8 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       `CauHinhVai.macDinh`), UC25 bật tắt quy tắc tùy biến — chặn khi đang chơi
 - [x] **4.5** Thêm/bớt người chơi ảo (tài khoản `ao_NN`, không đăng nhập được) chỉ khi
       `CHO_PHEP_NGUOI_CHOI_AO=true`; mỗi người ảo chỉ ngồi một phòng
+- [x] **4.6** `SoDangKyVan`: UC11 bắt đầu ván từ phòng (chia vai, dựng bộ điều phối, người chơi
+      ảo vào ghế, chờ xem thẻ), khóa phòng, mở lại khi xong; hủy ván Q04; Class Diagram thêm lớp
 
 ---
 
