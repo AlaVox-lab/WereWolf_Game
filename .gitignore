@@ -41,3 +41,7 @@ docs/diagrams/out/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# ---------- Prisma ----------
+# Client sinh tự động — tạo lại bằng `npm run db:generate` (chạy sẵn ở postinstall).
+apps/server/src/infrastructure/repository/prisma/generated/

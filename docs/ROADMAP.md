@@ -302,7 +302,7 @@ tắc đạt; tệp token tồn tại trong `apps/web`.
 Mục tiêu: máy chủ thật, chơi được một ván bằng các ứng dụng khách Socket.IO viết trong kiểm
 thử (chưa cần giao diện).
 
-- [ ] **4.1** `[C]` `prisma/schema.prisma` cho các bảng MVP (ARCHITECTURE mục 12), đủ ràng buộc
+- [x] **4.1** `[C]` `prisma/schema.prisma` cho các bảng MVP (ARCHITECTURE mục 12), đủ ràng buộc
       `UNIQUE`; trigger chặn sửa/xóa `nhat_ky_van`; `seed.ts` tạo ba tài khoản mẫu
 - [ ] **4.2** `[C]` UC01, UC02: đăng ký, đăng nhập, đăng xuất; băm bcryptjs; JWT trong cookie
       `httpOnly`; bắt tay Socket.IO đọc cùng cookie đó; tài khoản bị khóa không đăng nhập được

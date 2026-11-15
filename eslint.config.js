@@ -9,7 +9,14 @@ const loiWebNhapServer =
   'apps/web chỉ được nhập @moonvillage/shared — luật chơi nằm ở máy chủ (ARCHITECTURE.md mục 2.1).';
 
 export default tseslint.config(
-  { ignores: ['**/node_modules/**', '**/dist/**', '**/coverage/**'] },
+  {
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/coverage/**',
+      'apps/server/src/infrastructure/repository/prisma/generated/**',
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

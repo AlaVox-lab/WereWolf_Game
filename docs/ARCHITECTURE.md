@@ -738,8 +738,22 @@ Thêm một điểm cuối hoặc sự kiện mới thì cập nhật mục này
 
 ## 12. Lược đồ dữ liệu
 
-*Chưa cài đặt.* Mười bảy bảng theo mục 12.1 tài liệu gốc, tên bảng và tên cột **giữ nguyên
-tiếng Việt `snake_case`** như từ điển dữ liệu.
+*Đã cài* (4.1) — `apps/server/prisma/schema.prisma`, Prisma 7 + driver adapter `pg`. Mười bảy
+bảng theo mục 12.1 tài liệu gốc, tên bảng và tên cột **giữ nguyên tiếng Việt `snake_case`** như
+từ điển dữ liệu (mô hình Prisma PascalCase ánh xạ qua `@@map`/`@map`). Khóa BIGINT ở cơ sở dữ
+liệu, chuỗi ở tầng ứng dụng.
+
+**Cổng kho** `application/kho/KhoDuLieu.ts`: `KhoTaiKhoan`, `KhoPhong`, `KhoVan`, `KhoXepHang`,
+`KhoBaoCao`. Hai bản cài cùng một hợp đồng (`tests/infrastructure/kho.test.ts` chạy cho cả hai):
+`infrastructure/repository/prisma/khoPrisma.ts` và `infrastructure/repository/boNho/khoBoNho.ts`
+(kiểm thử, CI, chạy thử không cần cơ sở dữ liệu). Ván kết thúc ghi trong **một giao dịch**: người
+chơi, lượt, ý định, kết quả đêm, phiên, phiếu, tin nhắn, nhật ký, cộng hồ sơ và điểm mùa.
+
+```bash
+npm run db:up                                    # PostgreSQL 17 ở cổng 5433
+npm run db:migrate --workspace @moonvillage/server
+npm run db:seed --workspace @moonvillage/server  # ngan, khoa, linh / langtrang1 · quantri / quantri123
+```
 
 **Ranh giới bộ nhớ – cơ sở dữ liệu**: phòng đang mở và ván đang chạy sống trong bộ nhớ tiến
 trình máy chủ (sổ đăng ký phòng/ván). Cơ sở dữ liệu lưu bản bền vững: tài khoản, phòng đã
@@ -762,6 +776,7 @@ chỉ ở mã:
 - `UNIQUE (phien_id, nguoi_bau_id)` trên `phieu_bau`
 - Tổng số vai trong `cau_hinh_vai` bằng số người thực tế — kiểm ở `CauHinhVai.kiemTraHopLe()`
 - `nhat_ky_van` **không được xóa vật lý** — chặn bằng trigger `BEFORE UPDATE OR DELETE`
+  (migration `chan_sua_nhat_ky`)
 - `trang_thai_ky_nang` kiểu `JSONB` — thêm vai mới không đổi cấu trúc bảng (PC09)
 
 ---

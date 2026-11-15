@@ -6,3 +6,4 @@ package-lock.json
 *.puml
 # Dữ liệu sinh tự động — npm run xuat-xem-truoc
 apps/web/public/xem-truoc/
+apps/server/src/infrastructure/repository/prisma/generated/

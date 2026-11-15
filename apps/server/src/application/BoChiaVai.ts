@@ -1,5 +1,6 @@
 import { LoaiVai } from '../domain/chung/LoaiVai.js';
 import { LoiNghiepVu } from '../domain/chung/LoiNghiepVu.js';
+import type { Phe } from '../domain/chung/Phe.js';
 import type { NguonNgauNhien } from '../domain/chung/NguonNgauNhien.js';
 import { TrangThaiVan } from '../domain/chung/TrangThaiVan.js';
 import type { CauHinhVai } from '../domain/luat/CauHinhVai.js';
@@ -24,6 +25,14 @@ const NHA_MAY_VAI: Readonly<Record<LoaiVai, () => VaiTro>> = {
   [LoaiVai.PhuThuy]: () => new PhuThuy(),
   [LoaiVai.ThoSan]: () => new ThoSan(),
 };
+
+/**
+ * Phe của một loại vai — hỏi chính lớp vai qua bảng factory, không chép luật. Kho dữ liệu dùng để
+ * biết người chơi thắng hay thua khi đọc lại ván cũ (bảng nguoi_choi_trong_van chỉ lưu loại vai).
+ */
+export function pheCuaVai(loai: LoaiVai): Phe {
+  return NHA_MAY_VAI[loai]().phe;
+}
 
 /**
  * Bộ chia vai (UC12) — mẫu **Factory**: sinh đối tượng `VaiTro` theo `CauHinhVai` mà nơi gọi không

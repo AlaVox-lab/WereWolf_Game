@@ -1,0 +1,296 @@
+// Lược đồ dữ liệu — mười bảy bảng theo mục 12.1 tài liệu gốc (ROADMAP 4.1, ARCHITECTURE mục 12).
+// Tên bảng và cột giữ nguyên tiếng Việt snake_case như từ điển dữ liệu; tên mô hình Prisma là
+// PascalCase/camelCase tương ứng qua @@map/@map.
+//
+// Ràng buộc toàn vẹn mục 12.3 đặt ở tầng cơ sở dữ liệu: các @@unique dưới đây, và trigger chặn sửa/
+// xóa nhat_ky_van ở migration "chan_sua_nhat_ky".
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/infrastructure/repository/prisma/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ——— Tài khoản ———
+
+model TaiKhoan {
+  id            BigInt   @id @default(autoincrement())
+  tenDangNhap   String   @unique @map("ten_dang_nhap") @db.VarChar(20)
+  matKhauBam    String   @map("mat_khau_bam") @db.VarChar(100)
+  laQuanTri     Boolean  @default(false) @map("la_quan_tri")
+  biKhoa        Boolean  @default(false) @map("bi_khoa")
+  /// Tài khoản của người chơi ảo — chỉ dùng ở môi trường phát triển (ROADMAP 4.5).
+  laNguoiChoiAo Boolean  @default(false) @map("la_nguoi_choi_ao")
+  ngayTao       DateTime @default(now()) @map("ngay_tao")
+
+  hoSo          HoSoNguoiChoi?
+  phongLamChu   PhongChoi[]
+  nguoiChoi     NguoiChoiTrongVan[]
+  baoCaoDaGui   BaoCaoViPham[]      @relation("NguoiBaoCao")
+  baoCaoBiNhan  BaoCaoViPham[]      @relation("NguoiBiBaoCao")
+  baoCaoDaXuLy  BaoCaoViPham[]      @relation("NguoiXuLy")
+  banGhiXepHang BanGhiXepHang[]
+
+  @@map("tai_khoan")
+}
+
+model HoSoNguoiChoi {
+  id          BigInt @id @default(autoincrement())
+  taiKhoanId  BigInt @unique @map("tai_khoan_id")
+  bietDanh    String @map("biet_danh") @db.VarChar(24)
+  /// Mã tranh thẻ vai làm ảnh đại diện (Soi, BaoVe, TienTri, PhuThuy, ThoSan, DanLang).
+  anhDaiDien  String @default("DanLang") @map("anh_dai_dien") @db.VarChar(20)
+  soVanDaChoi Int    @default(0) @map("so_van_da_choi")
+  soVanThang  Int    @default(0) @map("so_van_thang")
+
+  taiKhoan TaiKhoan @relation(fields: [taiKhoanId], references: [id], onDelete: Cascade)
+
+  @@map("ho_so_nguoi_choi")
+}
+
+// ——— Phòng ———
+
+model PhongChoi {
+  id         BigInt   @id @default(autoincrement())
+  maPhong    String   @unique @map("ma_phong") @db.VarChar(6)
+  chuPhongId BigInt   @map("chu_phong_id")
+  trangThai  String   @map("trang_thai") @db.VarChar(20)
+  ngayTao    DateTime @default(now()) @map("ngay_tao")
+
+  chuPhong   TaiKhoan     @relation(fields: [chuPhongId], references: [id])
+  cauHinhVai CauHinhVai[]
+  boLuatChoi BoLuatChoi[]
+  vanDau     VanDau[]
+
+  @@map("phong_choi")
+}
+
+model CauHinhVai {
+  id      BigInt @id @default(autoincrement())
+  phongId BigInt @map("phong_id")
+  loaiVai String @map("loai_vai") @db.VarChar(20)
+  soLuong Int    @map("so_luong")
+
+  phong PhongChoi @relation(fields: [phongId], references: [id], onDelete: Cascade)
+
+  @@unique([phongId, loaiVai])
+  @@map("cau_hinh_vai")
+}
+
+/// Sáu quy tắc tùy biến của một phòng (phong_id) hoặc bản đã khóa của một ván (van_id).
+model BoLuatChoi {
+  id                  BigInt  @id @default(autoincrement())
+  phongId             BigInt? @map("phong_id")
+  vanId               BigInt? @unique @map("van_id")
+  batDemDauCoChet     Boolean @map("bat_dem_dau_co_chet")
+  camPhuThuyTuCuu     Boolean @map("cam_phu_thuy_tu_cuu")
+  choBaoVeTuDo        Boolean @map("cho_bao_ve_tu_do")
+  camDoTrungDem       Boolean @map("cam_do_trung_dem")
+  thoSanBanKhiTreoCo  Boolean @map("tho_san_ban_khi_treo_co")
+  hoaPhieuKhongAiChet Boolean @map("hoa_phieu_khong_ai_chet")
+
+  phong PhongChoi? @relation(fields: [phongId], references: [id], onDelete: Cascade)
+  van   VanDau?    @relation(fields: [vanId], references: [id], onDelete: Cascade)
+
+  @@map("bo_luat_choi")
+}
+
+// ——— Ván ———
+
+model VanDau {
+  id         BigInt    @id @default(autoincrement())
+  phongId    BigInt    @map("phong_id")
+  trangThai  String    @map("trang_thai") @db.VarChar(20)
+  pheThang   String?   @map("phe_thang") @db.VarChar(10)
+  soLuot     Int       @default(0) @map("so_luot")
+  batDauLuc  DateTime  @map("bat_dau_luc")
+  ketThucLuc DateTime? @map("ket_thuc_luc")
+
+  phong     PhongChoi           @relation(fields: [phongId], references: [id])
+  boLuat    BoLuatChoi?
+  nguoiChoi NguoiChoiTrongVan[]
+  luot      LuotChoi[]
+  tinNhan   TinNhan[]
+  nhatKy    NhatKyVan[]
+  baoCao    BaoCaoViPham[]
+
+  @@map("van_dau")
+}
+
+model NguoiChoiTrongVan {
+  id              BigInt  @id @default(autoincrement())
+  vanId           BigInt  @map("van_id")
+  taiKhoanId      BigInt  @map("tai_khoan_id")
+  loaiVai         String  @map("loai_vai") @db.VarChar(20)
+  conSong         Boolean @default(true) @map("con_song")
+  thuTuGhe        Int     @map("thu_tu_ghe")
+  /// JSONB — thêm vai mới có trạng thái riêng không đổi cấu trúc bảng (PC09).
+  trangThaiKyNang Json?   @map("trang_thai_ky_nang")
+
+  van        VanDau        @relation(fields: [vanId], references: [id], onDelete: Cascade)
+  taiKhoan   TaiKhoan      @relation(fields: [taiKhoanId], references: [id])
+  hanhDong   HanhDongDem[] @relation("NguoiThucHien")
+  biNham     HanhDongDem[] @relation("MucTieu")
+  phieuDaBau PhieuBau[]    @relation("NguoiBau")
+  phieuBiBau PhieuBau[]    @relation("NguoiBiBau")
+  tinNhan    TinNhan[]
+
+  @@unique([vanId, taiKhoanId])
+  @@unique([vanId, thuTuGhe])
+  @@map("nguoi_choi_trong_van")
+}
+
+model LuotChoi {
+  id      BigInt @id @default(autoincrement())
+  vanId   BigInt @map("van_id")
+  soThuTu Int    @map("so_thu_tu")
+
+  van      VanDau        @relation(fields: [vanId], references: [id], onDelete: Cascade)
+  hanhDong HanhDongDem[]
+  ketQua   KetQuaDem?
+  phien    PhienBauCu[]
+
+  @@unique([vanId, soThuTu])
+  @@map("luot_choi")
+}
+
+model HanhDongDem {
+  id              BigInt   @id @default(autoincrement())
+  luotId          BigInt   @map("luot_id")
+  nguoiThucHienId BigInt   @map("nguoi_thuc_hien_id")
+  loaiHanhDong    String   @map("loai_hanh_dong") @db.VarChar(20)
+  mucTieuId       BigInt?  @map("muc_tieu_id")
+  doUuTien        Int      @map("do_uu_tien")
+  thoiDiem        DateTime @map("thoi_diem")
+
+  luot          LuotChoi           @relation(fields: [luotId], references: [id], onDelete: Cascade)
+  nguoiThucHien NguoiChoiTrongVan  @relation("NguoiThucHien", fields: [nguoiThucHienId], references: [id], onDelete: Cascade)
+  mucTieu       NguoiChoiTrongVan? @relation("MucTieu", fields: [mucTieuId], references: [id], onDelete: Cascade)
+
+  @@unique([luotId, nguoiThucHienId, loaiHanhDong])
+  @@map("hanh_dong_dem")
+}
+
+model KetQuaDem {
+  id           BigInt @id @default(autoincrement())
+  luotId       BigInt @unique @map("luot_id")
+  /// [{ nguoiChoiId, nguyenNhan }] — nguyên nhân chỉ mở sau ván.
+  danhSachChet Json   @map("danh_sach_chet")
+
+  luot LuotChoi @relation(fields: [luotId], references: [id], onDelete: Cascade)
+
+  @@map("ket_qua_dem")
+}
+
+model PhienBauCu {
+  id            BigInt  @id @default(autoincrement())
+  luotId        BigInt  @map("luot_id")
+  /// 1 = phiên chính, 2 = vòng bầu lại khi hòa (Q03).
+  vong          Int
+  ketQua        String  @map("ket_qua") @db.VarChar(20)
+  nguoiBiTreoId String? @map("nguoi_bi_treo_id") @db.VarChar(40)
+
+  luot  LuotChoi   @relation(fields: [luotId], references: [id], onDelete: Cascade)
+  phieu PhieuBau[]
+
+  @@unique([luotId, vong])
+  @@map("phien_bau_cu")
+}
+
+model PhieuBau {
+  id           BigInt  @id @default(autoincrement())
+  phienId      BigInt  @map("phien_id")
+  nguoiBauId   BigInt  @map("nguoi_bau_id")
+  nguoiBiBauId BigInt? @map("nguoi_bi_bau_id")
+
+  phien      PhienBauCu         @relation(fields: [phienId], references: [id], onDelete: Cascade)
+  nguoiBau   NguoiChoiTrongVan  @relation("NguoiBau", fields: [nguoiBauId], references: [id], onDelete: Cascade)
+  nguoiBiBau NguoiChoiTrongVan? @relation("NguoiBiBau", fields: [nguoiBiBauId], references: [id], onDelete: Cascade)
+
+  @@unique([phienId, nguoiBauId])
+  @@map("phieu_bau")
+}
+
+model TinNhan {
+  id         BigInt   @id @default(autoincrement())
+  vanId      BigInt   @map("van_id")
+  nguoiGuiId BigInt   @map("nguoi_gui_id")
+  kenh       String   @db.VarChar(12)
+  noiDung    String   @map("noi_dung") @db.VarChar(500)
+  thoiDiem   DateTime @map("thoi_diem")
+
+  van      VanDau            @relation(fields: [vanId], references: [id], onDelete: Cascade)
+  nguoiGui NguoiChoiTrongVan @relation(fields: [nguoiGuiId], references: [id], onDelete: Cascade)
+
+  @@map("tin_nhan")
+}
+
+/// Không được xóa vật lý — bằng chứng xử lý báo cáo vi phạm (12.3). Trigger chặn UPDATE/DELETE.
+model NhatKyVan {
+  id       BigInt @id @default(autoincrement())
+  vanId    BigInt @map("van_id")
+  thuTu    Int    @map("thu_tu")
+  loai     String @db.VarChar(30)
+  duLieu   Json   @map("du_lieu")
+  /// Mili giây kể từ lúc ván bắt đầu.
+  thoiDiem BigInt @map("thoi_diem")
+
+  van VanDau @relation(fields: [vanId], references: [id])
+
+  @@unique([vanId, thuTu])
+  @@map("nhat_ky_van")
+}
+
+// ——— Kiểm duyệt (sau MVP) ———
+
+model BaoCaoViPham {
+  id              BigInt    @id @default(autoincrement())
+  vanId           BigInt    @map("van_id")
+  nguoiBaoCaoId   BigInt    @map("nguoi_bao_cao_id")
+  nguoiBiBaoCaoId BigInt    @map("nguoi_bi_bao_cao_id")
+  lyDo            String    @map("ly_do") @db.VarChar(500)
+  /// CHO_XU_LY | CANH_CAO | KHOA_TAI_KHOAN | BAC_BO
+  trangThai       String    @default("CHO_XU_LY") @map("trang_thai") @db.VarChar(20)
+  ghiChuXuLy      String?   @map("ghi_chu_xu_ly") @db.VarChar(500)
+  nguoiXuLyId     BigInt?   @map("nguoi_xu_ly_id")
+  ngayTao         DateTime  @default(now()) @map("ngay_tao")
+  ngayXuLy        DateTime? @map("ngay_xu_ly")
+
+  van           VanDau    @relation(fields: [vanId], references: [id])
+  nguoiBaoCao   TaiKhoan  @relation("NguoiBaoCao", fields: [nguoiBaoCaoId], references: [id])
+  nguoiBiBaoCao TaiKhoan  @relation("NguoiBiBaoCao", fields: [nguoiBiBaoCaoId], references: [id])
+  nguoiXuLy     TaiKhoan? @relation("NguoiXuLy", fields: [nguoiXuLyId], references: [id])
+
+  @@map("bao_cao_vi_pham")
+}
+
+// ——— Xếp hạng (sau MVP) ———
+
+model MuaGiai {
+  id      BigInt    @id @default(autoincrement())
+  ten     String    @db.VarChar(60)
+  batDau  DateTime  @map("bat_dau")
+  ketThuc DateTime? @map("ket_thuc")
+
+  banGhi BanGhiXepHang[]
+
+  @@map("mua_giai")
+}
+
+model BanGhiXepHang {
+  id         BigInt @id @default(autoincrement())
+  muaId      BigInt @map("mua_id")
+  taiKhoanId BigInt @map("tai_khoan_id")
+  diem       Int    @default(0)
+  soVan      Int    @default(0) @map("so_van")
+  soThang    Int    @default(0) @map("so_thang")
+
+  mua      MuaGiai  @relation(fields: [muaId], references: [id], onDelete: Cascade)
+  taiKhoan TaiKhoan @relation(fields: [taiKhoanId], references: [id])
+
+  @@unique([muaId, taiKhoanId])
+  @@map("ban_ghi_xep_hang")
+}

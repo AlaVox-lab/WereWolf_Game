@@ -14,7 +14,7 @@
 
 | Mục | Giá trị |
 |---|---|
-| Cập nhật lần cuối | 2026-11-10 |
+| Cập nhật lần cuối | 2026-11-15 |
 | Phiên bản hiện tại | **`v0.3.0`** — Điều phối ván, phát hành 20/10 ([release](https://github.com/AlaVox-lab/WereWolf_Game/releases/tag/v0.3.0)). Trước đó `v0.2.0` — Lõi miền, 19/10. Bỏ qua `v0.1.0` vì Giai đoạn 0 chỉ còn 0.9, không phải mã |
 | Giai đoạn học phần | Đã qua M1. Nếu giả định tuần 3 ngày 29/09 là đúng thì nay khoảng **tuần 6** — mốc M2 đã qua, M3 cuối tuần này |
 | Giai đoạn MVP | **Giai đoạn 0** xong 9/10, còn 0.9 · **Giai đoạn 1 hoàn thành** (12/12) · **Giai đoạn 2 hoàn thành** (11/11) |
@@ -346,6 +346,17 @@ thêm màn đăng nhập/đăng ký vì môn học cần đủ use case.
       **đề xuất**, chốt ở 4.2
 - [x] `apps/web` tắt `exactOptionalPropertyTypes` (mã registry viết theo tsconfig mặc định của
       shadcn); máy chủ và lõi miền vẫn bật
+
+---
+
+### 15/11 — Giai đoạn 4: máy chủ, tài khoản, phòng, thời gian thực
+
+Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từng hạng mục; điểm xếp hạng
+**thắng +3, thua +1**; giữ ràng buộc tài khoản (3–20 ký tự `[a-z0-9_]`, mật khẩu ≥ 8).
+
+- [x] **4.1** `prisma/schema.prisma` 17 bảng + trigger chặn sửa/xóa `nhat_ky_van`; cổng kho
+      `application/kho/` với bản Prisma và bản bộ nhớ chung một bộ kiểm hợp đồng; `seed.ts`.
+      PostgreSQL dời sang cổng **5433** — 5432 trên máy đang bị dự án khác chiếm
 
 ---
 
