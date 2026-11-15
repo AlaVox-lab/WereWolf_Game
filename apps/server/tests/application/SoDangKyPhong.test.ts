@@ -90,3 +90,46 @@ describe('SoDangKyPhong', () => {
     expect(so.chieu(ma).thanhVien[0]!.ketNoi).toBe(false);
   });
 });
+
+describe('SoDangKyPhong — cấu hình (4.4)', () => {
+  async function phongDu(so: SoDangKyPhong, soNguoi: number) {
+    const ma = await so.taoPhong(phien(1));
+    for (let i = 2; i <= soNguoi; i++) so.vaoPhong(ma, phien(i));
+    return ma;
+  }
+
+  it('UC08 — vi phạm báo tức thời theo số người; gợi ý bộ vai mặc định thì hết vi phạm', async () => {
+    const { so } = taoSo();
+    const ma = await phongDu(so, 8);
+    so.datCauHinhVai(ma, 't1', { Soi: 4, DanLang: 4 });
+    expect(so.chieu(ma).viPham.map((v) => v.ma)).toContain('QUA_NHIEU_SOI');
+    so.goiYCauHinhVai(ma, 't1');
+    expect(so.chieu(ma).viPham).toEqual([]);
+    expect(so.chieu(ma).cauHinhVai).toMatchObject({
+      Soi: 2,
+      BaoVe: 1,
+      TienTri: 1,
+      PhuThuy: 1,
+      ThoSan: 1,
+      DanLang: 2,
+    });
+  });
+
+  it('UC08 — dữ liệu thô sai bị từ chối; người không phải chủ phòng bị từ chối', async () => {
+    const { so } = taoSo();
+    const ma = await phongDu(so, 6);
+    expect(() => so.datCauHinhVai(ma, 't1', { Rong: 1 })).toThrow('CAU_HINH_VAI_KHONG_HOP_LE');
+    expect(() => so.datCauHinhVai(ma, 't1', { Soi: 1.5 })).toThrow('CAU_HINH_VAI_KHONG_HOP_LE');
+    expect(() => so.datCauHinhVai(ma, 't1', { Soi: -1 })).toThrow('CAU_HINH_VAI_KHONG_HOP_LE');
+    expect(() => so.datCauHinhVai(ma, 't2', { Soi: 1 })).toThrow('KHONG_PHAI_CHU_PHONG');
+  });
+
+  it('UC25 — bật tắt quy tắc tùy biến hiện ngay trong tóm tắt luật; quy tắc cố định bị từ chối', async () => {
+    const { so } = taoSo();
+    const ma = await phongDu(so, 6);
+    so.datQuyTac(ma, 't1', 'BR11', false);
+    expect(so.chieu(ma).boLuat.find((q) => q.ma === 'BR11')?.dangBat).toBe(false);
+    expect(() => so.datQuyTac(ma, 't1', 'BR01', false)).toThrow('QUY_TAC_CO_DINH');
+    expect(() => so.datQuyTac(ma, 't1', 'BR99', false)).toThrow('QUY_TAC_CO_DINH');
+  });
+});

@@ -363,6 +363,8 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
 - [x] **4.3** `PhongChoi` (domain) + `SoDangKyPhong` (application): tạo phòng mã 6 ký tự, vào,
       rời, loại người, tối đa 12, Q11; REST `/api/phong*`; Class Diagram thêm `SoDangKyPhong`,
       `CHUA_CAI` rỗng — mọi lớp trên sơ đồ đã có mã
+- [x] **4.4** UC08 đặt bộ vai (kiểm dữ liệu thô, vi phạm báo tức thời theo số người, gợi ý
+      `CauHinhVai.macDinh`), UC25 bật tắt quy tắc tùy biến — chặn khi đang chơi
 
 ---
 

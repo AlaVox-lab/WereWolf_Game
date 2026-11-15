@@ -308,7 +308,7 @@ thử (chưa cần giao diện).
       `httpOnly`; bắt tay Socket.IO đọc cùng cookie đó; tài khoản bị khóa không đăng nhập được
 - [x] **4.3** `[C]` UC06, UC07, UC10: tạo phòng với mã 6 ký tự, vào phòng, rời phòng, chủ
       phòng loại người; tối đa 12; chuyển chủ phòng theo **Q11**
-- [ ] **4.4** `[C]` UC08, UC25: nhận cấu hình vai và bộ luật, kiểm bằng `CauHinhVai` và
+- [x] **4.4** `[C]` UC08, UC25: nhận cấu hình vai và bộ luật, kiểm bằng `CauHinhVai` và
       `BoLuatChoi` của lõi miền; phát tóm tắt bộ luật cho cả phòng; chặn khi ván đã bắt đầu
 - [ ] **4.5** `[C]` Thêm/bớt người chơi ảo vào phòng — **chỉ khi** biến môi trường
       `CHO_PHEP_NGUOI_CHOI_AO=true`

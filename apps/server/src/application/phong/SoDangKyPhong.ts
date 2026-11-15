@@ -4,7 +4,10 @@ import type {
   TomTatPhong,
   TrangThaiPhongCongKhai,
 } from '@moonvillage/shared';
+import { LoaiVai } from '../../domain/chung/LoaiVai.js';
 import { LoiNghiepVu } from '../../domain/chung/LoiNghiepVu.js';
+import { MaQuyTac } from '../../domain/chung/MaQuyTac.js';
+import { CauHinhVai } from '../../domain/luat/CauHinhVai.js';
 import type { NguonNgauNhien } from '../../domain/chung/NguonNgauNhien.js';
 import { PhongChoi, TrangThaiPhong } from '../../domain/phong/PhongChoi.js';
 import type { KhoDuLieu } from '../kho/KhoDuLieu.js';
@@ -98,6 +101,50 @@ export class SoDangKyPhong {
     const p = this.lay(maPhong);
     p.phong.loaiThanhVien(chuPhongId, taiKhoanId);
     this.phongCuaNguoi.delete(taiKhoanId);
+    this.bao(maPhong);
+  }
+
+  /**
+   * UC08 — chủ phòng đặt số lượng từng vai. Nhận dữ liệu thô từ ngoài: chỉ các loại vai đã biết,
+   * số nguyên không âm. Hợp lệ với số người hay không thì báo trong `chieu().viPham`.
+   */
+  datCauHinhVai(maPhong: string, chuPhongId: string, soLuong: Record<string, unknown>): void {
+    const sach: Partial<Record<LoaiVai, number>> = {};
+    for (const [loai, so] of Object.entries(soLuong)) {
+      if (!Object.values(LoaiVai).includes(loai as LoaiVai)) {
+        throw new LoiNghiepVu('CAU_HINH_VAI_KHONG_HOP_LE', `không có vai ${loai}`);
+      }
+      if (
+        typeof so !== 'number' ||
+        !Number.isInteger(so) ||
+        so < 0 ||
+        so > PhongChoi.SO_NGUOI_TOI_DA
+      ) {
+        throw new LoiNghiepVu('CAU_HINH_VAI_KHONG_HOP_LE', `${loai}=${String(so)}`);
+      }
+      sach[loai as LoaiVai] = so;
+    }
+    this.lay(maPhong).phong.datCauHinhVai(chuPhongId, new CauHinhVai(sach));
+    this.bao(maPhong);
+  }
+
+  /** Gợi ý bộ vai mặc định cho số người hiện có (`CauHinhVai.macDinh`). */
+  goiYCauHinhVai(maPhong: string, chuPhongId: string): void {
+    const { phong } = this.lay(maPhong);
+    const n = Math.max(
+      CauHinhVai.SO_NGUOI_TOI_THIEU,
+      Math.min(PhongChoi.SO_NGUOI_TOI_DA, phong.layThanhVien().length),
+    );
+    phong.datCauHinhVai(chuPhongId, CauHinhVai.macDinh(n));
+    this.bao(maPhong);
+  }
+
+  /** UC25 — bật tắt một quy tắc tùy biến; quy tắc cố định bị từ chối (`QUY_TAC_CO_DINH`). */
+  datQuyTac(maPhong: string, chuPhongId: string, maQuyTac: string, dangBat: boolean): void {
+    if (!Object.values(MaQuyTac).includes(maQuyTac as MaQuyTac)) {
+      throw new LoiNghiepVu('QUY_TAC_CO_DINH', maQuyTac);
+    }
+    this.lay(maPhong).phong.datQuyTac(chuPhongId, maQuyTac as MaQuyTac, dangBat);
     this.bao(maPhong);
   }
 
