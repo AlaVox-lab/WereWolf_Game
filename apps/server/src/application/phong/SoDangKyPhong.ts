@@ -41,6 +41,8 @@ export class SoDangKyPhong {
   private readonly phong = new Map<string, PhongDangMo>();
   private readonly phongCuaNguoi = new Map<string, string>();
   private readonly ketNoi = new Set<string>();
+  /** Người chơi ảo đang ngồi trong phòng nào — một tài khoản ảo chỉ ở một phòng. */
+  private readonly nguoiAo = new Map<string, string>();
   private readonly nguoiNghe = new Set<(maPhong: string) => void>();
 
   constructor(private readonly phu: PhuThuocSoDangKy) {}
@@ -101,6 +103,7 @@ export class SoDangKyPhong {
     const p = this.lay(maPhong);
     p.phong.loaiThanhVien(chuPhongId, taiKhoanId);
     this.phongCuaNguoi.delete(taiKhoanId);
+    this.nguoiAo.delete(taiKhoanId);
     this.bao(maPhong);
   }
 
@@ -146,6 +149,50 @@ export class SoDangKyPhong {
     }
     this.lay(maPhong).phong.datQuyTac(chuPhongId, maQuyTac as MaQuyTac, dangBat);
     this.bao(maPhong);
+  }
+
+  /**
+   * ROADMAP 4.5 — chủ phòng thêm một người chơi ảo (chỉ khi máy chủ bật CHO_PHEP_NGUOI_CHOI_AO).
+   * Người ảo dùng tài khoản riêng `ao_NN`, đi chung luồng với người thật khi chơi (nguyên tắc 2.5).
+   */
+  async themNguoiChoiAo(maPhong: string, chuPhongId: string): Promise<void> {
+    if (!this.phu.choPhepNguoiChoiAo) throw new LoiNghiepVu('NGUOI_CHOI_AO_BI_TAT');
+    const p = this.lay(maPhong);
+    if (p.phong.maChuPhong !== chuPhongId) throw new LoiNghiepVu('KHONG_PHAI_CHU_PHONG');
+    if (p.phong.layThanhVien().length >= PhongChoi.SO_NGUOI_TOI_DA)
+      throw new LoiNghiepVu('PHONG_DA_DAY');
+    let thuTu = 1;
+    for (;;) {
+      const tk = await this.phu.kho.taiKhoan.layNguoiChoiAo(thuTu);
+      if (!this.nguoiAo.has(tk.id)) {
+        const hs = await this.phu.kho.taiKhoan.layHoSo(tk.id);
+        p.phong.themThanhVien({
+          taiKhoanId: tk.id,
+          ten: hs?.bietDanh ?? tk.tenDangNhap,
+          laNguoiChoiAo: true,
+        });
+        p.anhDaiDien.set(tk.id, hs?.anhDaiDien ?? 'DanLang');
+        this.nguoiAo.set(tk.id, maPhong);
+        break;
+      }
+      thuTu += 1;
+    }
+    this.bao(maPhong);
+  }
+
+  /** Chủ phòng bớt người chơi ảo vào sau cùng. */
+  botNguoiChoiAo(maPhong: string, chuPhongId: string): void {
+    const p = this.lay(maPhong);
+    if (p.phong.maChuPhong !== chuPhongId) throw new LoiNghiepVu('KHONG_PHAI_CHU_PHONG');
+    const ao = [...p.phong.layThanhVien()].reverse().find((t) => t.laNguoiChoiAo);
+    if (!ao) return;
+    p.phong.loaiThanhVien(chuPhongId, ao.taiKhoanId);
+    this.nguoiAo.delete(ao.taiKhoanId);
+    this.bao(maPhong);
+  }
+
+  laNguoiChoiAo(taiKhoanId: string): boolean {
+    return this.nguoiAo.has(taiKhoanId);
   }
 
   datCongKhai(maPhong: string, chuPhongId: string, congKhai: boolean): void {
@@ -258,7 +305,10 @@ export class SoDangKyPhong {
     const p = this.lay(maPhong);
     const dong = p.phong.roiPhong(taiKhoanId);
     this.phongCuaNguoi.delete(taiKhoanId);
-    if (dong) this.phong.delete(maPhong);
+    if (dong) {
+      for (const [id, ma] of this.nguoiAo) if (ma === maPhong) this.nguoiAo.delete(id);
+      this.phong.delete(maPhong);
+    }
     this.bao(maPhong);
   }
 }

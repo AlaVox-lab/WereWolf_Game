@@ -133,3 +133,43 @@ describe('SoDangKyPhong — cấu hình (4.4)', () => {
     expect(() => so.datQuyTac(ma, 't1', 'BR99', false)).toThrow('QUY_TAC_CO_DINH');
   });
 });
+
+describe('SoDangKyPhong — người chơi ảo (4.5)', () => {
+  it('chủ phòng thêm tới 12 người, mỗi người ảo một tài khoản riêng; bớt người vào sau cùng', async () => {
+    const { so } = taoSo();
+    const ma = await so.taoPhong(phien(1));
+    for (let i = 0; i < 11; i++) await so.themNguoiChoiAo(ma, 't1');
+    const tv = so.chieu(ma).thanhVien;
+    expect(tv).toHaveLength(12);
+    expect(new Set(tv.map((t) => t.id)).size).toBe(12);
+    expect(tv.filter((t) => t.laNguoiChoiAo).every((t) => t.ketNoi)).toBe(true);
+    await expect(so.themNguoiChoiAo(ma, 't1')).rejects.toThrow('PHONG_DA_DAY');
+    const cuoi = tv.at(-1)!.id;
+    so.botNguoiChoiAo(ma, 't1');
+    expect(so.thanhVienCua(ma)).not.toContain(cuoi);
+    expect(so.laNguoiChoiAo(cuoi)).toBe(false);
+  });
+
+  it('hai phòng không dùng chung một người ảo; chỉ chủ phòng thêm được', async () => {
+    const { so } = taoSo();
+    const a = await so.taoPhong(phien(1));
+    const b = await so.taoPhong(phien(2));
+    await so.themNguoiChoiAo(a, 't1');
+    await so.themNguoiChoiAo(b, 't2');
+    const aoA = so.thanhVienCua(a)[1];
+    const aoB = so.thanhVienCua(b)[1];
+    expect(aoA).not.toBe(aoB);
+    await expect(so.themNguoiChoiAo(a, 't2')).rejects.toThrow('KHONG_PHAI_CHU_PHONG');
+  });
+
+  it('máy chủ tắt CHO_PHEP_NGUOI_CHOI_AO thì không thêm được', async () => {
+    const so = new SoDangKyPhong({
+      kho: taoKhoBoNho(),
+      nguonNgauNhien: new NgauNhienCoHat(1),
+      choPhepNguoiChoiAo: false,
+    });
+    const ma = await so.taoPhong(phien(1));
+    await expect(so.themNguoiChoiAo(ma, 't1')).rejects.toThrow('NGUOI_CHOI_AO_BI_TAT');
+    expect(so.chieu(ma).choPhepNguoiChoiAo).toBe(false);
+  });
+});

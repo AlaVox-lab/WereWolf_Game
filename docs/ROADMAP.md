@@ -310,7 +310,7 @@ thử (chưa cần giao diện).
       phòng loại người; tối đa 12; chuyển chủ phòng theo **Q11**
 - [x] **4.4** `[C]` UC08, UC25: nhận cấu hình vai và bộ luật, kiểm bằng `CauHinhVai` và
       `BoLuatChoi` của lõi miền; phát tóm tắt bộ luật cho cả phòng; chặn khi ván đã bắt đầu
-- [ ] **4.5** `[C]` Thêm/bớt người chơi ảo vào phòng — **chỉ khi** biến môi trường
+- [x] **4.5** `[C]` Thêm/bớt người chơi ảo vào phòng — **chỉ khi** biến môi trường
       `CHO_PHEP_NGUOI_CHOI_AO=true`
 - [ ] **4.6** `[A]` UC11: bắt đầu ván → `BoChiaVai` → `BoDieuPhoiVan`; sổ đăng ký ván đang chạy
       trong bộ nhớ; khóa phòng không cho người mới vào
