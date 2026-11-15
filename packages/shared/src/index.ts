@@ -16,3 +16,5 @@ export type * from './taiKhoan.js';
 export type * from './phong.js';
 export type * from './socket.js';
 export type * from './lichSu.js';
+export type * from './xepHang.js';
+export type * from './kiemDuyet.js';

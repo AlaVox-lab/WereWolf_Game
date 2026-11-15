@@ -59,6 +59,9 @@ const bc = (b: {
   ngayTao: b.ngayTao,
 });
 
+/** Mã lấy từ đường dẫn REST có thể là chữ bất kỳ — BigInt() sẽ ném lỗi, nên coi như không có. */
+const laMaSo = (id: string) => /^\d{1,18}$/.test(id);
+
 export function taoPrisma(chuoiKetNoi: string) {
   return new PrismaClient({ adapter: new PrismaPg({ connectionString: chuoiKetNoi }) });
 }
@@ -70,6 +73,7 @@ export function taoKhoPrisma(db: PrismaClient): KhoDuLieu {
       return t ? tk(t) : null;
     },
     async timTheoId(id) {
+      if (!laMaSo(id)) return null;
       const t = await db.taiKhoan.findUnique({ where: { id: BigInt(id) } });
       return t ? tk(t) : null;
     },
@@ -306,7 +310,7 @@ export function taoKhoPrisma(db: PrismaClient): KhoDuLieu {
         }));
       },
       async layVan(vanId) {
-        if (!/^\d{1,18}$/.test(vanId)) return null; // mã lạ từ đường dẫn — BigInt() sẽ ném lỗi
+        if (!laMaSo(vanId)) return null;
         const v = await db.vanDau.findUnique({
           where: { id: BigInt(vanId) },
           include: {
@@ -329,6 +333,7 @@ export function taoKhoPrisma(db: PrismaClient): KhoDuLieu {
             loaiVai: n.loaiVai,
             conSong: n.conSong,
             thuTuGhe: n.thuTuGhe,
+            laNguoiChoiAo: n.taiKhoan.laNguoiChoiAo,
           })),
           nhatKy: v.nhatKy.map((s) => ({
             thuTu: s.thuTu,
@@ -365,6 +370,7 @@ export function taoKhoPrisma(db: PrismaClient): KhoDuLieu {
         return (await db.baoCaoViPham.findMany({ orderBy: { ngayTao: 'desc' } })).map(bc);
       },
       async timTheoId(id) {
+        if (!laMaSo(id)) return null;
         const b = await db.baoCaoViPham.findUnique({ where: { id: BigInt(id) } });
         return b ? bc(b) : null;
       },

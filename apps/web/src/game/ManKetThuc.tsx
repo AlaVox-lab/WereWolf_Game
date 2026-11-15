@@ -1,6 +1,7 @@
 import type { KetThucCongKhai } from '@moonvillage/shared';
 import { motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { TextEffect } from '@/components/ui/text-effect';
 import { AnhVai } from './anhVai';
@@ -74,6 +75,11 @@ export function ManKetThuc({
           {moNhatKy ? 'Đóng diễn biến' : 'Xem diễn biến cả ván'}
         </Button>
       </div>
+      {onVePhongCho && (
+        <p className="ghi-chu">
+          Có người chơi xấu? Mở ván này trong <Link to="/lich-su">Lịch sử</Link> để báo cáo vi phạm.
+        </p>
+      )}
       {moNhatKy && <NhatKyVan nhatKy={ketThuc.nhatKy} ten={ten} className="tam" />}
     </motion.section>
   );

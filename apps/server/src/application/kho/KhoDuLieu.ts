@@ -105,7 +105,14 @@ export interface ChiTietVan {
   ketThucLuc: Date;
   trangThai: string;
   pheThang: string | null;
-  nguoiChoi: { id: string; ten: string; loaiVai: string; conSong: boolean; thuTuGhe: number }[];
+  nguoiChoi: {
+    id: string;
+    ten: string;
+    loaiVai: string;
+    conSong: boolean;
+    thuTuGhe: number;
+    laNguoiChoiAo: boolean;
+  }[];
   nhatKy: { thuTu: number; loai: string; duLieu: Record<string, unknown>; thoiDiem: number }[];
 }
 

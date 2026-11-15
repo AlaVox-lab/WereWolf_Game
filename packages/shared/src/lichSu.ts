@@ -27,6 +27,8 @@ export interface ChiTietVanCongKhai {
     loaiVai: LoaiVaiCongKhai;
     conSong: boolean;
     thuTuGhe: number;
+    /** Người chơi ảo không báo cáo vi phạm được (UC21). */
+    laNguoiChoiAo: boolean;
   }[];
   nhatKy: SuKienNhatKyCongKhai[];
 }

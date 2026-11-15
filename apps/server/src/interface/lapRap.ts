@@ -5,6 +5,9 @@ import type { CauHinhThoiGian } from '../application/CauHinhThoiGian.js';
 import type { KhoDuLieu } from '../application/kho/KhoDuLieu.js';
 import { SoDangKyPhong } from '../application/phong/SoDangKyPhong.js';
 import { DichVuLichSu } from '../application/van/DichVuLichSu.js';
+import { DichVuBaoCao } from '../application/kiemduyet/DichVuBaoCao.js';
+import { DichVuQuanTri, type CongNgatKetNoi } from '../application/kiemduyet/DichVuQuanTri.js';
+import { DichVuXepHang } from '../application/xephang/DichVuXepHang.js';
 import { DichVuTaiKhoan } from '../application/taikhoan/DichVuTaiKhoan.js';
 import { DichVuLuuVan } from '../application/van/DichVuLuuVan.js';
 import { SoDangKyVan } from '../application/van/SoDangKyVan.js';
@@ -15,7 +18,9 @@ import { taoBoPhien } from '../infrastructure/auth/phien.js';
 import { NguoiChoiAo, type CauHinhNguoiChoiAo } from '../infrastructure/bot/NguoiChoiAo.js';
 import { DongHoThat, NgauNhienThat } from '../infrastructure/thoiGian.js';
 import { createApp } from './api/app.js';
+import { taoRouterKiemDuyet } from './api/kiemDuyet.js';
 import { taoRouterLichSu } from './api/lichSu.js';
+import { taoRouterXepHang } from './api/xepHang.js';
 import { taoRouterPhong } from './api/phong.js';
 import { moCongSocket } from './ws/congSocket.js';
 
@@ -60,10 +65,31 @@ export function lapRapMayChu(ch: CauHinhMayChu) {
     vanDaLuu.push(hua);
     await hua;
   });
+  // UC23 — người bị khóa: ra khỏi phòng đang chờ (ván đang chơi thì thành mất kết nối) rồi bị
+  // ngắt mọi kết nối. `socket` lắp ngay dưới; cổng chỉ được gọi khi máy chủ đã chạy.
+  const congNgat: CongNgatKetNoi = {
+    ngat(taiKhoanId, lyDo) {
+      const ma = phong.phongCua(taiKhoanId);
+      if (ma) {
+        try {
+          phong.roiPhong(ma, taiKhoanId);
+        } catch {
+          // Phòng đang chơi — người đó ngồi lại như mất kết nối, Q04 lo phần còn lại.
+        }
+      }
+      socket.ngatTaiKhoan(taiKhoanId, lyDo);
+    },
+  };
+  const quanTri = new DichVuQuanTri(ch.kho.taiKhoan, ch.kho.baoCao, ch.kho.van, congNgat);
   const app = createApp({
     taiKhoan,
     phien,
-    routerThem: [taoRouterPhong(phong), taoRouterLichSu(new DichVuLichSu(ch.kho.van))],
+    routerThem: [
+      taoRouterPhong(phong),
+      taoRouterLichSu(new DichVuLichSu(ch.kho.van)),
+      taoRouterXepHang(new DichVuXepHang(ch.kho.xepHang)),
+      taoRouterKiemDuyet(new DichVuBaoCao(ch.kho.baoCao, ch.kho.van, ch.kho.taiKhoan), quanTri),
+    ],
   });
   const http = createServer(app);
   const socket = moCongSocket(http, {
@@ -82,6 +108,7 @@ export function lapRapMayChu(ch: CauHinhMayChu) {
     taiKhoan,
     phong,
     van,
+    quanTri,
     socket,
     /** Lời hứa lưu của các ván đã kết thúc — kiểm thử chờ cho chắc. */
     vanDaLuu,

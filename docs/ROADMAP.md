@@ -394,21 +394,24 @@ Các use case còn lại trong phạm vi đã chốt. Mỗi nhóm là một bả
 
 - [x] **7.1** `[C]` UC03 + MH09: cập nhật biệt danh, ảnh đại diện; thống kê số ván, tỉ lệ thắng
 - [x] **7.2** `[C]` UC04: danh sách ván đã chơi; mở lại nhật ký diễn tiến của ván cũ
-- [ ] **7.3** `[C]` UC09: sinh liên kết mời vào phòng
+- [x] **7.3** `[C]` UC09: sinh liên kết mời vào phòng
+      · liên kết là `/phong/:ma` (nút "Chép liên kết mời" ở MH03, 5.4); chưa đăng nhập thì qua
+      MH01 với `?tiep=` rồi vào thẳng phòng — đã thử trọn luồng trên trình duyệt
 
 **`v1.2.0` — Mùa giải và xếp hạng**
 
 - [x] **7.4** `[ALL]` Chốt công thức điểm xếp hạng (tài liệu gốc chưa định nghĩa) — ghi vào
       `game-rules.md`
 - [x] **7.5** `[B]` `MuaGiai`, `BanGhiXepHang`; UC20 cộng điểm khi kết thúc ván
-- [ ] **7.6** `[B]` UC05 + MH10: bảng xếp hạng mùa hiện tại
+- [x] **7.6** `[B]` UC05 + MH10: bảng xếp hạng mùa hiện tại
 
 **`v1.3.0` — Kiểm duyệt và quản trị**
 
-- [ ] **7.7** `[B]` UC21: báo cáo vi phạm từ màn kết thúc hoặc lịch sử, tự đính kèm nhật ký ván
-- [ ] **7.8** `[B]` Quyền quản trị viên (AC03); UC22 xem xét báo cáo, ra quyết định
-- [ ] **7.9** `[B]` UC23: khóa và mở khóa tài khoản; người bị khóa bị ngắt khỏi phòng đang ở
-- [ ] **7.10** `[B]` UC24 + MH11: bảng điều khiển — số ván, số người chơi, báo cáo chờ xử lý,
+- [x] **7.7** `[B]` UC21: báo cáo vi phạm từ màn kết thúc hoặc lịch sử, tự đính kèm nhật ký ván
+      · báo cáo ở trang mở lại ván cũ; MH08 dẫn sang Lịch sử (ván vừa xong lưu xong mới có mã)
+- [x] **7.8** `[B]` Quyền quản trị viên (AC03); UC22 xem xét báo cáo, ra quyết định
+- [x] **7.9** `[B]` UC23: khóa và mở khóa tài khoản; người bị khóa bị ngắt khỏi phòng đang ở
+- [x] **7.10** `[B]` UC24 + MH11: bảng điều khiển — số ván, số người chơi, báo cáo chờ xử lý,
       tỉ lệ thắng theo phe
 
 **Tiêu chí hoàn thành**: mọi use case UC01–UC25 có ít nhất một đường đi chạy được trên giao

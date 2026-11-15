@@ -81,6 +81,8 @@ Không dùng bộ thẻ *Ultimate Werewolf* hay *Loups-Garous de Thiercelieux*: 
 | `mh08-ket-thuc.jpg` | MH08 — ván thật kết thúc: phe thắng, lật vai cả làng, "Về phòng chờ" |
 | `mh09-ho-so.jpg` | MH09 — hồ sơ: thống kê, đổi tên, chọn tranh thẻ làm ảnh đại diện |
 | `uc04-lich-su.jpg` | UC04 — mở lại ván cũ: lật vai cả làng, diễn biến từng lượt |
+| `mh10-xep-hang.jpg` | MH10 — bảng vàng mùa: bục ba người đầu và bảng điểm |
+| `mh11-quan-tri.jpg` | MH11 — quản trị: số liệu, ván thắng theo phe, thẻ báo cáo và tài khoản |
 | `mh04-the-vai.jpg` | MH04 — thẻ Bảo vệ lật ngửa |
 | `mh05-dem-3d.jpg` | MH05 — đêm thứ hai, lượt Bảo vệ: quân người chết đã ngã, bảng việc có vòng đếm ngược |
 | `mh07-treo-co-3d.jpg` | MH07 — cảnh treo cổ sau bỏ phiếu |

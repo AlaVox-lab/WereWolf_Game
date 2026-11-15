@@ -424,13 +424,25 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       Tách `game/NhatKyVan.tsx` dùng chung với MH08 và sửa giờ nhật ký: tính từ sự kiện đầu tiên
       (trước đó in thẳng mốc tuyệt đối của máy chủ). Kiểm thử: 3 bài REST (`lichSu.test.ts`) + hợp
       đồng kho; thử thật trên PostgreSQL (người lạ 403, mã lạ 404)
+- [x] **7.3, 7.6–7.10** (một commit theo yêu cầu người dùng — G7 xong):
+      UC09 liên kết mời thử trọn luồng (chưa đăng nhập → MH01 → vào thẳng phòng). Máy chủ thêm
+      `DichVuXepHang` (UC05), `DichVuBaoCao` (UC21), `DichVuQuanTri` + cổng `CongNgatKetNoi`
+      (UC22–UC24), REST `/api/xep-hang`, `/api/bao-cao`, `/api/quan-tri/*`, sáu mã lỗi mới; kho
+      Prisma chặn mã không phải số ở mọi `timTheoId`; `ChiTietVan` thêm `laNguoiChoiAo`. Vẽ ba
+      dịch vụ + cổng lên Class Diagram. Web: MH10 `XepHang` (bục ba người đầu + bảng), MH11
+      `QuanTri` (Tổng quan với thanh "ván thắng theo phe" — màu qua bộ kiểm dataviz, có nhãn
+      chữ và bảng ẩn; Báo cáo; Tài khoản), hộp thoại báo cáo ở trang ván cũ (chỉ liệt kê người
+      thật), MH08 dẫn sang Lịch sử để báo cáo. Kiểm thử: `kiemDuyet.test.ts` 7 bài (Q14, mọi
+      điều kiện báo cáo, quyền AC03, khóa từ báo cáo → bị đẩy khỏi phòng + ngắt socket + không
+      đăng nhập được, mở khóa, không khóa quản trị viên, tổng quan). Thử thật trên trình duyệt +
+      PostgreSQL với ván hai người thật
 
 ---
 
 ## Đang làm
 
 **Giai đoạn 5 — giao diện chơi.** Xong 5.1–5.10; còn 5.11 (điện thoại thật qua LAN — cần người).
-Tiếp theo: G7 (xong 7.1, 7.2, 7.4, 7.5; còn liên kết mời, xếp hạng, báo cáo, quản trị) → G6 → G8. Kiểm thử: 340 đạt, 7 bỏ
+**Giai đoạn 7 xong** (mọi UC01–UC25 có đường chạy trên giao diện). Tiếp theo: G8 → G6. Kiểm thử: 347 đạt, 7 bỏ
 qua (Prisma, cần `DATABASE_URL_TEST`). Bàn giao chi tiết: `E:/Workspace/_scratch/WereWolf_Game/handoff/HANDOFF-2026-11-15-2024.md`.
 
 ---

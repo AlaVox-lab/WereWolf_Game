@@ -138,6 +138,28 @@ class DichVuLichSu {
 }
 note right of DichVuLichSu : UC04 — đọc ván đã lưu; nhật ký lộ vai cả làng nên chỉ\nngười đã chơi ván đó hoặc quản trị viên mở được
 DichVuLuuVan ..> DichVuLichSu : ván đã lưu đọc lại
+class DichVuXepHang {
+  + bangMuaHienTai() : BangXepHang
+}
+note right of DichVuXepHang : UC05 — bảng mùa hiện tại; điểm đã cộng lúc lưu ván (Q14),\ncùng điểm, cùng tỉ lệ thắng, cùng số ván thì cùng hạng
+DichVuLuuVan ..> DichVuXepHang : điểm mùa
+class DichVuBaoCao {
+  + baoCao(nguoiBaoCaoId, du) : BaoCaoLuu
+}
+note right of DichVuBaoCao : UC21 — chỉ người cùng ván báo cáo một người thật khác,\nmỗi cặp một lần; báo cáo gắn mã ván nên nhật ký tự đi kèm
+class DichVuQuanTri {
+  + danhSachBaoCao(nguoi) : List<BaoCaoLuu>
+  + xuLyBaoCao(nguoi, baoCaoId, du) : BaoCaoLuu
+  + datKhoa(nguoi, taiKhoanId, biKhoa) : void
+  + danhSachTaiKhoan(nguoi) : List<TaiKhoanLuu>
+  + tongQuan(nguoi) : TongQuan
+}
+interface CongNgatKetNoi {
+  + ngat(taiKhoanId, lyDo) : void
+}
+note right of DichVuQuanTri : UC22–UC24, chỉ quản trị viên (AC03). Khóa tài khoản thì\nngắt người đó qua CongNgatKetNoi — tầng Socket.IO cài cổng này
+DichVuQuanTri --> CongNgatKetNoi : UC23 ngắt người bị khóa
+DichVuBaoCao ..> DichVuQuanTri : báo cáo chờ xử lý
 class VanDau {
   + id : String
   + boLuatChoi : BoLuatChoi

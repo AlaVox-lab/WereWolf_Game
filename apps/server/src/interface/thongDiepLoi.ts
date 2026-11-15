@@ -46,6 +46,12 @@ const THONG_DIEP: Record<MaLoi, string> = {
   KHONG_PHAI_CHU_PHONG: 'Chỉ chủ phòng làm được việc này.',
   KHONG_O_TRONG_PHONG: 'Bạn không ở trong phòng này.',
   NGUOI_CHOI_AO_BI_TAT: 'Máy chủ này không cho thêm người chơi ảo.',
+  LY_DO_KHONG_HOP_LE: 'Lý do báo cáo dài 5–500 ký tự.',
+  KHONG_TU_BAO_CAO: 'Bạn không thể tự báo cáo chính mình.',
+  KHONG_BAO_CAO_NGUOI_AO: 'Chỉ báo cáo được người chơi thật.',
+  DA_BAO_CAO: 'Bạn đã báo cáo người này trong ván này rồi.',
+  BAO_CAO_DA_XU_LY: 'Báo cáo này đã được xử lý.',
+  KHONG_KHOA_QUAN_TRI: 'Không khóa được chính mình hay quản trị viên khác.',
 };
 
 /** Mã HTTP cho từng nhóm lỗi; mặc định 400. */
@@ -58,6 +64,9 @@ const MA_HTTP: Partial<Record<MaLoi, number>> = {
   KHONG_TIM_THAY: 404,
   KHONG_TIM_THAY_PHONG: 404,
   TRUNG_TEN_DANG_NHAP: 409,
+  DA_BAO_CAO: 409,
+  BAO_CAO_DA_XU_LY: 409,
+  KHONG_KHOA_QUAN_TRI: 403,
 };
 
 export function dichLoi(loi: unknown): { maHttp: number; than: PhanHoiLoi } {

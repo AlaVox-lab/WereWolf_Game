@@ -5,7 +5,9 @@ import { HoSo } from './screens/HoSo';
 import { ChiTietVanCu, LichSu } from './screens/LichSu';
 import { ManXacThuc } from './screens/ManXacThuc';
 import { PhongCho } from './screens/PhongCho';
+import { QuanTri } from './screens/QuanTri';
 import { TrangChu } from './screens/TrangChu';
+import { XepHang } from './screens/XepHang';
 
 // Ván mẫu kéo theo cả three.js — tải riêng khi vào, màn đăng nhập mở nhẹ.
 const TrangVanMau = lazy(() =>
@@ -39,6 +41,8 @@ function DuongDan() {
           <Route path="/ho-so" element={<HoSo />} />
           <Route path="/lich-su" element={<LichSu />} />
           <Route path="/lich-su/:vanId" element={<ChiTietVanCu />} />
+          <Route path="/xep-hang" element={<XepHang />} />
+          <Route path="/quan-tri" element={<QuanTri />} />
         </Route>
         {/* Phòng tự bọc khung khi chờ; trong ván màn chơi chiếm trọn màn hình. */}
         <Route path="/phong/:ma" element={<PhongCho />} />

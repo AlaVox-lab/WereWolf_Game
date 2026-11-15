@@ -210,7 +210,7 @@ WereWolf_Game/
 │       │   ├── components/ui/           # component kéo từ registry: shadcn/ui, Magic UI, Motion Primitives
 │       │   ├── game/                    # màn trong ván MH04–MH08: thanh trạng thái, bảng việc, lời dẫn, KhungChat
 │       │   │   └── canh3d/              #   cảnh 3D: trời, rừng, làng, bàn, nến, quân, thẻ, giá treo cổ
-│       │   ├── screens/                 # MH01 (gọi API thật), MH02 TrangChu, MH03/MH03b PhongCho, ManVan (5.5–5.10), MH09 HoSo, LichSu (UC04),
+│       │   ├── screens/                 # MH01 (gọi API thật), MH02 TrangChu, MH03/MH03b PhongCho, ManVan (5.5–5.10), MH09 HoSo, LichSu (UC04), MH10 XepHang, MH11 QuanTri,
 │       │   │                            #   KhungUngDung (điều hướng, CanDangNhap)
 │       │   ├── xem-truoc/               # /van-mau — phát lại ván mô phỏng khi chưa có máy chủ thời gian thực
 │       │   ├── lib/api.ts               # goiApi — REST, lỗi thành câu tiếng Việt (5.1)
@@ -399,6 +399,14 @@ ván — cùng `CongLuaChon` với người chơi ảo. Kết thúc hoặc hủy
 lại để chơi ván mới, ván được lưu (4.10). **Ván đã lưu** (7.2): `application/van/DichVuLichSu.ts`
 đọc lại qua `KhoVan` — `lichSuCua()` và `xemVan()`; bản ghi diễn tiến lộ vai cả làng nên chỉ
 người đã ngồi trong ván hoặc quản trị viên mở được (`KHONG_CO_QUYEN`).
+
+**Xếp hạng và kiểm duyệt** (7.6–7.10): `application/xephang/DichVuXepHang.ts` đánh hạng bảng mùa
+(điểm đã cộng lúc lưu ván, Q14). `application/kiemduyet/DichVuBaoCao.ts` (UC21) chỉ nhận báo
+cáo của người cùng ván về một người thật khác, mỗi cặp một lần. `DichVuQuanTri.ts` (UC22–UC24)
+kiểm quyền AC03 ở mọi phương thức; khóa tài khoản thì gọi cổng `CongNgatKetNoi` — tầng lắp ráp
+cài cổng này bằng cách đưa người đó khỏi phòng đang chờ rồi `socket.ngatTaiKhoan()` (đảo phụ
+thuộc: tầng ứng dụng không biết Socket.IO). Người bị khóa không đăng nhập lại được vì
+`timPhien()` trả `null`.
 
 ### 5.5. Các lớp điều khiển
 
@@ -743,6 +751,11 @@ nửa người còn sống mất kết nối liên tục quá 120 giây thì `So
 | `GET` | `/api/phong` | Phòng công khai đang chờ (MH02) |
 | `GET` | `/api/phong/:maPhong` · `/api/phong-cua-toi` | Xem phòng trước khi vào · phòng mình đang ở |
 | `GET` | `/api/lich-su` · `/api/lich-su/:vanId` | UC04 — ván đã chơi · mở lại nhật ký (chỉ người đã chơi ván đó hoặc quản trị viên) |
+| `GET` | `/api/xep-hang` | UC05 — bảng mùa hiện tại (MH10) |
+| `POST` | `/api/bao-cao` | UC21 — báo cáo một người thật cùng ván |
+| `GET` · `POST` | `/api/quan-tri/bao-cao` · `/api/quan-tri/bao-cao/:id` | UC22 — xem, ra quyết định (chỉ AC03) |
+| `GET` · `POST` | `/api/quan-tri/tai-khoan` · `/api/quan-tri/tai-khoan/:id/khoa` | UC23 — danh sách, khóa / mở khóa |
+| `GET` | `/api/quan-tri/tong-quan` | UC24 — bảng điều khiển (MH11) |
 
 Mọi việc **trong phòng và trong ván** — vào phòng, cấu hình, bắt đầu, hành động, bỏ phiếu,
 nhắn tin — đi qua Socket.IO để có thứ tự và phản hồi tức thời.

@@ -48,7 +48,14 @@ export type MaLoi =
   | 'PHONG_DA_BAT_DAU'
   | 'KHONG_PHAI_CHU_PHONG'
   | 'KHONG_O_TRONG_PHONG'
-  | 'NGUOI_CHOI_AO_BI_TAT';
+  | 'NGUOI_CHOI_AO_BI_TAT'
+  // Kiểm duyệt và quản trị (UC21–UC23)
+  | 'LY_DO_KHONG_HOP_LE'
+  | 'KHONG_TU_BAO_CAO'
+  | 'KHONG_BAO_CAO_NGUOI_AO'
+  | 'DA_BAO_CAO'
+  | 'BAO_CAO_DA_XU_LY'
+  | 'KHONG_KHOA_QUAN_TRI';
 
 export class LoiNghiepVu extends Error {
   override readonly name = 'LoiNghiepVu';

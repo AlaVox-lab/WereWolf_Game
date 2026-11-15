@@ -51,11 +51,13 @@ export function KhungUngDung({ children }: { children?: ReactNode }) {
     useKho.getState().datPhien(null);
     di('/dang-nhap');
   };
-  // Mục nào có trang thì mới hiện — lịch sử, xếp hạng, quản trị thêm dần ở Giai đoạn 7.
+  // Mục "Quản trị" chỉ hiện với quản trị viên (AC03); máy chủ vẫn kiểm quyền ở từng lời gọi.
   const muc: { den: string; ten: string; quanTri?: boolean }[] = [
     { den: '/', ten: 'Trang chủ' },
     { den: '/lich-su', ten: 'Lịch sử' },
+    { den: '/xep-hang', ten: 'Xếp hạng' },
     { den: '/ho-so', ten: 'Hồ sơ' },
+    { den: '/quan-tri', ten: 'Quản trị', quanTri: true },
   ];
   return (
     <div className="khung-ung-dung" data-thoi="dem">

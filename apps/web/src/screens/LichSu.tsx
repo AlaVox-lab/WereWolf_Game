@@ -1,8 +1,17 @@
 import type { ChiTietVanCongKhai, TomTatVanCongKhai } from '@moonvillage/shared';
-import { ArrowLeft, ChevronRight, Users } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Flag, Users } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { AnhVai } from '@/game/anhVai';
 import { TEN_VAI } from '@/game/hienThi';
 import { NhatKyVan } from '@/game/NhatKyVan';
@@ -83,6 +92,105 @@ export function LichSu() {
   );
 }
 
+/**
+ * UC21 — báo cáo vi phạm từ ván cũ. Chỉ liệt kê người thật khác trong ván; mã ván đi kèm nên
+ * quản trị viên mở lại được cả nhật ký. Máy chủ kiểm lại mọi điều kiện.
+ */
+function NutBaoCao({ van, toiId }: { van: ChiTietVanCongKhai; toiId: string }) {
+  const coTheBaoCao = van.nguoiChoi.filter((n) => n.id !== toiId && !n.laNguoiChoiAo);
+  const [mo, setMo] = useState(false);
+  const [ai, setAi] = useState<string | null>(null);
+  const [lyDo, setLyDo] = useState('');
+  const [loi, setLoi] = useState<string | null>(null);
+  const [daGui, setDaGui] = useState(false);
+  const [dangGui, setDangGui] = useState(false);
+  if (coTheBaoCao.length === 0) return null;
+
+  const gui = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!ai) return;
+    setDangGui(true);
+    setLoi(null);
+    try {
+      await goiApi('/bao-cao', 'POST', { vanId: van.vanId, nguoiBiBaoCaoId: ai, lyDo });
+      setDaGui(true);
+    } catch (loiGui) {
+      setLoi(loiGui instanceof Error ? loiGui.message : 'Không gửi được báo cáo.');
+    } finally {
+      setDangGui(false);
+    }
+  };
+
+  return (
+    <Dialog
+      open={mo}
+      onOpenChange={(m) => {
+        setMo(m);
+        if (!m) {
+          setDaGui(false);
+          setLoi(null);
+        }
+      }}
+    >
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="ls-nut-bao-cao">
+          <Flag aria-hidden />
+          Báo cáo vi phạm
+        </Button>
+      </DialogTrigger>
+      <DialogContent data-thoi="dem" className="so-tay">
+        <DialogHeader>
+          <DialogTitle className="so-tay-tieu-de">Báo cáo vi phạm</DialogTitle>
+          <DialogDescription>
+            Quản trị viên sẽ xem lại nhật ký của ván này cùng lý do bạn đưa ra.
+          </DialogDescription>
+        </DialogHeader>
+        {daGui ? (
+          <p className="pc-san-sang" role="status">
+            Đã gửi báo cáo. Cảm ơn bạn giữ làng trong sạch.
+          </p>
+        ) : (
+          <form className="ls-form-bao-cao" onSubmit={gui}>
+            <fieldset className="ls-chon-nguoi">
+              <legend>Người vi phạm</legend>
+              {coTheBaoCao.map((n) => (
+                <label key={n.id} className={`muc-tieu-nut ${ai === n.id ? 'muc-tieu-chon' : ''}`}>
+                  <input
+                    type="radio"
+                    name="nguoiBiBaoCao"
+                    className="sr-only"
+                    checked={ai === n.id}
+                    onChange={() => setAi(n.id)}
+                  />
+                  {n.ten}
+                </label>
+              ))}
+            </fieldset>
+            <label className="o-nhap">
+              <span className="text-sm font-semibold">Lý do (5–500 ký tự)</span>
+              <textarea
+                className="qt-ghi-chu"
+                value={lyDo}
+                maxLength={500}
+                onChange={(e) => setLyDo(e.target.value)}
+                placeholder="Ví dụ: chửi bới trong kênh chung, cố tình lộ vai…"
+              />
+            </label>
+            <Button type="submit" disabled={!ai || lyDo.trim().length < 5 || dangGui}>
+              {dangGui ? 'Đang gửi…' : 'Gửi báo cáo'}
+            </Button>
+            {loi && (
+              <p className="o-loi" role="alert">
+                {loi}
+              </p>
+            )}
+          </form>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 /** UC04 — mở lại một ván cũ: vai của cả làng và bản ghi diễn tiến từng lượt. */
 export function ChiTietVanCu() {
   const { vanId = '' } = useParams();
@@ -128,6 +236,7 @@ export function ChiTietVanCu() {
             {toi.conSong ? ', sống tới cuối ván.' : ', đã ngã xuống.'}
           </p>
         )}
+        {toi && toiId && <NutBaoCao van={van} toiId={toiId} />}
       </header>
 
       <ul className="lat-vai ls-lat-vai">

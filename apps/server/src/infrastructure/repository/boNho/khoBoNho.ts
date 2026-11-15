@@ -144,6 +144,7 @@ export function taoKhoBoNho(): KhoDuLieu {
             loaiVai: n.loaiVai,
             conSong: n.conSong,
             thuTuGhe: n.thuTuGhe,
+            laNguoiChoiAo: taiKhoan.get(n.id)?.laNguoiChoiAo ?? false,
           })),
           nhatKy: v.nhatKy,
         };
