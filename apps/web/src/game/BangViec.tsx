@@ -22,6 +22,9 @@ interface Props {
   daChon: string | null;
   onChon: (id: string) => void;
   daGui: boolean;
+  /** Lựa chọn có thật sự gửi lên máy chủ không (không phải bản xem trước). */
+  guiThat: boolean;
+  loiGui: string | null;
   onGui: () => void;
   onBoTrang: () => void;
 }
@@ -130,7 +133,9 @@ export function BangViec(p: Props) {
       <div className="bang-viec-chan">
         <p className="lua-chon-hien" aria-live="polite">
           {p.daGui
-            ? 'Đã ghi lựa chọn. Bản xem trước không gửi đi đâu cả.'
+            ? p.guiThat
+              ? 'Đã gửi. Chờ những người khác.'
+              : 'Đã ghi lựa chọn. Bản xem trước không gửi đi đâu cả.'
             : p.daChon
               ? `Bạn chọn: ${p.ten(p.daChon)}`
               : 'Chạm vào một người trên bàn.'}
@@ -144,6 +149,11 @@ export function BangViec(p: Props) {
           Xác nhận
         </Button>
       </div>
+      {p.loiGui && (
+        <p className="o-loi" role="alert">
+          {p.loiGui}
+        </p>
+      )}
       {!viec.choPhepBoTrang && <p className="ghi-chu">Hết giờ mà chưa chọn thì coi như bỏ lượt.</p>}
     </motion.section>
   );

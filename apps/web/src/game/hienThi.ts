@@ -42,7 +42,9 @@ export function tenPha(g: GocNhinNguoiChoi): string {
   switch (g.trangThai) {
     case 'PHA_DEM':
     case 'GIAI_QUYET_DEM':
-      return `Đêm thứ ${thuTu(g.luot)}`;
+      return g.luot < 1 ? 'Màn đêm buông' : `Đêm thứ ${thuTu(g.luot)}`;
+    case 'DANG_CHIA_VAI':
+      return 'Chia bài';
     case 'PHA_CONG_BO':
       return 'Trời sáng';
     case 'PHA_THAO_LUAN':
@@ -88,6 +90,8 @@ export function canLamGi(g: GocNhinNguoiChoi): string {
       return 'Nhắm mắt lại — làng đang ngủ.';
     case 'GIAI_QUYET_DEM':
       return 'Màn đêm sắp tan.';
+    case 'DANG_CHIA_VAI':
+      return 'Xem thẻ vai của bạn — đừng để ai nhìn thấy.';
     case 'PHA_CONG_BO':
       return 'Nghe công bố của quản trò.';
     case 'PHA_THAO_LUAN':

@@ -24,6 +24,8 @@ import { ANH_VAI } from '@/game/anhVai';
 import { TEN_VAI } from '@/game/hienThi';
 import { guiLenh } from '@/realtime/ketNoi';
 import { useKho } from '@/realtime/kho';
+import { KhungUngDung } from './KhungUngDung';
+import { ManVan } from './ManVan';
 
 const THU_TU_VAI: LoaiVaiCongKhai[] = ['Soi', 'DanLang', 'BaoVe', 'TienTri', 'PhuThuy', 'ThoSan'];
 
@@ -256,7 +258,7 @@ function BangCauHinh({
  * mời cũng chính là đường dẫn này. Mọi kiểm tra (đủ người, bộ vai hợp lệ, quyền chủ phòng) do
  * máy chủ làm; giao diện chỉ hiện `viPham` máy chủ gửi kèm ảnh chụp phòng.
  */
-export function PhongCho() {
+function NoiDungPhong() {
   const { ma = '' } = useParams();
   const maPhong = ma.toUpperCase();
   const di = useNavigate();
@@ -324,13 +326,10 @@ export function PhongCho() {
   }
 
   if (phong.vanId) {
-    // Màn trong ván nối ở 5.5–5.10.
+    // Ván vừa bắt đầu, góc nhìn đầu tiên đang tới.
     return (
       <main className="trang-chu">
-        <header className="tc-chao">
-          <p className="tc-loi-chao">Phòng {maPhong}</p>
-          <h1 className="tc-tieu-de">Ván đã bắt đầu.</h1>
-        </header>
+        <p className="phu">Quản trò đang chia bài…</p>
       </main>
     );
   }
@@ -457,5 +456,25 @@ export function PhongCho() {
         </section>
       </div>
     </main>
+  );
+}
+
+/**
+ * Đường dẫn `/phong/:ma`: có góc nhìn ván của phòng này thì vào màn chơi (chiếm trọn màn hình),
+ * không thì phòng chờ trong khung ứng dụng. Về phòng chờ sau MH08 là bỏ góc nhìn đang giữ.
+ */
+export function PhongCho() {
+  const { ma = '' } = useParams();
+  const phong = useKho((s) => s.phong);
+  const gocNhin = useKho((s) => s.gocNhin);
+  if (gocNhin && phong?.maPhong === ma.toUpperCase()) {
+    return (
+      <ManVan key={gocNhin.vanId} g={gocNhin} onVePhongCho={() => useKho.getState().xoaVan()} />
+    );
+  }
+  return (
+    <KhungUngDung>
+      <NoiDungPhong />
+    </KhungUngDung>
   );
 }

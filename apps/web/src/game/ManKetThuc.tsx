@@ -1,6 +1,7 @@
 import type { KetThucCongKhai, SuKienNhatKyCongKhai } from '@moonvillage/shared';
 import { motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { TextEffect } from '@/components/ui/text-effect';
 import { AnhVai } from './anhVai';
 import { TEN_PHE, TEN_VAI, dongHo, thuTu } from './hienThi';
@@ -44,10 +45,13 @@ export function ManKetThuc({
   ketThuc,
   ten,
   conSong,
+  onVePhongCho,
 }: {
   ketThuc: KetThucCongKhai;
   ten: (id: string) => string;
   conSong: ReadonlySet<string>;
+  /** Chỉ phòng chơi thật có — bản xem trước không có phòng để về. */
+  onVePhongCho?: () => void;
 }) {
   const giam = useReducedMotion();
   const [moNhatKy, setMoNhatKy] = useState(false);
@@ -92,14 +96,21 @@ export function ManKetThuc({
         ))}
       </ul>
 
-      <button
-        type="button"
-        className="nut nut-phu"
-        onClick={() => setMoNhatKy((m) => !m)}
-        aria-expanded={moNhatKy}
-      >
-        {moNhatKy ? 'Đóng diễn biến' : 'Xem diễn biến cả ván'}
-      </button>
+      <div className="ket-thuc-nut">
+        {onVePhongCho && (
+          <Button size="lg" onClick={onVePhongCho}>
+            Về phòng chờ
+          </Button>
+        )}
+        <Button
+          variant="secondary"
+          size="lg"
+          onClick={() => setMoNhatKy((m) => !m)}
+          aria-expanded={moNhatKy}
+        >
+          {moNhatKy ? 'Đóng diễn biến' : 'Xem diễn biến cả ván'}
+        </Button>
+      </div>
       {moNhatKy && (
         <ol className="nhat-ky tam">
           {dong.map(({ sk, cau: c }) => (

@@ -4,20 +4,41 @@ import type { LenhNguoiChoi, PhanHoiLenh, SuKienMayChu } from '@moonvillage/shar
 import { io, type Socket } from 'socket.io-client';
 import { useKho } from './kho';
 
-let socket: Socket<SuKienMayChu, LenhNguoiChoi> | null = null;
+type SocketUngDung = Socket<SuKienMayChu, LenhNguoiChoi>;
+
+// Giữ kết nối trên globalThis: khi phát triển Vite nạp lại tệp này lúc sửa mã, bản mới vẫn thấy
+// đúng kết nối đang mở thay vì mất dấu nó (một trang — một kết nối).
+const chung = globalThis as { __ketNoiLangTrang?: SocketUngDung | null };
+const lay = () => chung.__ketNoiLangTrang ?? null;
+/** Vừa nối (lại): ảnh chụp phòng đầu tiên cho biết góc nhìn đang giữ còn thuộc ván nào không. */
+let vuaNoi = false;
+
+const daXong = (trangThai: string) => trangThai === 'KET_THUC' || trangThai === 'HUY_VAN';
 
 export function moKetNoi(): void {
-  if (socket) return;
+  if (lay()) return;
   const kho = useKho.getState();
   kho.datKetNoi('dang-noi');
-  socket = io({ path: '/socket.io', withCredentials: true });
-  socket.on('connect', () => useKho.getState().datKetNoi('da-noi'));
+  const socket: SocketUngDung = io({ path: '/socket.io', withCredentials: true });
+  chung.__ketNoiLangTrang = socket;
+  socket.on('connect', () => {
+    vuaNoi = true;
+    useKho.getState().datKetNoi('da-noi');
+  });
   socket.on('disconnect', () => useKho.getState().datKetNoi('mat-ket-noi'));
   socket.on('connect_error', () => useKho.getState().datKetNoi('mat-ket-noi'));
   socket.on('phong:cap-nhat', (p) => {
     const s = useKho.getState();
     s.datPhong(p);
-    if (!p?.vanId && s.gocNhin && s.gocNhin.trangThai !== 'KET_THUC') s.xoaVan();
+    const g = s.gocNhin;
+    if (!p) {
+      s.xoaVan();
+    } else if (vuaNoi && g && !daXong(g.trangThai) && p.vanId !== g.vanId) {
+      // Ván kết thúc trong lúc mất kết nối — bỏ góc nhìn cũ đang dở.
+      s.xoaVan();
+    }
+    // Ván vừa xong thì phòng mở lại trước, ảnh chụp cuối (MH08) tới ngay sau — giữ góc nhìn.
+    vuaNoi = false;
   });
   socket.on('van:goc-nhin', ({ gocNhin, bayGioMayChu }) =>
     useKho.getState().datGocNhin(gocNhin, bayGioMayChu),
@@ -31,8 +52,8 @@ export function moKetNoi(): void {
 }
 
 export function dongKetNoi(): void {
-  socket?.disconnect();
-  socket = null;
+  lay()?.disconnect();
+  chung.__ketNoiLangTrang = null;
   const s = useKho.getState();
   s.datKetNoi('chua-noi');
   s.datPhong(null);
@@ -45,6 +66,7 @@ export function guiLenh<K extends keyof LenhNguoiChoi>(
   duLieu: Parameters<LenhNguoiChoi[K]>[0],
 ): Promise<void> {
   return new Promise((ok, loi) => {
+    const socket = lay();
     if (!socket?.connected) {
       loi(new Error('Mất kết nối với máy chủ — đang thử nối lại.'));
       return;

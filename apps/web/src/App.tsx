@@ -34,8 +34,9 @@ function DuongDan() {
       <Route element={<CanDangNhap />}>
         <Route element={<KhungUngDung />}>
           <Route index element={<TrangChu />} />
-          <Route path="/phong/:ma" element={<PhongCho />} />
         </Route>
+        {/* Phòng tự bọc khung khi chờ; trong ván màn chơi chiếm trọn màn hình. */}
+        <Route path="/phong/:ma" element={<PhongCho />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

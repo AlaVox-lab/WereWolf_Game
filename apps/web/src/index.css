@@ -12,6 +12,7 @@
 @import './styles/xac-thuc.css';
 @import './styles/khung.css';
 @import './styles/phong-cho.css';
+@import './styles/trong-van.css';
 
 @custom-variant dark (&:is(.dark *));
 

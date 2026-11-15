@@ -1,7 +1,50 @@
 import type { GocNhinNguoiChoi } from '@moonvillage/shared';
+import { BookOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { TextEffect } from '@/components/ui/text-effect';
 import { AnhVai } from './anhVai';
 import { canLamGi, dongHo, LOI_GOI_VAI, TEN_PHE, tenPha } from './hienThi';
+
+/** Sổ tay cho người mới (N05): năng lực của vai mình và bộ luật đang dùng trong ván này. */
+function SoTay({ g }: { g: GocNhinNguoiChoi }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="nut-so-tay">
+          <BookOpen aria-hidden />
+          Sổ tay
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="so-tay" data-thoi="dem">
+        <DialogHeader>
+          <DialogTitle className="so-tay-tieu-de">Bạn là {g.toi.tenVai}</DialogTitle>
+          <DialogDescription>{g.toi.moTaNangLuc}</DialogDescription>
+        </DialogHeader>
+        <h3 className="so-tay-muc">Luật của ván này</h3>
+        <ul className="so-tay-luat">
+          {g.boLuat.map((q) => (
+            <li key={q.ma} className={q.dangBat ? '' : 'so-tay-tat'}>
+              <span className="so-tay-dau">{q.dangBat ? 'Bật' : 'Tắt'}</span>
+              {q.noiDung}
+            </li>
+          ))}
+        </ul>
+        <p className="ghi-chu">
+          Ban đêm mỗi vai thức dậy theo thứ tự; ban ngày cả làng thảo luận rồi bỏ phiếu treo cổ. Dân
+          thắng khi hết Sói, Sói thắng khi số Sói bằng số người còn lại.
+        </p>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 interface Props {
   g: GocNhinNguoiChoi;
@@ -21,6 +64,7 @@ export function ThanhTrangThai({ g, conLai }: Props) {
           {g.luot > 0 ? `Lượt ${g.luot} · ` : ''}
           {conSong}/{g.nguoiChoi.length} người còn sống
         </p>
+        <SoTay g={g} />
       </div>
 
       <div className="thanh-pha" aria-live="polite">

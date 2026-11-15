@@ -40,7 +40,7 @@ export function CanDangNhap({ children }: { children?: ReactNode }) {
 }
 
 /** Khung các trang ngoài ván: thanh trên có tên làng, các mục, người đang đăng nhập. */
-export function KhungUngDung() {
+export function KhungUngDung({ children }: { children?: ReactNode }) {
   const phien = useKho((s) => s.phien)!;
   const ketNoi = useKho((s) => s.ketNoi);
   const di = useNavigate();
@@ -96,9 +96,7 @@ export function KhungUngDung() {
           </Button>
         </div>
       </header>
-      <div className="khung-noi-dung">
-        <Outlet />
-      </div>
+      <div className="khung-noi-dung">{children ?? <Outlet />}</div>
     </div>
   );
 }

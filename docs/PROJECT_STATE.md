@@ -24,12 +24,12 @@
 | Quyết định kiến trúc | ADR-0001 TypeScript toàn tầng — **Đã chấp nhận** 19/10 |
 | Điểm mơ hồ trong luật | Q01–Q11 **đã chốt** 19/10. **Q12, Q13 mới, chưa chốt** — đã cài theo đề xuất, không chặn việc gì |
 | Kiểm thử tự động | 285 bài xanh (1 sức khỏe, 10 `chung`, 30 `luat`, 25 `vaitro`, 17 `van`, 24 `BoGiaiQuyetDem`, 15 `baucu`, 13 `BoKiemTraThangThua`, 8 `kenh`, 8 `trangthai`, 10 `BoChiaVai`, 4 đối chiếu sơ đồ, 13 `CongLuaChon`, 29 pha đêm, 19 pha ngày, 9 `BoQuanLyKenh`, 8 `BoPhatSuKien`, 9 `taoGocNhin`, 7 nhật ký, 7 `NguoiChoiAo`, 14 mô phỏng, 5 hệ thống) · độ phủ dòng lệnh 99 % · **20 / 20 TC** · **3 / 5 ST** không giao diện (ST01, ST02, ST04; ST03, ST05 cần máy chủ thời gian thực) |
-| Thiết kế giao diện | **Đang làm** — MH01, MH02, MH03/MH03b đã nối máy chủ thật (5.2–5.4); màn trong ván MH04–MH08 dạng **3D** chạy được ở ván mẫu; thẻ vai là tranh khắc phạm vi công cộng. Còn nối màn trong ván với socket và kênh chat (5.5–5.10). Xem `docs/design/README.md` |
+| Thiết kế giao diện | **Đang làm** — MH01, MH02, MH03/MH03b đã nối máy chủ thật (5.2–5.4); màn trong ván MH04–MH08 dạng **3D** chạy được ở ván mẫu; thẻ vai là tranh khắc phạm vi công cộng. Màn trong ván nối socket thật kèm khung chat (5.5–5.10). Xem `docs/design/README.md` |
 
 **Một câu tóm tắt trạng thái**: toàn bộ luật chơi và bộ điều phối ván đã xong — một ván chạy
 trọn bằng người chơi ảo, 1 000 ván 6–12 người kết thúc đúng lúc, 0 lỗi, 20/20 TC và ST01, ST02,
-ST04 xanh. Máy chủ thời gian thực, PostgreSQL và tài khoản xong (Giai đoạn 4); web đã có đăng
-nhập, trang chủ, phòng chờ — còn nối màn trong ván (Giai đoạn 5).
+ST04 xanh. Máy chủ thời gian thực, PostgreSQL và tài khoản xong (Giai đoạn 4); web chơi trọn
+ván thật: đăng nhập, trang chủ, phòng chờ, màn trong ván 3D, chat (Giai đoạn 5).
 
 **Phân công** (theo mục 1.6 tài liệu gốc — **cần gán tên** ở hạng mục 0.9):
 
@@ -398,12 +398,23 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       (sáu `Switch` kèm nội dung luật; người khác xem bản chỉ đọc); công tắc công khai; thêm/bớt
       người ảo; danh sách `viPham` máy chủ gửi; bắt đầu ván; rời phòng; bị loại hoặc phòng đóng thì
       về trang chủ kèm lời báo. Khi `vanId` có giá trị: khung tạm "Ván đã bắt đầu" tới 5.5
+- [x] **5.5–5.10** (một commit theo yêu cầu người dùng) `screens/ManVan.tsx` đổ `GocNhinNguoiChoi`
+      thật vào `ManChoi` — cùng màn với ván mẫu: đồng hồ theo `bayGioMayChu()`, mốc pha/đêm/việc,
+      hàng khoảnh khắc bằng `timKhoanhKhac` (tối đa 4), thẻ vai MH04 một lần mỗi ván, gửi
+      `van:hanh-dong` / `van:bo-phieu` (lỗi máy chủ mở lại bảng việc), MH08 có "Về phòng chờ",
+      màn "Ván bị hủy" (Q04). `game/KhungChat.tsx`: thẻ theo `kenhXemDuoc`, ô nhập theo
+      `kenhGuiDuoc`, tự đứng ở kênh gửi được và tự mở trong lượt Sói, đếm tin chưa đọc.
+      `ThanhTrangThai` thêm "Sổ tay" (năng lực vai + bộ luật ván này — N05). `/phong/:ma` ra khỏi
+      khung: trong ván chiếm trọn màn hình. `ketNoi.ts` giữ góc nhìn khi phòng mở lại trước ảnh
+      chụp cuối, chỉ bỏ góc nhìn dở khi nối lại thấy ván đã khác; giữ socket trên `globalThis`
+      để HMR không mất kết nối. Đánh dấu luôn 3.1–3.3
 
 ---
 
 ## Đang làm
 
-**Giai đoạn 5 — giao diện chơi.** Xong 5.1–5.4. Tiếp theo: nối màn chơi 3D với socket, khung chat (5.5–5.10). Kiểm thử: 337 đạt, 7 bỏ
+**Giai đoạn 5 — giao diện chơi.** Xong 5.1–5.10; còn 5.11 (điện thoại thật qua LAN — cần người).
+Tiếp theo: G7 (hồ sơ, lịch sử, xếp hạng, quản trị) → G6 → G8. Kiểm thử: 337 đạt, 7 bỏ
 qua (Prisma, cần `DATABASE_URL_TEST`). Bàn giao chi tiết: `E:/Workspace/_scratch/WereWolf_Game/handoff/HANDOFF-2026-11-15-2024.md`.
 
 ---

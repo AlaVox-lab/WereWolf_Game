@@ -23,14 +23,21 @@ interface Props {
   onXongKhoanhKhac: () => void;
   /** Người xem vừa trả lời việc đang mở (xác nhận hoặc bỏ trắng). */
   onDaTraLoi?: () => void;
+  /**
+   * Gửi lựa chọn lên máy chủ (`null` là bỏ trắng; `loai` chỉ khi Phù thủy chọn lọ). Không truyền
+   * thì là bản xem trước — lựa chọn chỉ ghi tại chỗ.
+   */
+  onGuiLuaChon?: (mucTieuId: string | null, loai: LoaiThuoc | null) => Promise<void>;
+  /** Nút "Về phòng chờ" ở màn kết thúc (MH08). */
+  onVePhongCho?: () => void;
   /** Lớp phủ riêng của nơi dùng màn này (thẻ vai, bảng điều khiển xem trước…). */
   children?: ReactNode;
 }
 
 /**
  * Màn trong ván (MH05–MH08) — chỉ vẽ lại GocNhinNguoiChoi, không biết dữ liệu đến từ máy chủ
- * thật hay từ bản phát lại. Cảnh 3D ở dưới, các lớp chữ DOM ở trên. Giai đoạn 5 thay nguồn dữ
- * liệu bằng Socket.IO, màn này giữ nguyên.
+ * thật hay từ bản phát lại. Cảnh 3D ở dưới, các lớp chữ DOM ở trên. Phòng chơi thật (5.5–5.10)
+ * truyền `onGuiLuaChon`; bản xem trước `/van-mau` không truyền.
  */
 export function ManChoi(p: Props) {
   const { g, bayGio } = p;
@@ -46,11 +53,29 @@ export function ManChoi(p: Props) {
   const [daChon, setDaChon] = useState<string | null>(null);
   const [nhom, setNhom] = useState<LoaiThuoc | null>(null);
   const [daGui, setDaGui] = useState(false);
+  const [loiGui, setLoiGui] = useState<string | null>(null);
   useEffect(() => {
     setDaChon(null);
     setNhom(null);
     setDaGui(false);
+    setLoiGui(null);
   }, [khoaViec]);
+
+  const traLoi = async (mucTieuId: string | null) => {
+    setDaGui(true);
+    setLoiGui(null);
+    if (!p.onGuiLuaChon) {
+      p.onDaTraLoi?.();
+      return;
+    }
+    try {
+      await p.onGuiLuaChon(mucTieuId, nhom);
+    } catch (e) {
+      // Máy chủ từ chối (hết hạn, mục tiêu không hợp lệ…) — mở lại để chọn lần nữa.
+      setDaGui(false);
+      setLoiGui(e instanceof Error ? e.message : 'Không gửi được lựa chọn.');
+    }
+  };
 
   const chonDuoc = useMemo(() => {
     if (!viec || daGui) return new Set<string>();
@@ -101,14 +126,12 @@ export function ManChoi(p: Props) {
             daChon={daChon}
             onChon={setDaChon}
             daGui={daGui}
-            onGui={() => {
-              setDaGui(true);
-              p.onDaTraLoi?.();
-            }}
+            guiThat={!!p.onGuiLuaChon}
+            loiGui={loiGui}
+            onGui={() => void traLoi(daChon)}
             onBoTrang={() => {
               setDaChon(null);
-              setDaGui(true);
-              p.onDaTraLoi?.();
+              void traLoi(null);
             }}
           />
         )}
@@ -133,6 +156,7 @@ export function ManChoi(p: Props) {
           ketThuc={g.ketThuc!}
           ten={tenTheoId}
           conSong={new Set(g.nguoiChoi.filter((n) => n.conSong).map((n) => n.id))}
+          {...(p.onVePhongCho ? { onVePhongCho: p.onVePhongCho } : {})}
         />
       )}
 

@@ -265,29 +265,29 @@ Mục tiêu: có bản thiết kế hoàn chỉnh cho mọi màn trong MVP **tr�
 > thẻ vai là **tranh khắc phạm vi công cộng** (The Met, CC0), component lấy sẵn từ registry trong
 > sổ tay SKILLS (shadcn/ui, Magic UI, Motion Primitives, Paper Shaders) thay cho tự dựng.
 
-- [ ] **3.1** Hệ thiết kế: token màu cho **hai không khí đêm và ngày**, màu phe (Dân / Sói),
+- [x] **3.1** Hệ thiết kế: token màu cho **hai không khí đêm và ngày**, màu phe (Dân / Sói),
       màu trạng thái (sống, chết, mất kết nối); cỡ chữ; khoảng cách; bo góc. Bộ phận dùng lại:
       thẻ người chơi, đồng hồ đếm ngược, thẻ vai, nút hành động chính, bong bóng tin nhắn, nhãn
       kênh, thanh "bạn là ai – pha nào – cần làm gì"
       · *09/11*: xong token hai không khí, màu phe, trạng thái, chữ, khoảng cách, bo góc; thẻ
-      người chơi, đồng hồ vòng, thẻ vai, nút chính, thanh trạng thái. **Còn** bong bóng tin
-      nhắn, nhãn kênh
-- [ ] **3.2** Luồng ngoài ván: MH01 đăng nhập/đăng ký, MH02 trang chủ, MH03 phòng chờ, MH03b
+      người chơi, đồng hồ vòng, thẻ vai, nút chính, thanh trạng thái. *15/11*: bong bóng tin
+      nhắn, nhãn kênh (khung chat 5.6–5.7)
+- [x] **3.2** Luồng ngoài ván: MH01 đăng nhập/đăng ký, MH02 trang chủ, MH03 phòng chờ, MH03b
       cấu hình bộ luật
-      · *10/11*: xong **MH01** (giao diện, kiểm dữ liệu nhập; máy chủ ở 4.1–4.2). **Còn** MH02,
-      MH03, MH03b
-- [ ] **3.3** Luồng trong ván: MH04 thông báo vai; MH05 pha đêm với **năm biến thể** — Bảo vệ,
+      · *10/11*: xong **MH01** (giao diện, kiểm dữ liệu nhập; máy chủ ở 4.1–4.2). *15/11*: MH02,
+      MH03, MH03b dựng thẳng trên máy chủ thật (5.3–5.4)
+- [x] **3.3** Luồng trong ván: MH04 thông báo vai; MH05 pha đêm với **năm biến thể** — Bảo vệ,
       Sói (kèm kênh Sói), Tiên tri (kèm kết quả soi), Phù thủy (kèm nạn nhân và hai lọ), màn chờ
       của Dân làng; MH06 pha ngày; MH07 bỏ phiếu; hộp thoại Thợ săn (UC17); MH08 kết thúc
       · *09/11*: xong MH04, MH05 (Bảo vệ, Sói, Tiên tri có nhãn kết quả soi, Phù thủy có nạn
       nhân và hai lọ, màn chờ), MH06, MH07 kèm cảnh treo cổ, bảng Thợ săn, MH08 kèm bản ghi
-      diễn biến. **Còn** kênh Sói và khung chat
+      diễn biến. *15/11*: kênh Sói và khung chat (5.6–5.7)
 - [ ] **3.4** Rà thiết kế theo sáu nguyên tắc mục 14.2 tài liệu gốc; mỗi màn có bản điện
       thoại 390 px và bản máy tính
 - [ ] **3.5** Xuất token thành `apps/web/src/styles/tokens.css`; chụp ảnh từng màn vào
       `docs/design/`; tạo `docs/design/README.md` ghi liên kết thiết kế và danh sách kiểm 3.4
       · *10/11*: có `tokens.css`, 5 ảnh (MH01 ×2, MH04, MH05 3D, MH07 3D), `docs/design/README.md`
-      kèm bảng nguồn tranh. **Còn** ảnh MH02–MH03b và danh sách kiểm 3.4
+      kèm bảng nguồn tranh. *15/11*: thêm ảnh MH02, MH03. **Còn** danh sách kiểm 3.4
 - [ ] **3.6** *(sau MVP, chỉ cần khung sườn)* MH09 hồ sơ, MH10 bảng xếp hạng, MH11 quản trị
 
 **Tiêu chí hoàn thành**: mọi màn MH01–MH08 và MH03b có thiết kế; danh sách kiểm sáu nguyên
@@ -347,14 +347,14 @@ tính luật.
 - [x] **5.3** `[C]` MH02 trang chủ: tạo phòng, nhập mã phòng
 - [x] **5.4** `[C]` MH03 phòng chờ và MH03b cấu hình bộ luật: danh sách thành viên, cấu hình vai
       có kiểm tức thời, sáu công tắc kèm mô tả, tóm tắt luật cho mọi người, nút thêm người chơi ảo
-- [ ] **5.5** `[A]` MH04 thông báo vai: vai, mô tả năng lực, đồng đội nếu là Sói
-- [ ] **5.6** `[A]` MH05 pha đêm: năm biến thể theo thiết kế 3.3; chỉ báo tiến độ **dạng số**;
+- [x] **5.5** `[A]` MH04 thông báo vai: vai, mô tả năng lực, đồng đội nếu là Sói
+- [x] **5.6** `[A]` MH05 pha đêm: năm biến thể theo thiết kế 3.3; chỉ báo tiến độ **dạng số**;
       kênh Sói trong lượt Sói; Dân làng chỉ thấy màn chờ
-- [ ] **5.7** `[B]` MH06 pha ngày: bảng người chơi, công bố người chết buổi sáng, kênh chung, kênh
+- [x] **5.7** `[B]` MH06 pha ngày: bảng người chơi, công bố người chết buổi sáng, kênh chung, kênh
       người chết cho người đã bị loại
-- [ ] **5.8** `[B]` MH07 bỏ phiếu và bỏ trắng; hộp thoại Thợ săn (UC17)
-- [ ] **5.9** `[B]` MH08 kết thúc: phe thắng, vai của tất cả, nhật ký diễn tiến theo từng lượt
-- [ ] **5.10** `[ALL]` Thanh trạng thái cố định "bạn là ai – đang ở pha nào – cần làm gì" trên
+- [x] **5.8** `[B]` MH07 bỏ phiếu và bỏ trắng; hộp thoại Thợ săn (UC17)
+- [x] **5.9** `[B]` MH08 kết thúc: phe thắng, vai của tất cả, nhật ký diễn tiến theo từng lượt
+- [x] **5.10** `[ALL]` Thanh trạng thái cố định "bạn là ai – đang ở pha nào – cần làm gì" trên
       mọi màn trong ván; lời nhắc lượt theo ngữ cảnh bằng tiếng Việt cho người mới (nhu cầu N05)
 - [ ] **5.11** `[C]` Kiểm trên điện thoại thật qua mạng LAN (Vite `--host`) ở 360–430 px và trên
       máy tính

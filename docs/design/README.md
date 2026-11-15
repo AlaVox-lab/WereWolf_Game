@@ -84,6 +84,5 @@ Không dùng bộ thẻ *Ultimate Werewolf* hay *Loups-Garous de Thiercelieux*: 
 
 ## Còn thiếu
 
-- Kênh Sói và khung chat (bong bóng tin nhắn, nhãn kênh)
 - Danh sách kiểm sáu nguyên tắc mục 14.2 tài liệu gốc (hạng mục 3.4)
 - Đo hiệu năng cảnh 3D trên máy yếu và điện thoại thật

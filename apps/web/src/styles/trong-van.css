@@ -1,0 +1,163 @@
+/* Phòng chơi thật (5.5–5.10): khung trò chuyện, sổ tay người mới, nút ở màn kết thúc. */
+
+/* ——— Khung trò chuyện ——— */
+.khung-chat {
+  position: absolute;
+  z-index: 65;
+  left: var(--le-man);
+  bottom: var(--le-man);
+}
+.chat-bang {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--kc-2);
+  width: min(360px, calc(100vw - 2 * var(--le-man) - 14px));
+  height: min(420px, 48vh);
+  padding: var(--kc-3);
+}
+.chat-dau {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kc-2);
+}
+.chat-tab-SOI[data-state='active'] {
+  color: var(--mau-soi);
+}
+.chat-ds {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  margin: 0;
+  padding: 0 4px 0 0;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.chat-trong {
+  color: var(--muc-phu);
+  font-size: var(--co-chu-nho);
+  text-align: center;
+  padding: var(--kc-4) 0;
+}
+.chat-tin {
+  display: grid;
+  justify-items: start;
+  gap: 1px;
+  max-width: 88%;
+}
+.chat-tin-toi {
+  justify-self: end;
+  justify-items: end;
+}
+.chat-ten {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--muc-phu);
+}
+.chat-noi-dung {
+  padding: 6px 10px;
+  border-radius: 10px 10px 10px 2px;
+  background: var(--tam-2);
+  overflow-wrap: anywhere;
+}
+.chat-tin-toi .chat-noi-dung {
+  border-radius: 10px 10px 2px 10px;
+  background: color-mix(in srgb, var(--mau-den-long) 24%, var(--tam-2));
+}
+.chat-SOI .chat-noi-dung {
+  box-shadow: inset 2px 0 0 var(--mau-soi);
+}
+.chat-NGUOI_CHET .chat-noi-dung {
+  font-style: italic;
+  color: var(--muc-phu);
+}
+.chat-moc {
+  height: 1px;
+}
+.chat-nhap {
+  display: flex;
+  gap: var(--kc-2);
+}
+.chat-im {
+  padding: var(--kc-2) 0;
+}
+.chat-mo {
+  position: relative;
+  box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.8);
+}
+.chat-dem {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--bo-tron);
+  background: var(--mau-den-long);
+  color: #1d150c;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ——— Sổ tay ——— */
+.nut-so-tay {
+  margin: var(--kc-1) 0 0 -10px;
+  color: var(--muc-phu);
+}
+.so-tay {
+  color: var(--muc);
+  max-height: min(640px, 90vh);
+  overflow-y: auto;
+}
+.so-tay-tieu-de {
+  font-family: var(--chu-trang-trong);
+  font-size: 2rem;
+  line-height: 1;
+}
+.so-tay-muc {
+  margin: 0;
+  font-size: 1rem;
+}
+.so-tay-luat {
+  display: grid;
+  gap: var(--kc-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.so-tay-luat li {
+  display: flex;
+  gap: var(--kc-3);
+  align-items: baseline;
+}
+.so-tay-dau {
+  flex: none;
+  width: 3ch;
+  font-size: var(--co-chu-nho);
+  font-weight: 600;
+  color: var(--mau-dan);
+}
+.so-tay-tat {
+  color: var(--muc-phu);
+}
+.so-tay-tat .so-tay-dau {
+  color: var(--mau-chet);
+}
+
+/* ——— Màn kết thúc ——— */
+.ket-thuc-nut {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--kc-3);
+}
+
+@media (max-width: 760px) {
+  .khung-chat {
+    bottom: auto;
+    top: calc(var(--le-man) + 104px);
+  }
+  .chat-bang {
+    height: min(380px, 52vh);
+  }
+}
