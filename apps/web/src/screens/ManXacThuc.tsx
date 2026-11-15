@@ -2,7 +2,8 @@ import type { LoaiVaiCongKhai } from '@moonvillage/shared';
 import { GodRays } from '@paper-design/shaders-react';
 import { LayoutGroup, motion, useReducedMotion } from 'motion/react';
 import { useId, useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router';
+import type { PhienCongKhai } from '@moonvillage/shared';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +11,8 @@ import { MagicCard } from '@/components/ui/magic-card';
 import { TextEffect } from '@/components/ui/text-effect';
 import { ANH_TRANG, ANH_VAI } from '@/game/anhVai';
 import { TEN_VAI } from '@/game/hienThi';
+import { goiApi } from '@/lib/api';
+import { useKho } from '@/realtime/kho';
 
 export type CheDo = 'dang-nhap' | 'dang-ky';
 
@@ -117,25 +120,47 @@ function O({
 }
 
 /**
- * MH01 — đăng nhập (UC02) và đăng ký (UC01). Chỉ là giao diện: máy chủ tài khoản thuộc Giai
- * đoạn 4 (4.1–4.2), nên gửi biểu mẫu chỉ kiểm dữ liệu nhập rồi dẫn vào ván mẫu.
+ * MH01 — đăng nhập (UC02) và đăng ký (UC01). Kiểm dữ liệu nhập ngay ở trình duyệt để báo sớm;
+ * máy chủ kiểm lại và là nơi quyết định. Thành công thì vào trang trước đó hoặc trang chủ.
  */
 export function ManXacThuc({ cheDo }: { cheDo: CheDo }) {
   const di = useNavigate();
+  const [timKiem] = useSearchParams();
   const giam = useReducedMotion();
   const idGoc = useId();
   const [loi, setLoi] = useState<Loi>({});
+  const [loiChung, setLoiChung] = useState<string | null>(null);
   const [dangGui, setDangGui] = useState(false);
+  const phien = useKho((s) => s.phien);
+  const datPhien = useKho((s) => s.datPhien);
   const dangKy = cheDo === 'dang-ky';
+  // Tạm vào ván mẫu cho tới khi có trang chủ MH02 (5.3).
+  const tiep = timKiem.get('tiep') ?? '/van-mau';
 
-  const gui = (e: FormEvent<HTMLFormElement>) => {
+  if (phien) return <Navigate to={tiep} replace />;
+
+  const gui = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const du = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
     const l = kiemTra(cheDo, du);
     setLoi(l);
+    setLoiChung(null);
     if (Object.keys(l).length) return;
     setDangGui(true);
-    setTimeout(() => di('/van-mau'), 900);
+    try {
+      const p = await goiApi<PhienCongKhai>(
+        dangKy ? '/tai-khoan/dang-ky' : '/tai-khoan/dang-nhap',
+        'POST',
+        dangKy
+          ? { tenDangNhap: du.tenDangNhap, bietDanh: du.tenHienThi, matKhau: du.matKhau }
+          : { tenDangNhap: du.tenDangNhap, matKhau: du.matKhau },
+      );
+      datPhien(p);
+      di(tiep, { replace: true });
+    } catch (loiGoi) {
+      setLoiChung(loiGoi instanceof Error ? loiGoi.message : 'Không nối được máy chủ.');
+      setDangGui(false);
+    }
   };
 
   return (
@@ -245,9 +270,14 @@ export function ManXacThuc({ cheDo }: { cheDo: CheDo }) {
               </Button>
             </form>
 
+            {loiChung && (
+              <p className="o-loi xt-loi-chung" role="alert">
+                {loiChung}
+              </p>
+            )}
             <p className="ghi-chu">
-              Bản giao diện: máy chủ tài khoản làm ở Giai đoạn 4, nên lúc này chỉ kiểm dữ liệu nhập
-              rồi mở ván mẫu.
+              Muốn xem trước khi đăng ký? <Link to="/van-mau">Xem một ván mẫu</Link> chơi bằng người
+              chơi ảo.
             </p>
           </div>
         </MagicCard>

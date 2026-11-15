@@ -25,7 +25,10 @@ const kho: KhoDuLieu =
 const mayChu = lapRapMayChu({
   kho,
   biMatPhien: biMat,
-  choPhepNguoiChoiAo: process.env.CHO_PHEP_NGUOI_CHOI_AO === 'true',
+  // Mặc định bật khi phát triển, tắt ở production — trừ khi biến môi trường nói khác (4.5).
+  choPhepNguoiChoiAo:
+    process.env.CHO_PHEP_NGUOI_CHOI_AO === 'true' ||
+    (process.env.NODE_ENV !== 'production' && process.env.CHO_PHEP_NGUOI_CHOI_AO !== 'false'),
 });
 
 mayChu.http.listen(port, () => {
