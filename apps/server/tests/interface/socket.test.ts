@@ -2,6 +2,7 @@
 // socket với người chơi ảo, ST05 rà mọi gói tin, kênh chat (UC18), BR13 kết nối lại, Q04 hủy ván.
 import type { GocNhinNguoiChoi, GoiGocNhin, PhongCongKhai } from '@moonvillage/shared';
 import { afterEach, describe, expect, it } from 'vitest';
+import { taoKhoPrisma, taoPrisma } from '../../src/infrastructure/repository/prisma/khoPrisma.js';
 import {
   lenh,
   moSocket,
@@ -118,9 +119,28 @@ describe('Socket.IO — bắt tay và phòng (4.7)', () => {
 
 describe('Socket.IO — chơi trọn ván (4.7, 4.11, ST05)', () => {
   it('2 người thật + 4 người ảo chơi tới khi có phe thắng; không gói tin nào lộ vai người khác', async () => {
-    const may = await dungMay();
-    const a = await nguoiChoi(may, 'nguoi_a');
-    const b = await nguoiChoi(may, 'nguoi_b');
+    await choiTronVan(await dungMay());
+  }, 40_000);
+
+  it.skipIf(!process.env.DATABASE_URL_TEST)(
+    '4.10 trên PostgreSQL — ván thật được ghi trọn trong một giao dịch',
+    async () => {
+      const db = taoPrisma(process.env.DATABASE_URL_TEST!);
+      canDong.push(() => db.$disconnect());
+      await choiTronVan(
+        await dungMay({ kho: taoKhoPrisma(db) }),
+        '_pg' + Date.now().toString(36).slice(-5),
+      );
+    },
+    40_000,
+  );
+});
+
+/** Chơi trọn một ván qua socket rồi kiểm ST05 và việc lưu ván (4.10). */
+async function choiTronVan(may: MayThu, duoi = '') {
+  {
+    const a = await nguoiChoi(may, 'nguoi_a' + duoi);
+    const b = await nguoiChoi(may, 'nguoi_b' + duoi);
     const ma = (await a.u.goi('/api/phong', 'POST')).body.maPhong as string;
     await lenh(b.s, 'phong:vao', { maPhong: ma });
     for (let i = 0; i < 4; i++)
@@ -165,8 +185,28 @@ describe('Socket.IO — chơi trọn ván (4.7, 4.11, ST05)', () => {
         }
       }
     }
-  }, 40_000);
-});
+
+    // 4.10 — UC20: ván được lưu, hồ sơ cộng số ván, điểm mùa chỉ cho người thật.
+    await Promise.all(may.vanDaLuu);
+    for (const p of [a, b]) {
+      const ls = await may.kho.van.lichSuCua(p.id);
+      expect(ls).toHaveLength(1);
+      expect(ls[0]!.pheThang).toBe(a.gocNhin!.ketThuc!.pheThang);
+      expect((await may.kho.taiKhoan.layHoSo(p.id))!.soVanDaChoi).toBe(1);
+      const chiTiet = await may.kho.van.layVan(ls[0]!.vanId);
+      expect(chiTiet!.nhatKy.at(-1)!.loai).toBe('KET_THUC');
+    }
+    const mua = await may.kho.xepHang.muaHienTai();
+    const bang = await may.kho.xepHang.bangXepHang(mua.id);
+    for (const p of [a, b]) {
+      expect([1, 3]).toContain(bang.find((d) => d.taiKhoanId === p.id)?.diem);
+    }
+    const nguoiAo = a
+      .gocNhin!.ketThuc!.vai.map((v) => v.id)
+      .filter((id) => id !== a.id && id !== b.id);
+    expect(bang.some((d) => nguoiAo.includes(d.taiKhoanId))).toBe(false);
+  }
+}
 
 describe('Socket.IO — kênh chat (4.8)', () => {
   it('UC18 — tin kênh chung tới mọi người còn sống; người không phải Sói không gửi được vào kênh Sói', async () => {
@@ -204,22 +244,26 @@ describe('Socket.IO — kênh chat (4.8)', () => {
 });
 
 describe('Socket.IO — mất kết nối (4.9)', () => {
-  it('BR13 — kết nối lại giữa ván nhận ngay ảnh chụp phòng, góc nhìn và lịch sử kênh', async () => {
-    const may = await dungMay({ thoiGianXemVai: 2_000 });
+  it('ST03 / BR13 — rớt mạng giữa pha đêm: ván không dừng; nối lại nhận ngay ảnh chụp và chơi tiếp tới hết', async () => {
+    const may = await dungMay();
     const a = await nguoiChoi(may, 'mat_a', false);
     const ma = (await a.u.goi('/api/phong', 'POST')).body.maPhong as string;
     for (let i = 0; i < 5; i++) await lenh(a.s, 'phong:them-nguoi-ao', {});
     await lenh(a.s, 'phong:goi-y-vai', {});
     await cho(() => a.phong?.viPham.length === 0);
     await lenh(a.s, 'phong:bat-dau', {});
-    await cho(() => a.gocNhin !== null);
+    await cho(() => (a.gocNhin?.luot ?? 0) >= 1 && a.gocNhin?.trangThai === 'PHA_DEM');
     a.s.disconnect();
     await cho(() => may.phong.chieu(ma).thanhVien[0]!.ketNoi === false);
 
     const nhan: string[] = [];
-    const lai: SocketThu = await moSocket(may.url, a.u.cookie, (s) =>
-      s.onAny((ten) => nhan.push(ten)),
-    );
+    let cuoi: GocNhinNguoiChoi | null = null;
+    const lai: SocketThu = await moSocket(may.url, a.u.cookie, (s) => {
+      s.onAny((ten) => nhan.push(ten));
+      s.on('van:goc-nhin', ({ gocNhin }) => {
+        cuoi = gocNhin;
+      });
+    });
     canDong.push(() => {
       lai.disconnect();
     });
@@ -227,7 +271,9 @@ describe('Socket.IO — mất kết nối (4.9)', () => {
       ['phong:cap-nhat', 'van:goc-nhin', 'kenh:lich-su'].every((t) => nhan.includes(t)),
     );
     expect(may.phong.chieu(ma).thanhVien[0]!.ketNoi).toBe(true);
-  }, 20_000);
+    // Người rớt mạng bị bỏ lượt (BR12/BR13) nhưng ván vẫn đi tới cuối.
+    await cho(() => (cuoi as GocNhinNguoiChoi | null)?.trangThai === 'KET_THUC', 30_000);
+  }, 40_000);
 
   it('Q04 — quá nửa người còn sống mất kết nối liên tục quá ngưỡng thì ván bị hủy, phòng mở lại', async () => {
     const may = await dungMay({

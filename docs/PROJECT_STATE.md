@@ -375,6 +375,10 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
 - [x] **4.10** `DichVuLuuVan` (UC20): ván xong ghi người chơi, lượt, ý định, kết quả đêm, phiên,
       phiếu, tin nhắn, nhật ký; cộng hồ sơ và điểm mùa (thắng +3, thua +1) chỉ cho người thật; ván
       hủy vẫn ghi nhưng không cộng. Đã chạy trên PostgreSQL thật
+- [x] **4.11** Kiểm thử tích hợp `tests/interface/socket.test.ts`: 2 người thật qua socket + 4 người
+      ảo chơi trọn ván; **ST05 tự động** (bộ rà mọi gói tin); **ST03 tự động** (rớt mạng giữa pha
+      đêm, nối lại, chơi tiếp tới hết); kiểm lưu ván; một bản chạy trên PostgreSQL khi có
+      `DATABASE_URL_TEST`. **Giai đoạn 4 xong**
 
 ---
 
