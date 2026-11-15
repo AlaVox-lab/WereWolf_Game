@@ -380,6 +380,13 @@ bcryptjs ở `infrastructure/auth/matKhau.ts`; phiên JWT HS256 (jose) trong coo
 `LuotChoi.ganPhienBauCu()` nhận tối đa hai phiên: phiên chính, và vòng bầu lại chỉ khi phiên
 chính ra `BAU_LAI`. `phienBauCu` trả phiên đang có hiệu lực.
 
+**Phòng** (4.3): `domain/phong/PhongChoi.ts` — thành viên theo thứ tự vào phòng (cũng là thứ tự
+ghế), Q11 chuyển chủ phòng cho người thật vào sớm nhất, phòng chỉ còn người ảo thì đóng; cấu
+hình vai và bộ luật chỉ chủ phòng sửa và chỉ khi `CHO`; `batDauVan()` dựng `VanDau` với mã người
+chơi = mã tài khoản. `application/phong/SoDangKyPhong.ts` giữ phòng đang mở trong bộ nhớ, mỗi
+tài khoản tối đa một phòng, mã 6 ký tự không có ký tự dễ nhầm, báo phòng đổi qua người nghe
+(Observer) để tầng Socket.IO phát `phong:cap-nhat`.
+
 ### 5.5. Các lớp điều khiển
 
 | Lớp | Trách nhiệm |
@@ -711,7 +718,8 @@ Khai báo **một lần** trong `packages/shared`, hai phía dùng chung kiểu.
 | `GET` | `/api/tai-khoan/toi` | Phiên hiện tại |
 | `GET` · `PATCH` | `/api/tai-khoan/ho-so` | UC03 |
 | `POST` | `/api/phong` | UC06 |
-| `GET` | `/api/phong/:maPhong` | Xem phòng trước khi vào |
+| `GET` | `/api/phong` | Phòng công khai đang chờ (MH02) |
+| `GET` | `/api/phong/:maPhong` · `/api/phong-cua-toi` | Xem phòng trước khi vào · phòng mình đang ở |
 
 Mọi việc **trong phòng và trong ván** — vào phòng, cấu hình, bắt đầu, hành động, bỏ phiếu,
 nhắn tin — đi qua Socket.IO để có thứ tự và phản hồi tức thời.

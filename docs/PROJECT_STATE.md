@@ -360,6 +360,9 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
 - [x] **4.2** `DichVuTaiKhoan` (UC01, UC02, UC03) + lớp `TaiKhoan` ở `application/taikhoan`; bcryptjs,
       JWT trong cookie httpOnly; REST `/api/tai-khoan/*` kiểm thân bằng Zod; tài khoản bị khóa mất
       phiên ngay; mã lỗi dịch ra tiếng Việt ở tầng interface. 13 bài kiểm thử
+- [x] **4.3** `PhongChoi` (domain) + `SoDangKyPhong` (application): tạo phòng mã 6 ký tự, vào,
+      rời, loại người, tối đa 12, Q11; REST `/api/phong*`; Class Diagram thêm `SoDangKyPhong`,
+      `CHUA_CAI` rỗng — mọi lớp trên sơ đồ đã có mã
 
 ---
 

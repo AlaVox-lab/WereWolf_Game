@@ -96,8 +96,7 @@ class CauHinhVai {
   + tongSoVai() : int
   + kiemTraHopLe(soNguoi) : List<ViPhamCauHinh>
 }
-note top of TaiKhoan : Quản lý người dùng — application/taikhoan,
-không thuộc luật chơi (ARCHITECTURE 5.4)
+note top of TaiKhoan : Quản lý người dùng — application/taikhoan,\nkhông thuộc luật chơi (ARCHITECTURE 5.4)
 class DichVuTaiKhoan {
   + dangKy(tenDangNhap, bietDanh, matKhau) : ThongTinPhien
   + dangNhap(tenDangNhap, matKhau) : ThongTinPhien
@@ -109,7 +108,15 @@ class PhongChoi {
   - trangThai : TrangThaiPhong
   + batDauVan() : VanDau
 }
-note top of PhongChoi : Chưa cài — Giai đoạn 4
+note top of PhongChoi : domain/phong — thành viên theo thứ tự vào phòng,\nQ11 chuyển chủ phòng, bộ luật sửa được khi chưa chơi
+class SoDangKyPhong {
+  + taoPhong(phien) : String
+  + vaoPhong(maPhong, phien) : void
+  + roiPhong(maPhong, taiKhoanId) : void
+  + loai(maPhong, chuPhongId, taiKhoanId) : void
+  + chieu(maPhong) : PhongCongKhai
+}
+SoDangKyPhong "1" o-- "0..*" PhongChoi : phòng đang mở
 class VanDau {
   + id : String
   + boLuatChoi : BoLuatChoi

@@ -306,7 +306,7 @@ thử (chưa cần giao diện).
       `UNIQUE`; trigger chặn sửa/xóa `nhat_ky_van`; `seed.ts` tạo ba tài khoản mẫu
 - [x] **4.2** `[C]` UC01, UC02: đăng ký, đăng nhập, đăng xuất; băm bcryptjs; JWT trong cookie
       `httpOnly`; bắt tay Socket.IO đọc cùng cookie đó; tài khoản bị khóa không đăng nhập được
-- [ ] **4.3** `[C]` UC06, UC07, UC10: tạo phòng với mã 6 ký tự, vào phòng, rời phòng, chủ
+- [x] **4.3** `[C]` UC06, UC07, UC10: tạo phòng với mã 6 ký tự, vào phòng, rời phòng, chủ
       phòng loại người; tối đa 12; chuyển chủ phòng theo **Q11**
 - [ ] **4.4** `[C]` UC08, UC25: nhận cấu hình vai và bộ luật, kiểm bằng `CauHinhVai` và
       `BoLuatChoi` của lõi miền; phát tóm tắt bộ luật cho cả phòng; chặn khi ván đã bắt đầu

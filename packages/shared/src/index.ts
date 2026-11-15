@@ -13,3 +13,4 @@ export interface PhanHoiSucKhoe {
 
 export type * from './gocNhin.js';
 export type * from './taiKhoan.js';
+export type * from './phong.js';
