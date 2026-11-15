@@ -339,11 +339,12 @@ với tệp HTML thử nghiệm tối giản (hoặc công cụ khách Socket.IO
 Mục tiêu: dựng MH01–MH08 và MH03b đúng thiết kế G3. Giao diện **chỉ hiển thị góc nhìn**, không
 tính luật.
 
-- [ ] **5.1** `[C]` Khung ứng dụng: định tuyến, bố cục, nạp `tokens.css`, thư viện bộ phận theo
+- [x] **5.1** `[C]` Khung ứng dụng: định tuyến, bố cục, nạp `tokens.css`, thư viện bộ phận theo
       hệ thiết kế; lớp gọi API; kho Zustand **chỉ lưu `GocNhinNguoiChoi` mới nhất** và danh sách
       tin nhắn; đồng hồ đếm ngược theo thời điểm hết hạn máy chủ gửi
-- [ ] **5.2** `[C]` MH01 đăng nhập và đăng ký
-- [ ] **5.3** `[C]` MH02 trang chủ: tạo phòng, nhập mã phòng
+- [x] **5.2** `[C]` MH01 đăng nhập và đăng ký
+      · *15/11*: gọi API thật (commit `1d01246`); đăng nhập xong vào `/` (hoặc `?tiep=` nội bộ)
+- [x] **5.3** `[C]` MH02 trang chủ: tạo phòng, nhập mã phòng
 - [ ] **5.4** `[C]` MH03 phòng chờ và MH03b cấu hình bộ luật: danh sách thành viên, cấu hình vai
       có kiểm tức thời, sáu công tắc kèm mô tả, tóm tắt luật cho mọi người, nút thêm người chơi ảo
 - [ ] **5.5** `[A]` MH04 thông báo vai: vai, mô tả năng lực, đồng đội nếu là Sói
@@ -397,9 +398,9 @@ Các use case còn lại trong phạm vi đã chốt. Mỗi nhóm là một bả
 
 **`v1.2.0` — Mùa giải và xếp hạng**
 
-- [ ] **7.4** `[ALL]` Chốt công thức điểm xếp hạng (tài liệu gốc chưa định nghĩa) — ghi vào
+- [x] **7.4** `[ALL]` Chốt công thức điểm xếp hạng (tài liệu gốc chưa định nghĩa) — ghi vào
       `game-rules.md`
-- [ ] **7.5** `[B]` `MuaGiai`, `BanGhiXepHang`; UC20 cộng điểm khi kết thúc ván
+- [x] **7.5** `[B]` `MuaGiai`, `BanGhiXepHang`; UC20 cộng điểm khi kết thúc ván
 - [ ] **7.6** `[B]` UC05 + MH10: bảng xếp hạng mùa hiện tại
 
 **`v1.3.0` — Kiểm duyệt và quản trị**

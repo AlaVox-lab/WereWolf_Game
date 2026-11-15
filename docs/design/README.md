@@ -76,13 +76,14 @@ Không dùng bộ thẻ *Ultimate Werewolf* hay *Loups-Garous de Thiercelieux*: 
 |---|---|
 | `mh01-dang-nhap.jpg` | MH01 — đăng nhập: tia trăng, quạt thẻ, khung Magic Card |
 | `mh01-dang-ky-bao-loi.jpg` | MH01 — đăng ký, gửi trống: báo lỗi từng ô |
+| `mh02-trang-chu.jpg` | MH02 — trang chủ: dựng phòng, nhập mã sáu ô, phòng đang mở cửa |
 | `mh04-the-vai.jpg` | MH04 — thẻ Bảo vệ lật ngửa |
 | `mh05-dem-3d.jpg` | MH05 — đêm thứ hai, lượt Bảo vệ: quân người chết đã ngã, bảng việc có vòng đếm ngược |
 | `mh07-treo-co-3d.jpg` | MH07 — cảnh treo cổ sau bỏ phiếu |
 
 ## Còn thiếu
 
-- MH02 trang chủ, MH03 phòng chờ, MH03b cấu hình bộ luật
+- MH03 phòng chờ, MH03b cấu hình bộ luật
 - Kênh Sói và khung chat (bong bóng tin nhắn, nhãn kênh)
 - Danh sách kiểm sáu nguyên tắc mục 14.2 tài liệu gốc (hạng mục 3.4)
 - Đo hiệu năng cảnh 3D trên máy yếu và điện thoại thật

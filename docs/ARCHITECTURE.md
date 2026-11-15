@@ -210,10 +210,13 @@ WereWolf_Game/
 │       │   ├── components/ui/           # component kéo từ registry: shadcn/ui, Magic UI, Motion Primitives
 │       │   ├── game/                    # màn trong ván MH04–MH08: thanh trạng thái, bảng việc, lời dẫn
 │       │   │   └── canh3d/              #   cảnh 3D: trời, rừng, làng, bàn, nến, quân, thẻ, giá treo cổ
-│       │   ├── screens/                 # màn ngoài ván: MH01 đăng nhập/đăng ký (giao diện)
+│       │   ├── screens/                 # MH01 (gọi API thật), MH02 TrangChu, PhongCho (tạm, 5.4),
+│       │   │                            #   KhungUngDung (điều hướng, CanDangNhap)
 │       │   ├── xem-truoc/               # /van-mau — phát lại ván mô phỏng khi chưa có máy chủ thời gian thực
-│       │   ├── realtime/                # kết nối Socket.IO, kho góc nhìn — Giai đoạn 5
-│       │   └── styles/                  # tokens.css (nguồn màu duy nhất), san-khau.css, xac-thuc.css
+│       │   ├── lib/api.ts               # goiApi — REST, lỗi thành câu tiếng Việt (5.1)
+│       │   ├── realtime/                # kho.ts (Zustand: phiên, phòng, góc nhìn mới nhất, tin nhắn,
+│       │   │                            #   lệch giờ máy chủ), ketNoi.ts (một socket cho cả app) — 5.1
+│       │   └── styles/                  # tokens.css (nguồn màu duy nhất), san-khau.css, xac-thuc.css, khung.css
 │       └── public/
 │           ├── the-vai/                 # tranh khắc phạm vi công cộng (The Met) + nguon.json
 │           └── xem-truoc/               # van-mau.json — npm run xuat-xem-truoc

@@ -134,8 +134,9 @@ export function ManXacThuc({ cheDo }: { cheDo: CheDo }) {
   const phien = useKho((s) => s.phien);
   const datPhien = useKho((s) => s.datPhien);
   const dangKy = cheDo === 'dang-ky';
-  // Tạm vào ván mẫu cho tới khi có trang chủ MH02 (5.3).
-  const tiep = timKiem.get('tiep') ?? '/van-mau';
+  // Chỉ nhận đường dẫn nội bộ — tránh bị lừa chuyển sang trang ngoài sau khi đăng nhập.
+  const xin = timKiem.get('tiep');
+  const tiep = xin?.startsWith('/') && !xin.startsWith('//') ? xin : '/';
 
   if (phien) return <Navigate to={tiep} replace />;
 

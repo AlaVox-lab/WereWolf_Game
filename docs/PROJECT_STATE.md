@@ -379,15 +379,25 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       ảo chơi trọn ván; **ST05 tự động** (bộ rà mọi gói tin); **ST03 tự động** (rớt mạng giữa pha
       đêm, nối lại, chơi tiếp tới hết); kiểm lưu ván; một bản chạy trên PostgreSQL khi có
       `DATABASE_URL_TEST`. **Giai đoạn 4 xong**
+- [x] **5.1** (commit `1d01246`, người dùng tự commit/push) `lib/api.ts`, kho Zustand `realtime/kho.ts`,
+      `realtime/ketNoi.ts` (một socket cho cả app), `screens/KhungUngDung.tsx` (thanh điều hướng,
+      `CanDangNhap`); thêm shadcn switch/tabs/dialog/tooltip/scroll-area, Magic UI number-ticker,
+      zustand, socket.io-client, lucide-react. **5.2 một phần**: MH01 gọi API thật, tạm vào `/van-mau`
+- [x] 7.4 công thức điểm (Q14) và 7.5 bảng mùa giải + cộng điểm — đã làm ở 4.10
+- [x] **5.2** MH01 đăng nhập xong vào `/` (chỉ nhận `?tiep=` là đường dẫn nội bộ)
+- [x] **5.3** `screens/TrangChu.tsx` (MH02): dựng phòng (`POST /api/phong` → `/phong/:ma`), vào bằng
+      mã sáu ô (shadcn `input-otp`, tự viết hoa, đủ ô tự gửi, hỏi `GET /api/phong/:ma` trước để báo
+      lỗi tại chỗ), danh sách phòng công khai làm mới mỗi 5 s, nhắc "đang ngồi trong phòng…" qua
+      `/api/phong-cua-toi`. `App.tsx` gắn `CanDangNhap` + `KhungUngDung` (nền tia trăng chung với
+      MH01); `/phong/:ma` là khung tạm tới 5.4
 
 ---
 
 ## Đang làm
 
-**Giai đoạn 3 — giao diện.** Xong MH01 (giao diện) và màn trong ván MH04–MH08 dạng 3D chạy được.
-Còn: MH02 trang chủ, MH03 phòng chờ, MH03b cấu hình bộ luật, kênh Sói và khung chat, danh sách
-kiểm 3.4. Giai đoạn 4 (máy chủ, Prisma, Socket.IO)
-làm song song được.
+**Giai đoạn 5 — giao diện chơi.** Xong 5.1–5.3. Tiếp theo: MH03 +
+MH03b phòng chờ (5.4) → nối màn chơi 3D với socket, khung chat (5.5–5.10). Kiểm thử: 337 đạt, 7 bỏ
+qua (Prisma, cần `DATABASE_URL_TEST`). Bàn giao chi tiết: `E:/Workspace/_scratch/WereWolf_Game/handoff/HANDOFF-2026-11-15-2024.md`.
 
 ---
 

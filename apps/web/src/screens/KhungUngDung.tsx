@@ -1,8 +1,10 @@
+import { GodRays } from '@paper-design/shaders-react';
+import { useReducedMotion } from 'motion/react';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { Link, NavLink, Navigate, Outlet, useLocation, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { AnhVai } from '@/game/anhVai';
+import { ANH_TRANG, AnhVai } from '@/game/anhVai';
 import type { LoaiVaiCongKhai } from '@moonvillage/shared';
 import { goiApi } from '@/lib/api';
 import { dongKetNoi, moKetNoi } from '@/realtime/ketNoi';
@@ -42,31 +44,45 @@ export function KhungUngDung() {
   const phien = useKho((s) => s.phien)!;
   const ketNoi = useKho((s) => s.ketNoi);
   const di = useNavigate();
+  const giam = useReducedMotion();
   const dangXuat = async () => {
     await goiApi('/tai-khoan/dang-xuat', 'POST').catch(() => undefined);
     dongKetNoi();
     useKho.getState().datPhien(null);
     di('/dang-nhap');
   };
-  const muc = [
-    { den: '/', ten: 'Trang chủ' },
-    { den: '/lich-su', ten: 'Lịch sử' },
-    { den: '/xep-hang', ten: 'Xếp hạng' },
-    { den: '/ho-so', ten: 'Hồ sơ' },
-    ...(phien.laQuanTri ? [{ den: '/quan-tri', ten: 'Quản trị' }] : []),
-  ];
+  // Mục nào có trang thì mới hiện — lịch sử, xếp hạng, hồ sơ, quản trị thêm ở Giai đoạn 7.
+  const muc: { den: string; ten: string; quanTri?: boolean }[] = [{ den: '/', ten: 'Trang chủ' }];
   return (
     <div className="khung-ung-dung" data-thoi="dem">
+      <GodRays
+        className="nen-tia-trang"
+        colorBack="#060a14"
+        colorBloom="#2c3a58"
+        colors={['#4a5b7c', '#8ea3c6', '#7a6c50']}
+        density={0.25}
+        spotty={0.3}
+        midSize={0.2}
+        midIntensity={0.35}
+        intensity={0.24}
+        bloom={0.16}
+        speed={giam ? 0 : 0.25}
+        offsetX={0.4}
+        offsetY={-0.6}
+      />
+      <img className="trang-khung" src={ANH_TRANG} alt="" draggable={false} />
       <header className="thanh-dieu-huong">
         <Link to="/" className="ten-lang">
           Làng Trăng Mờ
         </Link>
         <nav aria-label="Mục chính" className="dieu-huong-muc">
-          {muc.map((m) => (
-            <NavLink key={m.den} to={m.den} end className="dieu-huong-lien-ket">
-              {m.ten}
-            </NavLink>
-          ))}
+          {muc
+            .filter((m) => !m.quanTri || phien.laQuanTri)
+            .map((m) => (
+              <NavLink key={m.den} to={m.den} end className="dieu-huong-lien-ket">
+                {m.ten}
+              </NavLink>
+            ))}
         </nav>
         <div className="dieu-huong-toi">
           <span
