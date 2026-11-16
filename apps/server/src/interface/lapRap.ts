@@ -36,6 +36,8 @@ export interface CauHinhMayChu {
   nguongMatKetNoiMs?: number;
   chuKyKiemTraMs?: number;
   chuKyLamMoiMs?: number;
+  /** Thư mục bản build của web — máy chủ phục vụ luôn giao diện (Docker). */
+  thuMucWeb?: string;
 }
 
 export function lapRapMayChu(ch: CauHinhMayChu) {
@@ -84,6 +86,7 @@ export function lapRapMayChu(ch: CauHinhMayChu) {
   const app = createApp({
     taiKhoan,
     phien,
+    ...(ch.thuMucWeb ? { thuMucWeb: ch.thuMucWeb } : {}),
     routerThem: [
       taoRouterPhong(phong),
       taoRouterLichSu(new DichVuLichSu(ch.kho.van)),

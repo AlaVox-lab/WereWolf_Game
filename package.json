@@ -21,6 +21,9 @@
     "format:check": "prettier --check .",
     "db:up": "docker compose -f infra/docker-compose.yml --env-file infra/.env.example up -d",
     "db:down": "docker compose -f infra/docker-compose.yml --env-file infra/.env.example down",
+    "docker:up": "docker compose -f infra/docker-compose.yml --env-file infra/.env.example --profile app up -d --build",
+    "docker:down": "docker compose -f infra/docker-compose.yml --env-file infra/.env.example --profile app down",
+    "docker:logs": "docker compose -f infra/docker-compose.yml --env-file infra/.env.example --profile app logs -f app",
     "so-do": "node scripts/xuat-so-do.mjs",
     "mo-phong": "tsx scripts/mo-phong.ts",
     "xuat-xem-truoc": "tsx scripts/xuat-xem-truoc.ts"

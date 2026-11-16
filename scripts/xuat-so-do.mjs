@@ -14,6 +14,9 @@ for (const dinhDang of ['svg', 'png']) {
     [
       'run',
       '--rm',
+      // PlantUML mặc định cắt ảnh PNG ở 4096 px — Class Diagram rộng hơn thế nên bị mất nửa phải.
+      '-e',
+      'PLANTUML_LIMIT_SIZE=16384',
       '-v',
       `${thuMuc}:/data`,
       'plantuml/plantuml',

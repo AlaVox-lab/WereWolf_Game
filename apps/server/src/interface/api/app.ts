@@ -1,6 +1,7 @@
 import { TEN_UNG_DUNG, type PhanHoiSucKhoe } from '@moonvillage/shared';
 import cookieParser from 'cookie-parser';
 import express, { type NextFunction, type Request, type Response } from 'express';
+import { join } from 'node:path';
 import { ZodError } from 'zod';
 import type { DichVuTaiKhoan, ThongTinPhien } from '../../application/taikhoan/DichVuTaiKhoan.js';
 import type { BoPhien } from '../../infrastructure/auth/phien.js';
@@ -14,6 +15,12 @@ export interface PhuThuocApi {
   phien: BoPhien;
   /** Router gắn thêm của các hạng mục sau (phòng, lịch sử, quản trị…). */
   routerThem?: express.Router[];
+  /**
+   * Thư mục bản build của web (`apps/web/dist`) — có thì máy chủ phục vụ luôn giao diện, một
+   * cổng cho cả web, REST và Socket.IO (đóng gói Docker, ROADMAP 6.4). Khi phát triển để trống:
+   * Vite tự phục vụ web và chuyển tiếp /api sang đây.
+   */
+  thuMucWeb?: string;
 }
 
 declare module 'express-serve-static-core' {
@@ -60,6 +67,19 @@ export function createApp(phu: PhuThuocApi) {
 
   app.use('/api/tai-khoan', taoRouterTaiKhoan(phu));
   for (const r of phu.routerThem ?? []) app.use('/api', r);
+
+  if (phu.thuMucWeb) {
+    const tepTrang = join(phu.thuMucWeb, 'index.html');
+    app.use(express.static(phu.thuMucWeb, { index: false }));
+    // Ứng dụng một trang: mọi GET còn lại ngoài /api trả index.html để react-router lo đường dẫn.
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      if (req.method !== 'GET' || req.path.startsWith('/api')) {
+        next();
+        return;
+      }
+      res.sendFile(tepTrang);
+    });
+  }
 
   app.use((loi: unknown, _req: Request, res: Response, _next: NextFunction) => {
     if (loi instanceof ZodError) {

@@ -26,6 +26,8 @@ const mayChu = lapRapMayChu({
   kho,
   biMatPhien: biMat,
   // Mặc định bật khi phát triển, tắt ở production — trừ khi biến môi trường nói khác (4.5).
+  // Bản Docker: máy chủ phục vụ luôn web đã build ở THU_MUC_WEB (một cổng cho tất cả).
+  ...(process.env.THU_MUC_WEB ? { thuMucWeb: process.env.THU_MUC_WEB } : {}),
   choPhepNguoiChoiAo:
     process.env.CHO_PHEP_NGUOI_CHOI_AO === 'true' ||
     (process.env.NODE_ENV !== 'production' && process.env.CHO_PHEP_NGUOI_CHOI_AO !== 'false'),

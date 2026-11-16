@@ -376,6 +376,10 @@ người thật trên ba máy + người chơi ảo chơi trọn ván.
       số liệu buổi chơi thử
 - [ ] **6.4** `[C]` Đóng gói: `docker compose up` dựng cả cơ sở dữ liệu, máy chủ, giao diện;
       `README.md` hướng dẫn chạy trên máy sạch, **kiểm chứng trên một máy khác**
+      · *16/11*: `Dockerfile` + dịch vụ `app` (profile) trong `infra/docker-compose.yml` —
+      `npm run docker:up` dựng CSDL, máy chủ, giao diện; máy chủ phục vụ luôn web đã build
+      (`THU_MUC_WEB`) trên cổng 8080; README có hướng dẫn. Đã chạy trên máy phát triển.
+      **Còn** kiểm chứng trên một máy khác
 - [ ] **6.5** `[C]` Cập nhật tài liệu gốc (`.docx`) và sơ đồ theo mọi thay đổi thiết kế phát
       sinh; cập nhật bảng truy vết phụ lục A với tệp kiểm thử thật
 - [ ] **6.6** `[C]` Cắt bản `v1.0.0`

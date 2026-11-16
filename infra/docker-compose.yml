@@ -1,4 +1,5 @@
-# Dựng PostgreSQL cho môi trường phát triển. Chạy: npm run db:up
+# PostgreSQL cho phát triển (npm run db:up), và — trong profile "app" — cả ứng dụng đã đóng gói
+# (npm run docker:up → http://localhost:8080). Hai cách dùng chung một CSDL và một volume.
 name: lang-trang-mo
 
 services:
@@ -18,6 +19,24 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  # Ứng dụng đóng gói (ROADMAP 6.4): web + REST + Socket.IO trên một cổng.
+  app:
+    profiles: ['app']
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Trong mạng Docker, CSDL tên là "postgres", cổng 5432 bên trong.
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET}
+      CHO_PHEP_NGUOI_CHOI_AO: ${CHO_PHEP_NGUOI_CHOI_AO}
+    ports:
+      - '${APP_PORT}:3000'
 
 volumes:
   pgdata:

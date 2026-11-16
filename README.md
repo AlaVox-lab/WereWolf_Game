@@ -47,7 +47,29 @@ khi số Sói còn sống không ít hơn số người còn lại. Luật đầ
 TypeScript toàn tầng — Node.js, Express, Socket.IO, PostgreSQL, Prisma, React, Vite, Tailwind
 CSS, Vitest — đã chốt ở [ADR-0001](docs/adr/0001-chon-bo-cong-nghe.md), kèm lý do và phương án thay thế.
 
-## Chạy thử
+## Chạy bằng Docker (chỉ cần Docker Desktop)
+
+Một lệnh dựng cả cơ sở dữ liệu, máy chủ và giao diện:
+
+```bash
+npm run docker:up
+```
+
+Mở `http://localhost:8080`. Đăng nhập bằng tài khoản mẫu `ngan` / `langtrang1` (hoặc `khoa`,
+`linh`; quản trị `quantri` / `quantri123`) — chỉ dùng chạy thử. Dựng phòng, bấm "Thêm người ảo"
+5 lần rồi "Bắt đầu ván" để chơi một mình; mở thêm cửa sổ ẩn danh đăng nhập tài khoản khác để chơi
+hai người. Xem nhật ký bằng `npm run docker:logs`, tắt bằng `npm run docker:down` (dữ liệu giữ
+trong volume `pgdata`). Đổi cổng hoặc khóa phiên trong `infra/.env.example` (`APP_PORT`,
+`JWT_SECRET`). Không có `npm` trên máy thì chạy thẳng:
+
+```bash
+docker compose -f infra/docker-compose.yml --env-file infra/.env.example --profile app up -d --build
+```
+
+Ảnh Docker: máy chủ Node phục vụ cả REST, Socket.IO lẫn bản build của web trên một cổng; mỗi lần
+khởi động tự áp migration và nạp dữ liệu mẫu (chạy lại an toàn).
+
+## Chạy khi phát triển
 
 Cần Node.js 24 và Docker Desktop.
 
@@ -56,22 +78,22 @@ npm install
 ```
 
 ```bash
+npm run db:up
+```
+
+```bash
+npm run dev
+```
+
+```bash
 npm test
 ```
 
-```bash
-npm run mo-phong
-```
-
-```bash
-npm run dev:web
-```
-
-`npm run mo-phong` chạy một ván toàn người chơi ảo và in nhật ký; thêm
-`-- --so-nguoi 6-12 --so-van 1000` để xem thống kê tỉ lệ thắng. `npm run dev:web` mở giao diện ở
-`http://localhost:5173`: màn đăng nhập/đăng ký (chỉ giao diện) dẫn vào `/van-mau` — một ván mô
-phỏng phát lại trong cảnh 3D, đổi ghế để xem bằng mắt từng người (tạo lại ván mẫu bằng
-`npm run xuat-xem-truoc`). Chơi thật với nhau ở Giai đoạn 5.
+`npm run dev` bật máy chủ (`http://localhost:3000`) và web (`http://localhost:5173`, tự nạp lại
+khi sửa mã). Lần đầu nạp dữ liệu mẫu bằng `npm run db:seed --workspace @moonvillage/server`.
+Không có PostgreSQL thì chạy máy chủ với `KHO=bo-nho` (dữ liệu mất khi tắt). `npm run mo-phong`
+chạy một ván toàn người chơi ảo và in nhật ký; thêm `-- --so-nguoi 6-12 --so-van 1000` để xem
+thống kê tỉ lệ thắng. `/van-mau` phát lại một ván mô phỏng trong cảnh 3D mà không cần đăng nhập.
 
 ## Cấu trúc thư mục
 

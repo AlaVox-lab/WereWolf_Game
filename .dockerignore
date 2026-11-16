@@ -1,0 +1,14 @@
+# Không đưa vào ngữ cảnh dựng ảnh Docker: thư viện đã cài, bản build cũ, bí mật, tài liệu nặng.
+**/node_modules
+**/dist
+**/coverage
+**/.vite
+apps/server/src/infrastructure/repository/prisma/generated
+.git
+.claude
+.env
+.env.*
+!infra/.env.example
+docs/diagrams/out
+docs/bao-ve/*.docx
+docs/bao-ve/*.pdf
