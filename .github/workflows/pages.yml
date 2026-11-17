@@ -1,0 +1,48 @@
+# Đưa bản xem thử (chỉ trang ván mẫu, không cần máy chủ) lên GitHub Pages.
+# Bật một lần: Settings → Pages → Source: "GitHub Actions".
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/web/**'
+      - 'packages/shared/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  dung:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build --workspace @moonvillage/web -- --mode pages
+      # Pages không có chuyển hướng cho ứng dụng một trang: đường dẫn lạ trả 404.html = index.html.
+      - run: cp apps/web/dist/index.html apps/web/dist/404.html
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: apps/web/dist
+
+  dua-len:
+    needs: dung
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.trien-khai.outputs.page_url }}
+    steps:
+      - id: trien-khai
+        uses: actions/deploy-pages@v4

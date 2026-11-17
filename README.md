@@ -9,8 +9,7 @@ Trường Đại học Thủ Dầu Một.
 
 | | |
 |---|---|
-| Nhóm | 13 |
-| Thành viên | Trần Khánh Ngọc · Nguyễn Thanh Sơn · Võ Minh Tự |
+| Sinh viên thực hiện | Nguyễn Thanh Sơn |
 | Giảng viên hướng dẫn | ThS. Trần Hữu Duật |
 
 ---
@@ -68,6 +67,18 @@ docker compose -f infra/docker-compose.yml --env-file infra/.env.example --profi
 
 Ảnh Docker: máy chủ Node phục vụ cả REST, Socket.IO lẫn bản build của web trên một cổng; mỗi lần
 khởi động tự áp migration và nạp dữ liệu mẫu (chạy lại an toàn).
+
+## Xem thử trên GitHub Pages
+
+GitHub Pages chỉ phục vụ tệp tĩnh nên **không** chạy được máy chủ, đăng nhập hay phòng chơi. Bản
+đưa lên đó chỉ có **ván mẫu**: phát lại một ván do người chơi ảo chơi, xem được từ góc nhìn từng
+ghế, có thanh tua. Workflow `.github/workflows/pages.yml` tự dựng (`vite build --mode pages`) và
+đẩy lên mỗi khi `apps/web/` đổi trên `main`. Bật một lần: **Settings → Pages → Source: GitHub
+Actions**. Dựng thử ở máy:
+
+```bash
+npm run build --workspace @moonvillage/web -- --mode pages
+```
 
 ## Chạy khi phát triển
 

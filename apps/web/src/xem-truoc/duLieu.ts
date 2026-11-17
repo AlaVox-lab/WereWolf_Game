@@ -31,7 +31,9 @@ export interface VanMau {
   khung: Khung[];
 }
 
-export async function taiVanMau(url = '/xem-truoc/van-mau.json'): Promise<VanMau> {
+export async function taiVanMau(
+  url = `${import.meta.env.BASE_URL}xem-truoc/van-mau.json`,
+): Promise<VanMau> {
   const tho = (await (await fetch(url)).json()) as DuLieuTho;
   const hienTai: GocNhinNguoiChoi[] = [];
   const khung = tho.khung.map((k) => {

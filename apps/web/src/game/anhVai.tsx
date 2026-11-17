@@ -3,17 +3,20 @@
 import type { LoaiVaiCongKhai } from '@moonvillage/shared';
 import { TEN_VAI } from './hienThi';
 
+// Theo `base` của Vite: '/' khi chạy thường, '/WereWolf_Game/' ở bản GitHub Pages.
+const THU_MUC = `${import.meta.env.BASE_URL}the-vai/`;
+
 export const ANH_VAI: Record<LoaiVaiCongKhai, string> = {
-  Soi: '/the-vai/Soi.webp',
-  BaoVe: '/the-vai/BaoVe.webp',
-  TienTri: '/the-vai/TienTri.webp',
-  PhuThuy: '/the-vai/PhuThuy.webp',
-  ThoSan: '/the-vai/ThoSan.webp',
-  DanLang: '/the-vai/DanLang.webp',
+  Soi: `${THU_MUC}Soi.webp`,
+  BaoVe: `${THU_MUC}BaoVe.webp`,
+  TienTri: `${THU_MUC}TienTri.webp`,
+  PhuThuy: `${THU_MUC}PhuThuy.webp`,
+  ThoSan: `${THU_MUC}ThoSan.webp`,
+  DanLang: `${THU_MUC}DanLang.webp`,
 };
 
 /** Mặt sau mọi thẻ, cũng là mặt trăng trên trời: "Full Moon", Claude Mellan, 1635. */
-export const ANH_TRANG = '/the-vai/MatSau.webp';
+export const ANH_TRANG = `${THU_MUC}MatSau.webp`;
 
 /** Tên tranh và tác giả — hiện nhỏ dưới thẻ khi lật. */
 export const NGUON_VAI: Record<LoaiVaiCongKhai, string> = {

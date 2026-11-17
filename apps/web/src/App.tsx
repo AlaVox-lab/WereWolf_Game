@@ -14,27 +14,26 @@ const TrangVanMau = lazy(() =>
   import('./xem-truoc/TrangVanMau').then((m) => ({ default: m.TrangVanMau })),
 );
 
+const vanMau = (
+  <Suspense
+    fallback={
+      <main className="san-khau man-cho" data-thoi="dem">
+        <p className="ten-lang">Làng Trăng Mờ</p>
+        <p className="phu">Trăng đang lên…</p>
+      </main>
+    }
+  >
+    <TrangVanMau />
+  </Suspense>
+);
+
 function DuongDan() {
   useNapPhien();
   return (
     <Routes>
       <Route path="/dang-nhap" element={<ManXacThuc cheDo="dang-nhap" />} />
       <Route path="/dang-ky" element={<ManXacThuc cheDo="dang-ky" />} />
-      <Route
-        path="/van-mau"
-        element={
-          <Suspense
-            fallback={
-              <main className="san-khau man-cho" data-thoi="dem">
-                <p className="ten-lang">Làng Trăng Mờ</p>
-                <p className="phu">Trăng đang lên…</p>
-              </main>
-            }
-          >
-            <TrangVanMau />
-          </Suspense>
-        }
-      />
+      <Route path="/van-mau" element={vanMau} />
       <Route element={<CanDangNhap />}>
         <Route element={<KhungUngDung />}>
           <Route index element={<TrangChu />} />
@@ -56,10 +55,27 @@ function DuongDan() {
  * Đường dẫn của web. Ngoài ván: MH01 đăng nhập/đăng ký, MH02 trang chủ, MH03 phòng chờ (cần đăng
  * nhập, nằm trong khung có thanh điều hướng); ván mẫu phát lại mở tự do để xem thử.
  */
-export function App() {
+function AppDayDu() {
   return (
     <BrowserRouter>
       <DuongDan />
     </BrowserRouter>
   );
 }
+
+/**
+ * Bản GitHub Pages (`vite build --mode pages`): không có máy chủ nên chỉ phát lại ván mẫu — mọi đường
+ * dẫn đều mở ván mẫu, không gọi API, không mở Socket.IO.
+ */
+function AppVanMau() {
+  return (
+    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+      <Routes>
+        <Route path="*" element={vanMau} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+// MODE được thay bằng hằng lúc build nên bản Pages bỏ hẳn các màn cần máy chủ khỏi gói.
+export const App = import.meta.env.MODE === 'pages' ? AppVanMau : AppDayDu;
