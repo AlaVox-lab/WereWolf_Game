@@ -302,7 +302,7 @@ Bảo vệ hoặc Phù thủy đã chết — và **Q03**, kịch bản TC19 nh�
 - [x] Thử đột biến `S ≥ D` → `S > D`: ST02 và bài 1 000 ván đỏ
 - [x] Đầu ra cho báo cáo: `docs/bao-cao/mo-phong-giai-doan-2.md` — nhật ký ván ST02 đối chiếu
       Sequence Diagram pha đêm, bảng tỉ lệ thắng 1 000 ván
-- [x] Phát hành **`v0.3.0` — Điều phối ván** trên GitHub (thẻ trên commit `385eeab`)
+- [x] Phát hành **`v0.3.0` — Điều phối ván** trên GitHub (thẻ trên commit `343516c`)
 
 ### 09/11 — Giai đoạn 3: giao diện trong ván
 
@@ -379,7 +379,7 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       ảo chơi trọn ván; **ST05 tự động** (bộ rà mọi gói tin); **ST03 tự động** (rớt mạng giữa pha
       đêm, nối lại, chơi tiếp tới hết); kiểm lưu ván; một bản chạy trên PostgreSQL khi có
       `DATABASE_URL_TEST`. **Giai đoạn 4 xong**
-- [x] **5.1** (commit `1d01246`, người dùng tự commit/push) `lib/api.ts`, kho Zustand `realtime/kho.ts`,
+- [x] **5.1** (commit `c4932ee`, người dùng tự commit/push) `lib/api.ts`, kho Zustand `realtime/kho.ts`,
       `realtime/ketNoi.ts` (một socket cho cả app), `screens/KhungUngDung.tsx` (thanh điều hướng,
       `CanDangNhap`); thêm shadcn switch/tabs/dialog/tooltip/scroll-area, Magic UI number-ticker,
       zustand, socket.io-client, lucide-react. **5.2 một phần**: MH01 gọi API thật, tạm vào `/van-mau`
@@ -447,7 +447,7 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       lại theo `schema.prisma`, giao diện, kiểm thử, kịch bản bảo vệ. Khuôn: Lab 07.3
 - [x] Sửa `scripts/xuat-so-do.mjs`: PNG Class Diagram bị cắt ở 4096 px — thêm
       `PLANTUML_LIMIT_SIZE=16384` (ảnh nay rộng 7660 px)
-- [x] **6.4 một phần** (commit `bfe4b41`, người dùng tự đẩy): `Dockerfile` + dịch vụ `app`
+- [x] **6.4 một phần** (commit `f72bb34`, người dùng tự đẩy): `Dockerfile` + dịch vụ `app`
       (profile) trong `infra/docker-compose.yml`, `npm run docker:up` → `http://localhost:8080`;
       máy chủ phục vụ luôn web đã build (`THU_MUC_WEB`), mỗi lần khởi động tự migrate + seed.
       Kiểm thử `phucVuWeb.test.ts`. **Còn** kiểm chứng trên một máy khác

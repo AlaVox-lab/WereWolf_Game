@@ -344,7 +344,7 @@ tính luật.
       hệ thiết kế; lớp gọi API; kho Zustand **chỉ lưu `GocNhinNguoiChoi` mới nhất** và danh sách
       tin nhắn; đồng hồ đếm ngược theo thời điểm hết hạn máy chủ gửi
 - [x] **5.2** `[C]` MH01 đăng nhập và đăng ký
-      · *15/11*: gọi API thật (commit `1d01246`); đăng nhập xong vào `/` (hoặc `?tiep=` nội bộ)
+      · *15/11*: gọi API thật (commit `c4932ee`); đăng nhập xong vào `/` (hoặc `?tiep=` nội bộ)
 - [x] **5.3** `[C]` MH02 trang chủ: tạo phòng, nhập mã phòng
 - [x] **5.4** `[C]` MH03 phòng chờ và MH03b cấu hình bộ luật: danh sách thành viên, cấu hình vai
       có kiểm tức thời, sáu công tắc kèm mô tả, tóm tắt luật cho mọi người, nút thêm người chơi ảo
