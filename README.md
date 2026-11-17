@@ -11,6 +11,8 @@ Trường Đại học Thủ Dầu Một.
 |---|---|
 | Sinh viên thực hiện | Nguyễn Thanh Sơn |
 | Giảng viên hướng dẫn | ThS. Trần Hữu Duật |
+| Mã nguồn | <https://github.com/AlaVox-lab/WereWolf_Game> |
+| Truy cập sản phẩm | <https://alavox-lab.github.io/WereWolf_Game/> — bản xem thử ván mẫu; bản đầy đủ chạy bằng Docker (xem bên dưới) |
 
 ---
 
