@@ -96,7 +96,7 @@ thì thêm người chơi ảo.
 
 ## Giai đoạn 0 — Dựng nền
 
-**Tuần 3** · **Phiên bản**: `v0.1.0` · **Trạng thái**: Gần xong — còn 0.9 (tên A/B/C, tuần học kỳ)
+**Tuần 3** · **Phiên bản**: `v0.1.0` · **Trạng thái**: Gần xong — còn 0.9 (tuần học kỳ)
 
 Mục tiêu: kho mã chạy được một lệnh kiểm thử và một lệnh chạy thử trên máy cả ba người, có
 rào chắn tự động cho nguyên tắc lõi miền không phụ thuộc gì.
@@ -126,7 +126,8 @@ rào chắn tự động cho nguyên tắc lõi miền không phụ thuộc gì.
       · *19/10: lần chạy đầu trên `main` xanh trong 26 giây*
 - [ ] **0.9** `[ALL]` Họp chốt: **Q01–Q11** trong `game-rules.md` mục 6, **ADR-0001**, và gán
       tên thật cho nhãn A/B/C. Ghi kết quả vào `game-rules.md` và `PROJECT_STATE.md`
-      · *19/10: đã chốt Q01–Q11 và ADR-0001. Còn gán tên A/B/C và xác nhận tuần học kỳ*
+      · *19/10: đã chốt Q01–Q11 và ADR-0001.* · *17/11: một người thực hiện — A/B/C đều là
+      Nguyễn Thanh Sơn. Còn xác nhận tuần học kỳ*
 
 **Tiêu chí hoàn thành**: trên máy của cả ba người, `npm install && npm run db:up && npm test
 && npm run dev` chạy không lỗi, mở trình duyệt thấy trang tạm gọi được máy chủ.
@@ -382,6 +383,10 @@ người thật trên ba máy + người chơi ảo chơi trọn ván.
       **Còn** kiểm chứng trên một máy khác
 - [ ] **6.5** `[C]` Cập nhật tài liệu gốc (`.docx`) và sơ đồ theo mọi thay đổi thiết kế phát
       sinh; cập nhật bảng truy vết phụ lục A với tệp kiểm thử thật
+      · *16/11*: có tài liệu Word mới `docs/bao-ve/TaiLieu_HieuVaTrinhBay_LangTrangMo.docx` (đặc
+      tả đủ 26 use case, bảng truy vết use case → lớp → kiểm thử, ERD vẽ lại theo
+      `schema.prisma` — lệch ERD Lab 07.3 ở `tai_khoan`, `ho_so_nguoi_choi`, `bao_cao_vi_pham`).
+      **Còn** sửa chính tài liệu gốc `TaiLieuDuAn_ToanDien_LangTrangMo_Nhom13.docx`
 - [ ] **6.6** `[C]` Cắt bản `v1.0.0`
 
 **Tiêu chí hoàn thành**: năm tiêu chí ở mục *Định nghĩa MVP*.

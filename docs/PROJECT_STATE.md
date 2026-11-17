@@ -31,16 +31,15 @@ trọn bằng người chơi ảo, 1 000 ván 6–12 người kết thúc đúng
 ST04 xanh. Máy chủ thời gian thực, PostgreSQL và tài khoản xong (Giai đoạn 4); web chơi trọn
 ván thật: đăng nhập, trang chủ, phòng chờ, màn trong ván 3D, chat (Giai đoạn 5).
 
-**Phân công** (theo mục 1.6 tài liệu gốc — **cần gán tên** ở hạng mục 0.9):
+**Phân công** (theo mục 1.6 tài liệu gốc — một người thực hiện cả ba mảng):
 
 | Nhãn | Phạm vi | Thành viên |
 |---|---|---|
-| A | Pha đêm — UC12, UC13, UC14, UC17; phân cấp `VaiTro`, `BoGiaiQuyetDem` | *chưa gán* |
-| B | Pha ngày, kết thúc, kiểm duyệt — UC15, UC16, UC18–UC20, UC21–UC24 | *chưa gán* |
-| C | Tài khoản, phòng chơi, Use Case Diagram, tổng hợp tài liệu | *chưa gán* |
+| A | Pha đêm — UC12, UC13, UC14, UC17; phân cấp `VaiTro`, `BoGiaiQuyetDem` | Nguyễn Thanh Sơn |
+| B | Pha ngày, kết thúc, kiểm duyệt — UC15, UC16, UC18–UC20, UC21–UC24 | Nguyễn Thanh Sơn |
+| C | Tài khoản, phòng chơi, Use Case Diagram, tổng hợp tài liệu | Nguyễn Thanh Sơn |
 
-Ba thành viên: Trần Khánh Ngọc (2424802010186), Nguyễn Thanh Sơn (2424802010044), Võ Minh Tự
-(2424802010473).
+Người thực hiện: Nguyễn Thanh Sơn (2424802010044).
 
 ---
 
@@ -441,16 +440,28 @@ Người dùng: làm tiếp tới khi dự án hoàn thành; commit + push từn
       MH05, MH06 từ ván thật; viết lại bảng đường dẫn ở `docs/design/README.md`;
       `docs/bao-ve/kich-ban-trinh-dien.md` (10 phút, phương án dự phòng) và
       `docs/bao-ve/cau-hoi-du-kien.md` (10 câu). **8.5 còn** — luyện trình diễn cần cả nhóm
+- [x] Tài liệu Word "hiểu và trình bày" 67 trang (`docs/bao-ve/TaiLieu_HieuVaTrinhBay_LangTrangMo.docx`
+      + `.pdf`, **chưa commit** — người dùng tự quyết): cách đọc UML và mẹo nhớ, kiến trúc, 4 tác
+      nhân, 26 use case + đặc tả chi tiết từng use case (dòng "Hiện thực trong mã"), 5 sơ đồ tuần
+      tự (thêm đăng nhập, bắt đầu ván, báo cáo – khóa), sơ đồ lớp toàn cảnh + 3 sơ đồ con, ERD vẽ
+      lại theo `schema.prisma`, giao diện, kiểm thử, kịch bản bảo vệ. Khuôn: Lab 07.3
+- [x] Sửa `scripts/xuat-so-do.mjs`: PNG Class Diagram bị cắt ở 4096 px — thêm
+      `PLANTUML_LIMIT_SIZE=16384` (ảnh nay rộng 7660 px)
+- [x] **6.4 một phần** (commit `bfe4b41`, người dùng tự đẩy): `Dockerfile` + dịch vụ `app`
+      (profile) trong `infra/docker-compose.yml`, `npm run docker:up` → `http://localhost:8080`;
+      máy chủ phục vụ luôn web đã build (`THU_MUC_WEB`), mỗi lần khởi động tự migrate + seed.
+      Kiểm thử `phucVuWeb.test.ts`. **Còn** kiểm chứng trên một máy khác
 
 ---
 
 ## Đang làm
 
-**Giai đoạn 5 — giao diện chơi.** Xong 5.1–5.10; còn 5.11 (điện thoại thật qua LAN — cần người).
-**Giai đoạn 7 xong** (mọi UC01–UC25 có đường chạy trên giao diện). **G8**: xong 8.1–8.4, còn
-8.5 (luyện tập — cần người). Còn lại: G6 (biên bản kiểm thử, Docker, buổi chơi thử), 5.11,
-0.9, đánh dấu 3.4–3.5. Kiểm thử: 347 đạt, 7 bỏ
-qua (Prisma, cần `DATABASE_URL_TEST`). Bàn giao chi tiết: `E:/Workspace/_scratch/WereWolf_Game/handoff/HANDOFF-2026-11-15-2024.md`.
+**G5, G7 xong; G8 xong 8.1–8.4.** Chạy được trọn trong Docker (`npm run docker:up` → cổng 8080).
+Còn lại: G6 — 6.1 biên bản kiểm thử `docs/test-report.md`, 6.2 hai buổi chơi thử (cần người),
+6.3 sửa lỗi, 6.4 kiểm trên máy khác (cần người), 6.5 cập nhật tài liệu gốc `.docx`, 6.6 cắt
+`v1.0.0` (chỉ khi người dùng đồng ý); 8.5 luyện trình diễn, 5.11 điện thoại qua LAN (cần người);
+3.4–3.5 danh sách kiểm sáu nguyên tắc; 0.9. Kiểm thử: 350 đạt, 7 bỏ qua (Prisma, cần
+`DATABASE_URL_TEST`). Bàn giao chi tiết: `E:/Workspace/_scratch/WereWolf_Game/handoff/HANDOFF-2026-11-16-2050.md`.
 
 ---
 

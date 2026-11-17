@@ -4,7 +4,7 @@
 > bốn quy tắc nghiệp vụ, bảng xung đột hiệu ứng và bộ kịch bản kiểm thử. Mã nguồn lõi
 > miền và bộ kiểm thử bám theo tệp này, không bám theo trí nhớ.
 >
-> Nội dung chép từ *Tài liệu dự án toàn diện — Làng Trăng Mờ, Nhóm 13, bản 1.0* (mục 1.3,
+> Nội dung chép từ *Tài liệu dự án toàn diện — Làng Trăng Mờ, bản 1.0* (mục 1.3,
 > 1.4, 10.2, 17.2, 17.3). Khi luật đổi: sửa tài liệu gốc **và** tệp này trong cùng một lần,
 > rồi báo cả nhóm.
 >

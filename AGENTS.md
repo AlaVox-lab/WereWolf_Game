@@ -64,7 +64,8 @@ Tệp nào chưa tồn tại thì báo người dùng thay vì đoán.
 ## 1. Dự án trong một đoạn
 
 **Làng Trăng Mờ (MoonVillage)** — trò chơi suy luận nhóm dạng Ma Sói trên web, máy làm quản
-trò. Đồ án học phần *Phân tích thiết kế hướng đối tượng*, Nhóm 13, ĐH Thủ Dầu Một. Sáu vai
+trò. Đồ án thực hành học phần *Phân tích thiết kế hướng đối tượng*, ĐH Thủ Dầu Một — người
+thực hiện: Nguyễn Thanh Sơn. Sáu vai
 cố định, mười bốn quy tắc (sáu quy tắc chủ phòng bật tắt được), phòng 6–12 người. Đồ án được
 chấm trên **chất lượng mô hình hóa hướng đối tượng** và **sự nhất quán giữa sơ đồ với mã**.
 

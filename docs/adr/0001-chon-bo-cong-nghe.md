@@ -6,7 +6,7 @@
 | Ngày | 2026-09-29 |
 | Phạm vi | `toàn hệ thống` |
 | Hạng mục ROADMAP | 0.9 |
-| Người quyết định | Cả nhóm 13 |
+| Người quyết định | Nguyễn Thanh Sơn |
 
 ---
 

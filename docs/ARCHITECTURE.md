@@ -16,7 +16,8 @@
 
 **Làng Trăng Mờ (MoonVillage)** — hệ thống hỗ trợ trò chơi suy luận nhóm dạng Ma Sói chạy
 trên trình duyệt, **tự động hóa hoàn toàn vai trò quản trò**. Đồ án học phần *Phân tích
-thiết kế hướng đối tượng*, Nhóm 13, Trường Đại học Thủ Dầu Một, giảng viên hướng dẫn ThS.
+thiết kế hướng đối tượng*, Trường Đại học Thủ Dầu Một, người thực hiện Nguyễn Thanh Sơn,
+giảng viên hướng dẫn ThS.
 Trần Hữu Duật.
 
 **Bài toán**: tổ chức Ma Sói ngoài đời vướng năm trở ngại — phải tụ đủ người, mất một suất
@@ -109,7 +110,7 @@ Trạng thái: **Đã chấp nhận** — [ADR-0001](adr/0001-chon-bo-cong-nghe.
 | Giao diện | React 19 + Vite, React Router, Zustand | MIT | Ứng dụng một trang, không cần kết xuất phía máy chủ |
 | Kiểu dáng | Tailwind CSS 4 | MIT | Token màu, chữ, khoảng cách xuất từ thiết kế Claude Design — mục 4.2 |
 | Kiểm thử | Vitest | MIT | |
-| Đóng gói | Docker Compose | Apache-2.0 | MVP chỉ cần PostgreSQL chạy trong Compose |
+| Đóng gói | Docker Compose | Apache-2.0 | PostgreSQL + dịch vụ `app` (profile) — xem mục 4.3 |
 | Tổ chức kho | npm workspaces | — | Không cần cài thêm trình quản lý gói |
 
 ---
@@ -225,8 +226,9 @@ WereWolf_Game/
 │   └── shared/                          # HỢP ĐỒNG giữa máy chủ và giao diện
 │       └── src/                         # kiểu góc nhìn, tên sự kiện socket, lược đồ lệnh
 ├── infra/
-│   ├── docker-compose.yml               # PostgreSQL; về sau thêm server và web
+│   ├── docker-compose.yml               # PostgreSQL; profile "app" thêm ứng dụng đóng gói
 │   └── .env.example
+├── Dockerfile                           # ảnh ứng dụng: dựng web, chạy máy chủ phục vụ cả web
 ├── scripts/                             # mô phỏng hàng loạt ván bằng người chơi ảo
 └── docs/
 ```
@@ -250,6 +252,16 @@ flowchart LR
   đặt lớp vai hay bất cứ thứ gì chứa luật vào đây, kẻo nó bị đóng gói xuống trình duyệt.
 
 ---
+
+### 4.3. Triển khai bằng Docker (ROADMAP 6.4)
+
+`npm run docker:up` dựng hai container: `postgres` (dùng chung với môi trường phát triển, volume
+`pgdata`) và `app` (profile `app`, ảnh từ `Dockerfile` ở gốc kho). Trong `app`, máy chủ Node phục vụ
+**cả** REST, Socket.IO **lẫn** bản build của web trên một cổng (mặc định 8080 → 3000): biến
+`THU_MUC_WEB` bật `express.static` và trả `index.html` cho mọi GET ngoài `/api` (ứng dụng một
+trang). Mỗi lần khởi động: `prisma migrate deploy` → seed (chạy lại an toàn) → `tsx src/main.ts`.
+Khi phát triển thì không đặt `THU_MUC_WEB`: Vite phục vụ web ở 5173 và chuyển tiếp `/api`,
+`/socket.io` sang máy chủ ở 3000.
 
 ## 5. Mô hình miền
 
